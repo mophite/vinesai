@@ -1,0 +1,147 @@
+syntax = "proto3";
+
+package phub;
+// this proto file is for api.hello/srv.hello
+
+// request params.
+message TokenReq {
+  // 客户端id
+  string client_id = 1;
+  // 客户端密钥
+  string client_secret = 2;
+  // 授权类型:authorization_code,client_credentials
+  string grant_type = 3;
+  // 权限，默认为空
+  string scope = 5;
+  // 通过code直接获取
+  string code = 6;
+}
+
+message tokenData{
+  string access_token = 1;
+  //  string refresh_token = 2;
+  int64 expires_in = 3;
+  string token_type=4;
+}
+
+message commonData{
+  int32 code = 1;
+  string msg = 2;
+}
+
+// response content.
+message TokenRsp {
+  int32 code = 1;
+  string msg = 2;
+  tokenData data = 3;
+}
+
+service Oauth{
+  //获取token
+  rpc Token(TokenReq) returns (TokenRsp) {}
+}
+
+// v1 is service api for client and server.
+service Device {
+
+  //设备发现
+  rpc DiscoverDevices(DiscoverDevicesReq)returns(DiscoverDevicesRsp){};
+
+  //设备控制
+  rpc ControlDevices(ControlDevicesReq)returns(ControlDevicesRsp){};
+
+  //设备状态
+  rpc DevicesStatus(DevicesStatusReq)returns(DevicesStatusRsp){};
+
+  //设备属性上报
+  rpc ReportDeviceAttributes(ReportDeviceAttributesReq)returns(ReportDeviceAttributesRsp){};
+
+}
+
+message DiscoverDevicesReq{
+  string name = 1;
+}
+
+message devicesEndpoint{
+  string endpointId = 1;
+  string friendlyName = 2;
+  string description = 3;
+  string manufacturerName = 4;
+}
+
+message discoverDevicesData{
+  repeated devicesEndpoint endpoints = 1;
+}
+
+message DiscoverDevicesRsp{
+  int32 code = 1;
+  string msg = 2;
+  discoverDevicesData data = 4;
+}
+
+message ControlDevicesReq{
+  string homeId=1;
+  repeated string devicesIds = 2;
+  string message=3;
+}
+
+message controlDevicesData{
+  //机器人语音提示内容
+  string tip = 1;
+  //截取需要内容
+  string exp = 2;
+  //chatgpt返回内容
+  string resp = 3;
+}
+
+message ControlDevicesRsp{
+  int32 code=1;
+  string msg=2;
+  controlDevicesData data=3;
+}
+
+message DevicesStatusReq{
+  repeated string devicesIds=2;
+}
+
+message deviceAttributes {
+  string name=1;
+  string value=2;
+}
+
+message devicesStatusData{
+  string deviceId=1;
+  repeated deviceAttributes deviceAttributes=2;
+}
+
+message DevicesStatusRsp{
+  int32 code=1;
+  string msg=2;
+  repeated devicesStatusData devices=4;
+}
+
+message deviceAttributesData{
+  string deviceId=1;
+  string name=2;
+  string value=3;
+}
+
+message ReportDeviceAttributesReq{
+  repeated deviceAttributesData deviceAttributes=2;
+}
+
+message reportDeviceAttributesData{
+ string deviceId=1;
+ string status=2;
+ string message=3;
+}
+
+message ReportDeviceAttributesRsp{
+  int32 code=1;
+  string msg=2;
+  repeated reportDeviceAttributesData data=3;
+}
+
+
+
+
