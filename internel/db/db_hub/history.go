@@ -1,6 +1,6 @@
 package db_hub
 
-var MessageHistoryTable = "message_history"
+var TableMessageHistory = "message_history"
 
 type MessageHistory struct {
 	ID        uint   `gorm:"column:id;primary_key;AUTO_INCREMENT"`

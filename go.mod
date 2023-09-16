@@ -20,6 +20,8 @@ require (
 	github.com/rsocket/rsocket-go v0.8.8
 	github.com/sashabaranov/go-openai v1.14.2
 	github.com/stretchr/testify v1.7.1
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/asr v1.0.749
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.749
 	github.com/urfave/cli/v2 v2.3.0
 	google.golang.org/grpc v1.33.1
 	gorm.io/driver/mysql v1.5.1

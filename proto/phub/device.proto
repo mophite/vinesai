@@ -15,13 +15,15 @@ message TokenReq {
   string scope = 5;
   // 通过code直接获取
   string code = 6;
+  // 家庭id
+  string home_id = 7;
 }
 
 message tokenData{
   string access_token = 1;
   //  string refresh_token = 2;
   int64 expires_in = 3;
-  string token_type=4;
+  string token_type = 4;
 }
 
 message commonData{
@@ -44,46 +46,72 @@ service Oauth{
 // v1 is service api for client and server.
 service Device {
 
-  //设备发现
-  rpc DiscoverDevices(DiscoverDevicesReq)returns(DiscoverDevicesRsp){};
+  //  // 获取家庭id、设备清单及设备初始状态
+  //  rpc GetHomeInfo(SyncHomeInfoReq)returns(SyncHomeInfoRsp){};
 
-  //设备控制
-  rpc ControlDevices(ControlDevicesReq)returns(ControlDevicesRsp){};
+  //设备状态改变上报
+  rpc ReportDeviceStatus(DevicesStatusReq)returns(DevicesStatusRsp){};
 
-  //设备状态
-  rpc DevicesStatus(DevicesStatusReq)returns(DevicesStatusRsp){};
+  //设备控制控制指令透传-wav文件
+  rpc TransmitControlCommand(stream ControlFileReq)returns(stream ControlFileRsp){};
 
-  //设备属性上报
-  rpc ReportDeviceAttributes(ReportDeviceAttributesReq)returns(ReportDeviceAttributesRsp){};
+  //设备控制控制指令透传-文本
+  rpc TransmitControlCommandWord(ControlWordReq)returns(ControlWordRsp){};
+
+  //设备执行指令并上报结果状态
+  rpc ExecuteAndReport(ReportDeviceAttributesReq)returns(ReportDeviceAttributesRsp){};
 
 }
 
-message DiscoverDevicesReq{
-  string name = 1;
+message devicesData{
+  string deviceId = 1;
+  string deviceName = 2;
+  deviceStatus status = 3;
 }
 
-message devicesEndpoint{
-  string endpointId = 1;
-  string friendlyName = 2;
-  string description = 3;
-  string manufacturerName = 4;
+message deviceStatus {
+  string power = 1;
+  int32 brightness = 2;
+  string color = 3;
+  string colorTemperature = 4;
 }
 
-message discoverDevicesData{
-  repeated devicesEndpoint endpoints = 1;
+message SyncHomeInfoReq{
+  repeated devicesData devices = 1;
 }
 
-message DiscoverDevicesRsp{
+message SyncHomeInfoRsp{
   int32 code = 1;
   string msg = 2;
-  discoverDevicesData data = 4;
 }
 
-message ControlDevicesReq{
-  string homeId=1;
-  repeated string devicesIds = 2;
-  string message=3;
+message ControlFileReq{
+  string homeId = 1;
+  string traceId = 2;
+  string fileName = 3;
+  int64 fileSize = 4;
+  bytes  body = 5;
 }
+
+
+message ControlFileRsp{
+  uint32 code = 1;
+  string msg = 2;
+  controlDevicesData data = 3;
+}
+
+message ControlWordReq{
+  string HomeId = 1;
+  string traceId = 2;
+  string message = 3;
+}
+
+message ControlWordRsp{
+  uint32 code = 1;
+  string msg = 2;
+  controlDevicesData data = 3;
+}
+
 
 message controlDevicesData{
   //机器人语音提示内容
@@ -95,51 +123,58 @@ message controlDevicesData{
 }
 
 message ControlDevicesRsp{
-  int32 code=1;
-  string msg=2;
-  controlDevicesData data=3;
+  int32 code = 1;
+  string msg = 2;
+  controlDevicesData data = 3;
 }
 
 message DevicesStatusReq{
-  repeated string devicesIds=2;
+  string deviceId = 1;
+  deviceStatus status = 2;
 }
 
 message deviceAttributes {
-  string name=1;
-  string value=2;
+  string name = 1;
+  string value = 2;
 }
 
 message devicesStatusData{
-  string deviceId=1;
-  repeated deviceAttributes deviceAttributes=2;
+  string deviceId = 1;
+  repeated deviceAttributes deviceAttributes = 2;
 }
 
 message DevicesStatusRsp{
-  int32 code=1;
-  string msg=2;
-  repeated devicesStatusData devices=4;
+  int32 code = 1;
+  string msg = 2;
+  repeated devicesStatusData devices = 4;
 }
 
 message deviceAttributesData{
-  string deviceId=1;
-  string name=2;
-  string value=3;
+  string deviceId = 1;
+  string name = 2;
+  string value = 3;
+}
+
+message executeAndReportCommand{
+  string type = 1;
+  string value = 2;
 }
 
 message ReportDeviceAttributesReq{
-  repeated deviceAttributesData deviceAttributes=2;
+  string deviceId = 1;
+  repeated executeAndReportCommand commands = 2;
 }
 
+
 message reportDeviceAttributesData{
- string deviceId=1;
- string status=2;
- string message=3;
+  string deviceId = 1;
+  deviceStatus status = 2;
 }
 
 message ReportDeviceAttributesRsp{
-  int32 code=1;
-  string msg=2;
-  repeated reportDeviceAttributesData data=3;
+  int32 code = 1;
+  string msg = 2;
+  repeated reportDeviceAttributesData data = 3;
 }
 
 

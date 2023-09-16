@@ -4,14 +4,16 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	openai "github.com/sashabaranov/go-openai"
 	"strings"
 	"time"
+
 	"vinesai/internel/ava"
 	"vinesai/internel/config"
 	"vinesai/internel/db"
 	"vinesai/internel/db/db_hub"
 	"vinesai/internel/x"
+
+	"github.com/sashabaranov/go-openai"
 )
 
 var gCli *openai.Client
@@ -69,7 +71,7 @@ func ask(c *ava.Context, msg, homeId string) (*db_hub.MessageHistory, error) {
 	var dbHistory []*db_hub.MessageHistory
 	err := db.
 		GMysql.
-		Table(db_hub.MessageHistoryTable).
+		Table(db_hub.TableMessageHistory).
 		Where("home_id=?", homeId).
 		Order("created_at desc").
 		Limit(3).
@@ -158,7 +160,7 @@ func ask(c *ava.Context, msg, homeId string) (*db_hub.MessageHistory, error) {
 		Resp:    content,
 		HomeID:  homeId,
 	}
-	err = db.GMysql.Table(db_hub.MessageHistoryTable).Create(h).Error
+	err = db.GMysql.Table(db_hub.TableMessageHistory).Create(h).Error
 	if err != nil {
 		return nil, err
 	}
@@ -232,33 +234,52 @@ AiavaControl:###{"1004":{"setSwitch":"false"},"1002":{"setCoolingSetpoint":"25",
 <<<好的，主人，我会立即执行您的命令。>>>
 
 “”“
-|设备id| 设备名称 | 中文名称 | Capability | Command | Arguments | 取值范围 |
+|设备id| 设备名称 | 中文名称 | Capability | Command | Arguments | 取值范围 | value |
 | --- | --- | --- | --- | --- | --- | --- |
-|1001|  智能门锁 | 门锁开关 | lock | setLock | lockValue (boolean) | true/false |
-| 1002| 空调 | 开关机 | switch | setSwitch | switchValue (boolean) | true/false |
-| 1002| 空调 | 制冷温度 | thermostatCoolingSetpoint | setCoolingSetpoint | coolingSetpoint (double) | 16-30摄氏度 |
-| 1002| 空调 | 制热温度 | thermostatHeatingSetpoint | setHeatingSetpoint | heatingSetpoint (double) | 16-30摄氏度 |
-| 1002| 空调 | 温度调节 | thermostatTemperatureSetpoint | setTemperatureSetpoint | temperatureSetpoint (double) | 16-30摄氏度 |
-| 1002| 空调 | 风速 | fanSpeed | setFanSpeed | fanSpeed (string) | "low", "medium", "high" |
-| 1002| 空调 | 工作模式 | thermostatMode | setThermostatMode | thermostatMode (string) | "auto", "cool", "heat", "off" |
-| 1003| 空气净化器 | 开关机 | switch | setSwitch | switchValue (boolean) | true/false |
-| 1003| 空气净化器 | 模式 | airPurifierMode | setAirPurifierMode | airPurifierMode (string) | "auto", "manual" |
-| 1003| 空气净化器 | 风速 | airPurifierFanSpeed | setAirPurifierFanSpeed | fanSpeed (string) | "low", "medium", "high" |
-| 1003| 空气净化器 | 过滤器状态 | airPurifierFilterStatus | getFilterStatus | - | "clean", "dirty", "replace" |
-| 1004| 灯 | 开关 | switch | setSwitch | switchValue (boolean) | true/false |
-| 1004| 灯 | 亮度 | brightness | setBrightness | brightnessValue (int) | 0-100 |
-| 1004| 灯 | 色温 | colorTemperature | setColorTemperature | colorTemperatureValue (int) | 2700-6500K |
-| 1005| 电热水器 | 开关 | switch | setSwitch | switchValue (boolean) | true/false |
-| 1005| 电热水器 | 温度 | waterHeaterTemperature | setWaterHeaterTemperature | temperatureValue (double) | 30-75摄氏度 |
-| 1006| 香薰机 | 开关 | switch | setSwitch | switchValue (boolean) | true/false |
-| 1006| 香薰机 | 模式 | diffuserMode | setDiffuserMode | diffuserMode (string) | "continuous", "interval" |
-| 1006| 香薰机 | 强度 | diffuserIntensity | setDiffuserIntensity | diffuserIntensity (string) | "low", "medium", "high" |
-| 1007| 智能窗帘 | 开关 | switch | setSwitch | switchValue (boolean) | true/false |
-| 1007| 智能窗帘 | 百分比 | windowCoveringPercentage | setWindowCoveringPercentage | percentageValue (int) | 0-100 |
-| 1008| 扫地机器人 | 开关 | switch | setSwitch | switchValue (boolean) | true/false |
-| 1008| 扫地机器人 | 清扫模式 | vacuumCleanerMode | setVacuumCleanerMode | vacuumCleanerMode (string) | "auto", "quiet", "turbo" |
-| 1009| 智能音响 | 开关 | switch | setSwitch | switchValue (boolean) | true/false |
-| 1009| 智能音响 | 音量 | speakerVolume | setSpeakerVolume | volumeValue (int) | 0-100 |
-| 1009| 智能音响 | 播放 | speakerPlayback | setSpeakerPlayback | playbackValue (string) | "play", "pause", "stop" |
+|1001|  智能门锁 | 门锁开关 | lock | setLock | lockValue (boolean) | true/false | true |
+| 1002| 空调 | 开关机 | switch | setSwitch | switchValue (boolean) | true/false | true |
+| 1002| 空调 | 制冷温度 | thermostatCoolingSetpoint | setCoolingSetpoint | coolingSetpoint (double) | 16-30摄氏度 | 30摄氏度 |
+| 1002| 空调 | 制热温度 | thermostatHeatingSetpoint | setHeatingSetpoint | heatingSetpoint (double) | 16-30摄氏度 | 16摄氏度 |
+| 1002| 空调 | 温度调节 | thermostatTemperatureSetpoint | setTemperatureSetpoint | temperatureSetpoint (double) | 16-30摄氏度 | 25摄氏度 |
+| 1002| 空调 | 风速 | fanSpeed | setFanSpeed | fanSpeed (string) | "low", "medium", "high" | "low" |
+| 1002| 空调 | 工作模式 | thermostatMode | setThermostatMode | thermostatMode (string) | "auto", "cool", "heat", "off" | "auto" |
+| 1003| 空气净化器 | 开关机 | switch | setSwitch | switchValue (boolean) | true/false | true |
+| 1003| 空气净化器 | 模式 | airPurifierMode | setAirPurifierMode | airPurifierMode (string) | "auto", "manual" | "auto" |
+| 1003| 空气净化器 | 风速 | airPurifierFanSpeed | setAirPurifierFanSpeed | fanSpeed (string) | "low", "medium", "high" | "high" |
+| 1003| 空气净化器 | 过滤器状态 | airPurifierFilterStatus | getFilterStatus | - | "clean", "dirty", "replace" | "clean" |
+| 1004| 灯 | 开关 | switch | setSwitch | switchValue (boolean) | true/false | true |
+| 1004| 灯 | 亮度 | brightness | setBrightness | brightnessValue (int) | 0-100 | 50 |
+| 1004| 灯 | 色温 | colorTemperature | setColorTemperature | colorTemperatureValue (int) | 2700-6500K | 2800k |
+| 1005| 电热水器 | 开关 | switch | setSwitch | switchValue (boolean) | true/false | true |
+| 1005| 电热水器 | 温度 | waterHeaterTemperature | setWaterHeaterTemperature | temperatureValue (double) | 30-75摄氏度 | 40摄氏度 |
+| 1006| 香薰机 | 开关 | switch | setSwitch | switchValue (boolean) | true/false | true |
+| 1006| 香薰机 | 模式 | diffuserMode | setDiffuserMode | diffuserMode (string) | "continuous", "interval" | "interval" |
+| 1006| 香薰机 | 强度 | diffuserIntensity | setDiffuserIntensity | diffuserIntensity (string) | "low", "medium", "high" | "low" |
+| 1007| 智能窗帘 | 开关 | switch | setSwitch | switchValue (boolean) | true/false | true |
+| 1007| 智能窗帘 | 百分比 | windowCoveringPercentage | setWindowCoveringPercentage | percentageValue (int) | 0-100 | 50 |
+| 1008| 扫地机器人 | 开关 | switch | setSwitch | switchValue (boolean) | true/false | true |
+| 1008| 扫地机器人 | 清扫模式 | vacuumCleanerMode | setVacuumCleanerMode | vacuumCleanerMode (string) | "auto", "quiet", "turbo" | "auto" |
+| 1009| 智能音响 | 开关 | switch | setSwitch | switchValue (boolean) | true/false | true |
+| 1009| 智能音响 | 音量 | speakerVolume | setSpeakerVolume | volumeValue (int) | 0-100 | 50 |
+| 1009| 智能音响 | 播放 | speakerPlayback | setSpeakerPlayback | playbackValue (string) | "play", "pause", "stop" | "play" |
+”“”
+`
+
+var robotTmp = `希望你充当一个智能家居中控系统，“”“表格”“”是设备注册清单，确认后回复“设备注册成功”。
+设备注册成功后，你将能控制它们，
+当我向你说出场景信息时，你将按照下面规定的格式要求在唯一的代码块中输出回复，而不是其它内容，不要做任何解释和说明，不能遗漏任何一项，否则会被断电：
+1、AiavaControl:###{"设备id1":{"Command1":"Arguments1","Command3":"Arguments3"},"设备id2":{"Command2":"Arguments2"},…}&&&&&
+2、对控制指令做出解释说明，并把内容写在【】内
+3、以调皮幽默的智能音响的语气对我做出回应，并把内容写在<<<>>>内
+
+例如：
+当我告诉你我要睡觉了，你应该在唯一的代码块中回复我以下内容，而不是其它的，不要解释：
+AiavaControl:###{"1004":{"setSwitch":"false"},"1002":{"setCoolingSetpoint":"25","setThermostatMode":"cool"},"1003":{"setSwitch":"true"},"1005":{"setSwitch":"false"}}&&&&&
+【将灯光关闭，将空调制冷温度设为25摄氏度，将空气净化器开启，将电热水器关闭】
+<<<好的，主人，我会立即执行您的命令。>>>
+
+“”“
+|设备id| 设备名称 | 中文名称 | Capability | Command | Arguments | 取值范围 | 当前值 |
+| --- | --- | --- | --- | --- | --- | --- |
 ”“”
 `

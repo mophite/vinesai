@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 	"vinesai/internel/ava"
+	"vinesai/internel/lib"
 	"vinesai/internel/x"
 	"vinesai/proto/phub"
 )
@@ -34,6 +35,12 @@ const (
 type Oauth2 struct{}
 
 func (d *Oauth2) Token(c *ava.Context, req *phub.TokenReq, rsp *phub.TokenRsp) {
+	if req.HomeId == "" {
+		rsp.Code = http.StatusBadRequest
+		rsp.Msg = "homeId不能为空"
+		return
+	}
+
 	if req.GrantType != grantTypeCode && req.GrantType != grantTypeClientCredentials {
 		rsp.Code = http.StatusBadRequest
 		rsp.Msg = "GrantType错误"
@@ -53,7 +60,7 @@ func (d *Oauth2) Token(c *ava.Context, req *phub.TokenReq, rsp *phub.TokenRsp) {
 		return
 	}
 
-	jwtToken, expiry := generateJWToken(c)
+	jwtToken, expiry := generateJWToken(c, req.HomeId)
 
 	rsp.Code = http.StatusOK
 	rsp.Msg = "获取token成功"
@@ -93,6 +100,8 @@ func Oauth(c *ava.Context) (proto.Message, error) {
 	}
 
 	c.Infof("Oauth |data=%v", x.MustMarshal2String(t))
+
+	lib.SetHomeId(c, t.Audience[0])
 
 	return nil, nil
 }

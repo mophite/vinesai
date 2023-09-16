@@ -59,14 +59,14 @@ type tokenClaims struct {
 
 var jwtKey = []byte("DOGQ6MNVIU9Y5J7LK0PWB1A8H2Z4ERCX")
 
-func generateJWToken(c *ava.Context) (string, int64) {
+func generateJWToken(c *ava.Context, homeId string) (string, int64) {
 	expiry := jwt.NewNumericDate(x.LocalTimeNow().Add(defaultExpiryDelta))
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, tokenClaims{
 		Timestamp: x.LocalTimeNow().Format(time.RFC3339),
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    "vinesai",
 			Subject:   "oauth2.0授权",
-			Audience:  []string{"api.oauth2.0"},
+			Audience:  []string{homeId},
 			ExpiresAt: expiry,
 			NotBefore: jwt.NewNumericDate(x.LocalTimeNow()), //token在此时间之前不能被接收处理
 			IssuedAt:  jwt.NewNumericDate(x.LocalTimeNow()),

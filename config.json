@@ -1,0 +1,1 @@
+{"ava.redis":{"address":"127.0.0.1:6379","password":""},"openai":{"base_url":"https://api.openai-proxy.com/v1/","key":"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","temperature":0.1,"top_p":0},"ava.mysql":{"dsn":"root:12345678@tcp(127.0.0.1:3306)/vinesai?charset=utf8mb4&loc=Local"}}
