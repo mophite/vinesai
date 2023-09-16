@@ -16,7 +16,7 @@ message TokenReq {
   // 通过code直接获取
   string code = 6;
   // 家庭id
-  string home_id = 7;
+  string homeId = 7;
 }
 
 message tokenData{
