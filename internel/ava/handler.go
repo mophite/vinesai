@@ -17,9 +17,10 @@ package ava
 
 import (
 	"errors"
-	"github.com/gogo/protobuf/proto"
 	"net/http"
 	"sync"
+
+	"github.com/gogo/protobuf/proto"
 )
 
 // Handler for rpc service handler
@@ -196,7 +197,7 @@ func (r *Router) rrInterrupt() Interceptor {
 		reqData := c.Codec().MustEncodeString(req)
 		rspData := c.Codec().MustEncodeString(rsp)
 
-		if !c.isPutFile && len(reqData) < 10<<10 && len(rspData) < 10<<10 {
+		if !c.isPutFile && len(reqData) < 1024 && len(rspData) < 1024 {
 			c.Debugf("FROM=%s |TO=%s |PATH=%s", reqData, rspData, c.Metadata.Method())
 		}
 		return rsp, nil

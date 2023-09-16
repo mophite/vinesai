@@ -59,7 +59,7 @@ func (d *DevicesHub) TransmitControlCommandFile(c *ava.Context, req *phub.Contro
 	}
 
 	rsp.Code = http.StatusOK
-	rsp.Msg = "指令获取成功"
+	rsp.Msg = x.StatusOK
 
 	data := &phub.ControlDevicesData{
 		Tip:  cRsp.Data.Tip,
@@ -178,7 +178,7 @@ func (d *DevicesHub) TransmitControlCommandWord(c *ava.Context, req *phub.Contro
 	}
 
 	rsp.Code = http.StatusOK
-	rsp.Msg = "指令获取成功"
+	rsp.Msg = x.StatusOK
 
 	data := &phub.ControlDevicesData{
 		Tip:  cRsp.Data.Tip,

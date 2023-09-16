@@ -71,7 +71,7 @@
 ```json
 {
     "code": 200,
-    "msg": "指令获取成功"
+    "msg": x.StatusOk
 }
 ```
 
