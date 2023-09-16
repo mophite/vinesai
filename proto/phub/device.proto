@@ -58,9 +58,25 @@ service Device {
   //设备控制控制指令透传-文本
   rpc TransmitControlCommandWord(ControlWordReq)returns(ControlWordRsp){};
 
+  //设备控制控制指令透传-wav文件-put请求
+  rpc TransmitControlCommandFile(ControlPutFileReq)returns(ControlPutFileRsp){}
+
   //设备执行指令并上报结果状态
   rpc ExecuteAndReport(ReportDeviceAttributesReq)returns(ReportDeviceAttributesRsp){};
 
+}
+
+message ControlPutFileReq{
+  string file_name = 1;
+  int64 file_size = 2;
+  string extra=3;
+  bytes  body = 4;
+}
+
+message ControlPutFileRsp{
+  uint32 code = 1;
+  string msg = 2;
+  controlDevicesData data = 3;
 }
 
 message devicesData{

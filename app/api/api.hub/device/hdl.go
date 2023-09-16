@@ -11,6 +11,64 @@ import (
 
 type DevicesHub struct{}
 
+func (d *DevicesHub) TransmitControlCommandFile(c *ava.Context, req *phub.ControlPutFileReq, rsp *phub.ControlPutFileRsp) {
+	if req.Extra == "" {
+		rsp.Code = http.StatusBadRequest
+		rsp.Msg = "缺少extra"
+		return
+	}
+
+	var home struct {
+		HomeId string `json:"homeId"`
+	}
+
+	err := x.MustUnmarshal(x.StringToBytes(req.Extra), &home)
+	if err != nil {
+		rsp.Code = http.StatusBadRequest
+		rsp.Msg = "参数不正确"
+		return
+	}
+
+	if home.HomeId == "" {
+		rsp.Code = http.StatusBadRequest
+		rsp.Msg = "homeId不能为控"
+		return
+	}
+
+	result, err := asr(req.Body)
+
+	if err != nil {
+		c.Error(err)
+		rsp.Code = http.StatusInternalServerError
+		rsp.Msg = "asr服务错误"
+		return
+	}
+
+	if result == nil || result.Response == nil || result.Response.Result == nil {
+		rsp.Code = http.StatusInternalServerError
+		rsp.Msg = "asr服务错误"
+		return
+	}
+
+	cRsp, err := ipc.Chat2AI(c, &phub.ChatReq{HomeId: home.HomeId, Message: *result.Response.Result})
+	if err != nil {
+		c.Error(err)
+		rsp.Code = http.StatusInternalServerError
+		rsp.Msg = x.StatusInternalServerError
+		return
+	}
+
+	rsp.Code = http.StatusOK
+	rsp.Msg = "指令获取成功"
+
+	data := &phub.ControlDevicesData{
+		Tip:  cRsp.Data.Tip,
+		Exp:  cRsp.Data.Exp,
+		Resp: cRsp.Data.Resp,
+	}
+	rsp.Data = data
+}
+
 func (d *DevicesHub) TransmitControlCommand(c *ava.Context, req chan *phub.ControlFileReq, exit chan struct{}) chan *phub.ControlFileRsp {
 	var rsp = make(chan *phub.ControlFileRsp)
 
@@ -29,7 +87,7 @@ func (d *DevicesHub) TransmitControlCommand(c *ava.Context, req chan *phub.Contr
 					c.Debug("TransmitControlCommand 没有内容")
 					rsp <- &phub.ControlFileRsp{
 						Code: http.StatusBadRequest,
-						Msg:  "我不太明白你在说什么",
+						Msg:  "我不太明白你的意思",
 					}
 					break
 				}
@@ -40,7 +98,7 @@ func (d *DevicesHub) TransmitControlCommand(c *ava.Context, req chan *phub.Contr
 					c.Error(err)
 					rsp <- &phub.ControlFileRsp{
 						Code: http.StatusBadRequest,
-						Msg:  "我不太明白你在说什么",
+						Msg:  "对不起，我理解不了",
 					}
 					break
 				}
@@ -50,7 +108,7 @@ func (d *DevicesHub) TransmitControlCommand(c *ava.Context, req chan *phub.Contr
 				if result == nil || result.Response == nil || result.Response.Result == nil {
 					rsp <- &phub.ControlFileRsp{
 						Code: http.StatusBadRequest,
-						Msg:  "我不太明白你在说什么",
+						Msg:  "我出了点问题，等我一下",
 					}
 					break
 				}
@@ -61,7 +119,7 @@ func (d *DevicesHub) TransmitControlCommand(c *ava.Context, req chan *phub.Contr
 					c.Error(err)
 					rsp <- &phub.ControlFileRsp{
 						Code: http.StatusBadRequest,
-						Msg:  "我不太明白你在说什么",
+						Msg:  "我不明白",
 					}
 					break
 				}

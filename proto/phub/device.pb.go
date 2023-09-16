@@ -288,6 +288,134 @@ func (m *TokenRsp) GetData() *TokenData {
 	return nil
 }
 
+type ControlPutFileReq struct {
+	FileName string `protobuf:"bytes,1,opt,name=file_name,json=fileName,proto3" json:"file_name,omitempty"`
+	FileSize int64  `protobuf:"varint,2,opt,name=file_size,json=fileSize,proto3" json:"file_size,omitempty"`
+	Extra    string `protobuf:"bytes,3,opt,name=extra,proto3" json:"extra,omitempty"`
+	Body     []byte `protobuf:"bytes,4,opt,name=body,proto3" json:"body,omitempty"`
+}
+
+func (m *ControlPutFileReq) Reset()         { *m = ControlPutFileReq{} }
+func (m *ControlPutFileReq) String() string { return proto.CompactTextString(m) }
+func (*ControlPutFileReq) ProtoMessage()    {}
+func (*ControlPutFileReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cc372f058e4a4fb9, []int{4}
+}
+func (m *ControlPutFileReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ControlPutFileReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ControlPutFileReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ControlPutFileReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ControlPutFileReq.Merge(m, src)
+}
+func (m *ControlPutFileReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *ControlPutFileReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_ControlPutFileReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ControlPutFileReq proto.InternalMessageInfo
+
+func (m *ControlPutFileReq) GetFileName() string {
+	if m != nil {
+		return m.FileName
+	}
+	return ""
+}
+
+func (m *ControlPutFileReq) GetFileSize() int64 {
+	if m != nil {
+		return m.FileSize
+	}
+	return 0
+}
+
+func (m *ControlPutFileReq) GetExtra() string {
+	if m != nil {
+		return m.Extra
+	}
+	return ""
+}
+
+func (m *ControlPutFileReq) GetBody() []byte {
+	if m != nil {
+		return m.Body
+	}
+	return nil
+}
+
+type ControlPutFileRsp struct {
+	Code uint32              `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	Msg  string              `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg,omitempty"`
+	Data *ControlDevicesData `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+}
+
+func (m *ControlPutFileRsp) Reset()         { *m = ControlPutFileRsp{} }
+func (m *ControlPutFileRsp) String() string { return proto.CompactTextString(m) }
+func (*ControlPutFileRsp) ProtoMessage()    {}
+func (*ControlPutFileRsp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cc372f058e4a4fb9, []int{5}
+}
+func (m *ControlPutFileRsp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ControlPutFileRsp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ControlPutFileRsp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ControlPutFileRsp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ControlPutFileRsp.Merge(m, src)
+}
+func (m *ControlPutFileRsp) XXX_Size() int {
+	return m.Size()
+}
+func (m *ControlPutFileRsp) XXX_DiscardUnknown() {
+	xxx_messageInfo_ControlPutFileRsp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ControlPutFileRsp proto.InternalMessageInfo
+
+func (m *ControlPutFileRsp) GetCode() uint32 {
+	if m != nil {
+		return m.Code
+	}
+	return 0
+}
+
+func (m *ControlPutFileRsp) GetMsg() string {
+	if m != nil {
+		return m.Msg
+	}
+	return ""
+}
+
+func (m *ControlPutFileRsp) GetData() *ControlDevicesData {
+	if m != nil {
+		return m.Data
+	}
+	return nil
+}
+
 type DevicesData struct {
 	DeviceId   string        `protobuf:"bytes,1,opt,name=deviceId,proto3" json:"deviceId,omitempty"`
 	DeviceName string        `protobuf:"bytes,2,opt,name=deviceName,proto3" json:"deviceName,omitempty"`
@@ -298,7 +426,7 @@ func (m *DevicesData) Reset()         { *m = DevicesData{} }
 func (m *DevicesData) String() string { return proto.CompactTextString(m) }
 func (*DevicesData) ProtoMessage()    {}
 func (*DevicesData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cc372f058e4a4fb9, []int{4}
+	return fileDescriptor_cc372f058e4a4fb9, []int{6}
 }
 func (m *DevicesData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -359,7 +487,7 @@ func (m *DeviceStatus) Reset()         { *m = DeviceStatus{} }
 func (m *DeviceStatus) String() string { return proto.CompactTextString(m) }
 func (*DeviceStatus) ProtoMessage()    {}
 func (*DeviceStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cc372f058e4a4fb9, []int{5}
+	return fileDescriptor_cc372f058e4a4fb9, []int{7}
 }
 func (m *DeviceStatus) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -424,7 +552,7 @@ func (m *SyncHomeInfoReq) Reset()         { *m = SyncHomeInfoReq{} }
 func (m *SyncHomeInfoReq) String() string { return proto.CompactTextString(m) }
 func (*SyncHomeInfoReq) ProtoMessage()    {}
 func (*SyncHomeInfoReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cc372f058e4a4fb9, []int{6}
+	return fileDescriptor_cc372f058e4a4fb9, []int{8}
 }
 func (m *SyncHomeInfoReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -469,7 +597,7 @@ func (m *SyncHomeInfoRsp) Reset()         { *m = SyncHomeInfoRsp{} }
 func (m *SyncHomeInfoRsp) String() string { return proto.CompactTextString(m) }
 func (*SyncHomeInfoRsp) ProtoMessage()    {}
 func (*SyncHomeInfoRsp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cc372f058e4a4fb9, []int{7}
+	return fileDescriptor_cc372f058e4a4fb9, []int{9}
 }
 func (m *SyncHomeInfoRsp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -524,7 +652,7 @@ func (m *ControlFileReq) Reset()         { *m = ControlFileReq{} }
 func (m *ControlFileReq) String() string { return proto.CompactTextString(m) }
 func (*ControlFileReq) ProtoMessage()    {}
 func (*ControlFileReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cc372f058e4a4fb9, []int{8}
+	return fileDescriptor_cc372f058e4a4fb9, []int{10}
 }
 func (m *ControlFileReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -598,7 +726,7 @@ func (m *ControlFileRsp) Reset()         { *m = ControlFileRsp{} }
 func (m *ControlFileRsp) String() string { return proto.CompactTextString(m) }
 func (*ControlFileRsp) ProtoMessage()    {}
 func (*ControlFileRsp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cc372f058e4a4fb9, []int{9}
+	return fileDescriptor_cc372f058e4a4fb9, []int{11}
 }
 func (m *ControlFileRsp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -658,7 +786,7 @@ func (m *ControlWordReq) Reset()         { *m = ControlWordReq{} }
 func (m *ControlWordReq) String() string { return proto.CompactTextString(m) }
 func (*ControlWordReq) ProtoMessage()    {}
 func (*ControlWordReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cc372f058e4a4fb9, []int{10}
+	return fileDescriptor_cc372f058e4a4fb9, []int{12}
 }
 func (m *ControlWordReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -718,7 +846,7 @@ func (m *ControlWordRsp) Reset()         { *m = ControlWordRsp{} }
 func (m *ControlWordRsp) String() string { return proto.CompactTextString(m) }
 func (*ControlWordRsp) ProtoMessage()    {}
 func (*ControlWordRsp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cc372f058e4a4fb9, []int{11}
+	return fileDescriptor_cc372f058e4a4fb9, []int{13}
 }
 func (m *ControlWordRsp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -781,7 +909,7 @@ func (m *ControlDevicesData) Reset()         { *m = ControlDevicesData{} }
 func (m *ControlDevicesData) String() string { return proto.CompactTextString(m) }
 func (*ControlDevicesData) ProtoMessage()    {}
 func (*ControlDevicesData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cc372f058e4a4fb9, []int{12}
+	return fileDescriptor_cc372f058e4a4fb9, []int{14}
 }
 func (m *ControlDevicesData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -841,7 +969,7 @@ func (m *ControlDevicesRsp) Reset()         { *m = ControlDevicesRsp{} }
 func (m *ControlDevicesRsp) String() string { return proto.CompactTextString(m) }
 func (*ControlDevicesRsp) ProtoMessage()    {}
 func (*ControlDevicesRsp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cc372f058e4a4fb9, []int{13}
+	return fileDescriptor_cc372f058e4a4fb9, []int{15}
 }
 func (m *ControlDevicesRsp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -900,7 +1028,7 @@ func (m *DevicesStatusReq) Reset()         { *m = DevicesStatusReq{} }
 func (m *DevicesStatusReq) String() string { return proto.CompactTextString(m) }
 func (*DevicesStatusReq) ProtoMessage()    {}
 func (*DevicesStatusReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cc372f058e4a4fb9, []int{14}
+	return fileDescriptor_cc372f058e4a4fb9, []int{16}
 }
 func (m *DevicesStatusReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -952,7 +1080,7 @@ func (m *DeviceAttributes) Reset()         { *m = DeviceAttributes{} }
 func (m *DeviceAttributes) String() string { return proto.CompactTextString(m) }
 func (*DeviceAttributes) ProtoMessage()    {}
 func (*DeviceAttributes) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cc372f058e4a4fb9, []int{15}
+	return fileDescriptor_cc372f058e4a4fb9, []int{17}
 }
 func (m *DeviceAttributes) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1004,7 +1132,7 @@ func (m *DevicesStatusData) Reset()         { *m = DevicesStatusData{} }
 func (m *DevicesStatusData) String() string { return proto.CompactTextString(m) }
 func (*DevicesStatusData) ProtoMessage()    {}
 func (*DevicesStatusData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cc372f058e4a4fb9, []int{16}
+	return fileDescriptor_cc372f058e4a4fb9, []int{18}
 }
 func (m *DevicesStatusData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1057,7 +1185,7 @@ func (m *DevicesStatusRsp) Reset()         { *m = DevicesStatusRsp{} }
 func (m *DevicesStatusRsp) String() string { return proto.CompactTextString(m) }
 func (*DevicesStatusRsp) ProtoMessage()    {}
 func (*DevicesStatusRsp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cc372f058e4a4fb9, []int{17}
+	return fileDescriptor_cc372f058e4a4fb9, []int{19}
 }
 func (m *DevicesStatusRsp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1117,7 +1245,7 @@ func (m *DeviceAttributesData) Reset()         { *m = DeviceAttributesData{} }
 func (m *DeviceAttributesData) String() string { return proto.CompactTextString(m) }
 func (*DeviceAttributesData) ProtoMessage()    {}
 func (*DeviceAttributesData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cc372f058e4a4fb9, []int{18}
+	return fileDescriptor_cc372f058e4a4fb9, []int{20}
 }
 func (m *DeviceAttributesData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1176,7 +1304,7 @@ func (m *ExecuteAndReportCommand) Reset()         { *m = ExecuteAndReportCommand
 func (m *ExecuteAndReportCommand) String() string { return proto.CompactTextString(m) }
 func (*ExecuteAndReportCommand) ProtoMessage()    {}
 func (*ExecuteAndReportCommand) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cc372f058e4a4fb9, []int{19}
+	return fileDescriptor_cc372f058e4a4fb9, []int{21}
 }
 func (m *ExecuteAndReportCommand) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1228,7 +1356,7 @@ func (m *ReportDeviceAttributesReq) Reset()         { *m = ReportDeviceAttribute
 func (m *ReportDeviceAttributesReq) String() string { return proto.CompactTextString(m) }
 func (*ReportDeviceAttributesReq) ProtoMessage()    {}
 func (*ReportDeviceAttributesReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cc372f058e4a4fb9, []int{20}
+	return fileDescriptor_cc372f058e4a4fb9, []int{22}
 }
 func (m *ReportDeviceAttributesReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1280,7 +1408,7 @@ func (m *ReportDeviceAttributesData) Reset()         { *m = ReportDeviceAttribut
 func (m *ReportDeviceAttributesData) String() string { return proto.CompactTextString(m) }
 func (*ReportDeviceAttributesData) ProtoMessage()    {}
 func (*ReportDeviceAttributesData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cc372f058e4a4fb9, []int{21}
+	return fileDescriptor_cc372f058e4a4fb9, []int{23}
 }
 func (m *ReportDeviceAttributesData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1333,7 +1461,7 @@ func (m *ReportDeviceAttributesRsp) Reset()         { *m = ReportDeviceAttribute
 func (m *ReportDeviceAttributesRsp) String() string { return proto.CompactTextString(m) }
 func (*ReportDeviceAttributesRsp) ProtoMessage()    {}
 func (*ReportDeviceAttributesRsp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cc372f058e4a4fb9, []int{22}
+	return fileDescriptor_cc372f058e4a4fb9, []int{24}
 }
 func (m *ReportDeviceAttributesRsp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1388,6 +1516,8 @@ func init() {
 	proto.RegisterType((*TokenData)(nil), "phub.tokenData")
 	proto.RegisterType((*CommonData)(nil), "phub.commonData")
 	proto.RegisterType((*TokenRsp)(nil), "phub.TokenRsp")
+	proto.RegisterType((*ControlPutFileReq)(nil), "phub.ControlPutFileReq")
+	proto.RegisterType((*ControlPutFileRsp)(nil), "phub.ControlPutFileRsp")
 	proto.RegisterType((*DevicesData)(nil), "phub.devicesData")
 	proto.RegisterType((*DeviceStatus)(nil), "phub.deviceStatus")
 	proto.RegisterType((*SyncHomeInfoReq)(nil), "phub.SyncHomeInfoReq")
@@ -1412,67 +1542,71 @@ func init() {
 func init() { proto.RegisterFile("proto/phub/device.proto", fileDescriptor_cc372f058e4a4fb9) }
 
 var fileDescriptor_cc372f058e4a4fb9 = []byte{
-	// 949 bytes of a gzipped FileDescriptorProto
+	// 1011 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x56, 0x5f, 0x6f, 0x1b, 0x45,
-	0x10, 0xcf, 0xf9, 0x6f, 0x3c, 0x49, 0x5b, 0x67, 0x15, 0x25, 0x87, 0x51, 0x4d, 0xb8, 0xbe, 0x84,
-	0x82, 0x52, 0x30, 0x48, 0x08, 0x09, 0x21, 0xb5, 0x09, 0x55, 0x52, 0x21, 0x90, 0x2e, 0x01, 0x24,
-	0x54, 0x29, 0x3a, 0xdf, 0x6d, 0x9d, 0x53, 0x7d, 0xb7, 0xd7, 0xdd, 0x75, 0x9b, 0xf0, 0x01, 0x78,
-	0x44, 0x7c, 0x12, 0x3e, 0x03, 0x8f, 0x3c, 0xf6, 0x91, 0x47, 0x94, 0x7c, 0x11, 0xb4, 0x33, 0x7b,
-	0xf6, 0xf9, 0x6c, 0xd7, 0xce, 0x03, 0x6f, 0x3b, 0xbf, 0x99, 0x9d, 0xf9, 0xcd, 0xbf, 0xbd, 0x83,
-	0xdd, 0x4c, 0x0a, 0x2d, 0x1e, 0x65, 0x17, 0xa3, 0xfe, 0xa3, 0x88, 0xbf, 0x8e, 0x43, 0x7e, 0x80,
-	0x08, 0xab, 0x19, 0xc8, 0xfb, 0xd3, 0x81, 0xf5, 0x33, 0xf1, 0x92, 0xa7, 0x3e, 0x7f, 0xc5, 0xde,
-	0x87, 0x56, 0x38, 0x8c, 0x79, 0xaa, 0xcf, 0xe3, 0xc8, 0x75, 0xf6, 0x9c, 0xfd, 0x96, 0xbf, 0x4e,
-	0xc0, 0x49, 0xc4, 0x1e, 0xc0, 0x1d, 0xab, 0x54, 0x3c, 0x94, 0x5c, 0xbb, 0x15, 0x34, 0xd8, 0x24,
-	0xf0, 0x14, 0x31, 0x76, 0x1f, 0x60, 0x20, 0x83, 0x54, 0x9f, 0xeb, 0xab, 0x8c, 0xbb, 0x55, 0xb4,
-	0x68, 0x21, 0x72, 0x76, 0x95, 0x71, 0xb6, 0x0d, 0x75, 0x15, 0x8a, 0x8c, 0xbb, 0x75, 0xd4, 0x90,
-	0xc0, 0x18, 0xd4, 0x42, 0x11, 0x71, 0xb7, 0x81, 0x20, 0x9e, 0xd9, 0x2e, 0x34, 0x2f, 0x44, 0xc2,
-	0x0d, 0x91, 0x26, 0xc2, 0x0d, 0x23, 0x9e, 0x44, 0xde, 0x10, 0x5a, 0xda, 0xf0, 0x3d, 0x0a, 0x74,
-	0xc0, 0x3e, 0x84, 0xcd, 0x20, 0x0c, 0xb9, 0x52, 0xe7, 0x88, 0x59, 0xce, 0x1b, 0x84, 0x61, 0x5a,
-	0x86, 0x11, 0xbf, 0xcc, 0x62, 0xc9, 0xd5, 0x79, 0x9c, 0x22, 0xa3, 0xaa, 0xdf, 0xb2, 0xc8, 0x09,
-	0xaa, 0xf1, 0x2a, 0x11, 0xae, 0x11, 0x61, 0x44, 0x0c, 0x61, 0xaf, 0x07, 0x10, 0x8a, 0x24, 0x11,
-	0x14, 0x2e, 0x27, 0x6a, 0xc2, 0xd4, 0x2d, 0xd1, 0x36, 0x54, 0x13, 0x35, 0xb0, 0xc5, 0x30, 0x47,
-	0xef, 0xc7, 0xbc, 0xa2, 0x2a, 0x5b, 0xed, 0x06, 0x7b, 0x00, 0xb5, 0x28, 0xd0, 0x01, 0xb2, 0xdb,
-	0xe8, 0xdd, 0x3b, 0x30, 0x9d, 0x39, 0x18, 0x67, 0xe9, 0xa3, 0xd2, 0x1b, 0xc1, 0x06, 0xf5, 0x4f,
-	0x21, 0x97, 0x0e, 0xac, 0x93, 0x78, 0x32, 0x6e, 0x55, 0x2e, 0xb3, 0x2e, 0x00, 0x9d, 0xbf, 0x0f,
-	0x12, 0x6e, 0x03, 0x15, 0x10, 0xf6, 0x10, 0x1a, 0x4a, 0x07, 0x7a, 0xa4, 0x6c, 0x44, 0x46, 0x11,
-	0xc9, 0xe2, 0x14, 0x35, 0xbe, 0xb5, 0xf0, 0x7e, 0x73, 0x60, 0xb3, 0xa8, 0x30, 0x3d, 0xcc, 0xc4,
-	0x1b, 0x2e, 0x6d, 0x54, 0x12, 0x4c, 0xc8, 0xbe, 0x8c, 0x07, 0x17, 0x3a, 0xe5, 0x4a, 0x61, 0xc8,
-	0xba, 0x5f, 0x40, 0xcc, 0xad, 0x50, 0x0c, 0x85, 0xb4, 0x33, 0x41, 0x02, 0x7b, 0x08, 0x6d, 0x3c,
-	0x9c, 0xf1, 0x24, 0xe3, 0x32, 0xd0, 0x23, 0x99, 0xf7, 0x60, 0x06, 0xf7, 0xbe, 0x81, 0x7b, 0xa7,
-	0x57, 0x69, 0x78, 0x6c, 0xc6, 0x20, 0x7d, 0x21, 0xcc, 0xbc, 0x7e, 0x0c, 0x4d, 0x5b, 0x12, 0xd7,
-	0xd9, 0xab, 0xee, 0x6f, 0xf4, 0xb6, 0x8a, 0x89, 0x60, 0x9d, 0xfc, 0xdc, 0xc2, 0xfb, 0xb2, 0x74,
-	0x7f, 0xd5, 0xee, 0x78, 0xbf, 0x3b, 0x70, 0xf7, 0x50, 0xa4, 0x5a, 0x8a, 0xe1, 0xd3, 0x78, 0xc8,
-	0x4d, 0xe0, 0x1d, 0xb0, 0xe3, 0x68, 0x8b, 0x60, 0x25, 0xe6, 0x42, 0x53, 0xcb, 0x00, 0x7b, 0x42,
-	0x0e, 0x72, 0xd1, 0xb4, 0xeb, 0x45, 0x3c, 0xa4, 0x86, 0x50, 0x09, 0xc6, 0x72, 0xae, 0x3b, 0x8d,
-	0x7f, 0xa5, 0xec, 0xab, 0xfe, 0x58, 0x36, 0x14, 0xfb, 0x22, 0xba, 0xc2, 0x85, 0xd9, 0xf4, 0xf1,
-	0xec, 0x45, 0xd3, 0x7c, 0x4a, 0x89, 0xdc, 0x59, 0x38, 0x66, 0x9f, 0x4c, 0x8d, 0x99, 0x4b, 0xb5,
-	0x0a, 0xc9, 0xd3, 0x51, 0xa1, 0x64, 0x34, 0x6f, 0xcf, 0xc7, 0x51, 0x7e, 0x16, 0x32, 0xb2, 0x59,
-	0x1f, 0x4f, 0x65, 0x7d, 0xbc, 0x2c, 0x6b, 0x17, 0x9a, 0x09, 0x57, 0x2a, 0x18, 0xe4, 0x49, 0xe7,
-	0x62, 0x21, 0x07, 0xf4, 0xfe, 0x3f, 0xe5, 0xf0, 0x1d, 0xb0, 0x59, 0x9d, 0xf1, 0xaa, 0xe3, 0xcc,
-	0x26, 0x61, 0x8e, 0x06, 0xe1, 0x97, 0x59, 0x1e, 0x87, 0x5f, 0x22, 0x1b, 0xc9, 0x55, 0x66, 0x69,
-	0xe3, 0xd9, 0x1b, 0xc0, 0xd6, 0xe1, 0x94, 0xb7, 0xd5, 0x37, 0xfc, 0x76, 0xb4, 0x7f, 0x81, 0xb6,
-	0x05, 0xed, 0x32, 0xf2, 0x57, 0xef, 0xdc, 0xf7, 0xc9, 0x3e, 0x57, 0x96, 0xee, 0xf3, 0xd7, 0xd0,
-	0x26, 0xfc, 0xb1, 0xd6, 0x32, 0xee, 0x8f, 0x34, 0x57, 0x26, 0x87, 0xd4, 0x0c, 0x26, 0xf9, 0xc5,
-	0xb3, 0x59, 0xd8, 0xd7, 0xc1, 0x70, 0x94, 0x3f, 0x1f, 0x24, 0x78, 0x0a, 0xb6, 0xa2, 0x22, 0xb3,
-	0xa5, 0x4f, 0xd1, 0x93, 0xd9, 0x70, 0x6e, 0x05, 0x77, 0x75, 0xa7, 0x48, 0x72, 0xa2, 0xf5, 0x67,
-	0xec, 0xbd, 0x97, 0xe5, 0x72, 0xac, 0x5c, 0xf6, 0xcf, 0x26, 0x0f, 0x44, 0x0d, 0x83, 0xee, 0x4e,
-	0x3d, 0x10, 0x93, 0x1c, 0x26, 0xcf, 0xc4, 0x73, 0xd8, 0x2e, 0x13, 0x58, 0x9a, 0x64, 0x5e, 0xbf,
-	0xca, 0xbc, 0xfa, 0x55, 0x8b, 0xf5, 0x3b, 0x84, 0x5d, 0x7e, 0xc9, 0xc3, 0x91, 0xe6, 0x8f, 0xd3,
-	0xc8, 0xe7, 0x99, 0x90, 0xfa, 0x50, 0x24, 0x49, 0x90, 0xa2, 0x13, 0xfc, 0x06, 0xd9, 0x26, 0x68,
-	0xfb, 0xbd, 0x9c, 0xd3, 0x04, 0x09, 0xef, 0xd1, 0xd5, 0xa3, 0x72, 0xed, 0x96, 0xcc, 0xc9, 0x57,
-	0xb0, 0x1e, 0x52, 0xb4, 0xbc, 0x09, 0xf7, 0xa9, 0x1e, 0x0b, 0x38, 0xf9, 0x63, 0x73, 0x2f, 0x82,
-	0x8e, 0x9c, 0x1b, 0x73, 0x69, 0x71, 0x6e, 0x33, 0x9c, 0x6f, 0x16, 0x66, 0xb6, 0x72, 0xcb, 0xbf,
-	0x18, 0x6f, 0x9a, 0xc9, 0x6f, 0x8f, 0x82, 0x2d, 0xa6, 0x4e, 0x1b, 0xd7, 0xeb, 0x41, 0xfd, 0x87,
-	0x60, 0xa4, 0x2f, 0xd8, 0x47, 0x50, 0xa7, 0xff, 0x86, 0xbb, 0x74, 0x33, 0xff, 0x37, 0xea, 0x4c,
-	0xc9, 0x2a, 0xf3, 0xd6, 0x7a, 0x7f, 0x55, 0xa0, 0x41, 0x2e, 0xd9, 0x53, 0x60, 0x45, 0xde, 0xf6,
-	0x4b, 0x69, 0x27, 0xbc, 0xbc, 0xca, 0x9d, 0xb9, 0xb8, 0x71, 0xc9, 0x9e, 0xc1, 0xce, 0x99, 0x0c,
-	0x52, 0x95, 0xc4, 0xda, 0xbe, 0x34, 0xf9, 0x74, 0x6c, 0xd3, 0x9d, 0xe9, 0xef, 0x50, 0x67, 0x0e,
-	0x6a, 0xfc, 0xec, 0x3b, 0x9f, 0x3a, 0xec, 0x19, 0x74, 0xe6, 0xfb, 0x32, 0x0f, 0x6e, 0xc9, 0x9f,
-	0x7d, 0xe1, 0x3b, 0x73, 0x50, 0xe4, 0xf5, 0x13, 0xb4, 0xbf, 0x2d, 0x8d, 0x08, 0xfb, 0x80, 0x6c,
-	0x17, 0x4e, 0x62, 0xe7, 0xdd, 0x06, 0xc6, 0xef, 0x13, 0xf7, 0xef, 0xeb, 0xae, 0xf3, 0xf6, 0xba,
-	0xeb, 0xfc, 0x7b, 0xdd, 0x75, 0xfe, 0xb8, 0xe9, 0xae, 0xbd, 0xbd, 0xe9, 0xae, 0xfd, 0x73, 0xd3,
-	0x5d, 0xeb, 0x37, 0xf0, 0x27, 0xf5, 0xf3, 0xff, 0x02, 0x00, 0x00, 0xff, 0xff, 0xd7, 0x5f, 0x3d,
-	0xe1, 0xbf, 0x0a, 0x00, 0x00,
+	0x10, 0xcf, 0xc5, 0xb1, 0x1d, 0x4f, 0xd2, 0xd6, 0x59, 0x45, 0xf1, 0x71, 0xa8, 0x26, 0x5c, 0x5f,
+	0x42, 0x41, 0x29, 0x18, 0x24, 0x84, 0x84, 0x90, 0xda, 0x84, 0x2a, 0xa9, 0x10, 0x54, 0x97, 0x00,
+	0x12, 0xaa, 0x64, 0x9d, 0xef, 0xb6, 0xce, 0xa9, 0xbe, 0xdb, 0xeb, 0xee, 0x5e, 0xe3, 0xf4, 0x03,
+	0xf0, 0x88, 0x10, 0x1f, 0x84, 0xcf, 0xc1, 0x63, 0x1f, 0x79, 0x44, 0xc9, 0x17, 0x41, 0x3b, 0xbb,
+	0x6b, 0x9f, 0xff, 0xd5, 0xee, 0x43, 0xdf, 0x76, 0x7e, 0xb3, 0x3b, 0xf3, 0xfb, 0xcd, 0xcc, 0xee,
+	0x1d, 0xb4, 0x72, 0xce, 0x24, 0x7b, 0x90, 0x5f, 0x14, 0xbd, 0x07, 0x31, 0x7d, 0x95, 0x44, 0xf4,
+	0x10, 0x11, 0xb2, 0xa1, 0x20, 0xff, 0x6f, 0x07, 0x36, 0xcf, 0xd9, 0x0b, 0x9a, 0x05, 0xf4, 0x25,
+	0xf9, 0x10, 0x1a, 0xd1, 0x20, 0xa1, 0x99, 0xec, 0x26, 0xb1, 0xeb, 0xec, 0x3b, 0x07, 0x8d, 0x60,
+	0x53, 0x03, 0xa7, 0x31, 0xb9, 0x07, 0xb7, 0x8c, 0x53, 0xd0, 0x88, 0x53, 0xe9, 0xae, 0xe3, 0x86,
+	0x6d, 0x0d, 0x9e, 0x21, 0x46, 0xee, 0x02, 0xf4, 0x79, 0x98, 0xc9, 0xae, 0xbc, 0xca, 0xa9, 0x5b,
+	0xc1, 0x1d, 0x0d, 0x44, 0xce, 0xaf, 0x72, 0x4a, 0x76, 0xa1, 0x2a, 0x22, 0x96, 0x53, 0xb7, 0x8a,
+	0x1e, 0x6d, 0x10, 0x02, 0x1b, 0x11, 0x8b, 0xa9, 0x5b, 0x43, 0x10, 0xd7, 0xa4, 0x05, 0xf5, 0x0b,
+	0x96, 0x52, 0x45, 0xa4, 0x8e, 0x70, 0x4d, 0x99, 0xa7, 0xb1, 0x3f, 0x80, 0x86, 0x54, 0x7c, 0x8f,
+	0x43, 0x19, 0x92, 0x8f, 0x61, 0x3b, 0x8c, 0x22, 0x2a, 0x44, 0x17, 0x31, 0xc3, 0x79, 0x4b, 0x63,
+	0x28, 0x4b, 0x31, 0xa2, 0xc3, 0x3c, 0xe1, 0x54, 0x74, 0x93, 0x0c, 0x19, 0x55, 0x82, 0x86, 0x41,
+	0x4e, 0xd1, 0x8d, 0x47, 0x35, 0xe1, 0x0d, 0x4d, 0x18, 0x11, 0x45, 0xd8, 0xef, 0x00, 0x44, 0x2c,
+	0x4d, 0x99, 0x4e, 0x67, 0x89, 0xaa, 0x34, 0x55, 0x43, 0xb4, 0x09, 0x95, 0x54, 0xf4, 0x4d, 0x31,
+	0xd4, 0xd2, 0xff, 0xd9, 0x56, 0x54, 0xe4, 0xab, 0x9d, 0x20, 0xf7, 0x60, 0x23, 0x0e, 0x65, 0x88,
+	0xec, 0xb6, 0x3a, 0x77, 0x0e, 0x55, 0x67, 0x0e, 0x47, 0x2a, 0x03, 0x74, 0xfa, 0x97, 0xb0, 0x73,
+	0xc4, 0x32, 0xc9, 0xd9, 0xe0, 0x69, 0x21, 0x1f, 0x27, 0x03, 0x6a, 0x3a, 0xf6, 0x3c, 0x19, 0xd0,
+	0x6e, 0x16, 0xa6, 0xd4, 0x76, 0x4c, 0x01, 0x3f, 0x86, 0x29, 0x1d, 0x39, 0x45, 0xf2, 0x9a, 0x62,
+	0xba, 0x8a, 0x76, 0x9e, 0x25, 0xaf, 0xb1, 0x15, 0x74, 0x28, 0x79, 0x68, 0x9a, 0xa4, 0x0d, 0xc5,
+	0xb7, 0xc7, 0xe2, 0x2b, 0x2c, 0xc4, 0x76, 0x80, 0x6b, 0xbf, 0x3f, 0x93, 0x78, 0x4a, 0xd8, 0xad,
+	0x85, 0xc2, 0x3e, 0x9b, 0x10, 0xe6, 0x6a, 0x61, 0x91, 0x0e, 0x76, 0x8c, 0xc3, 0x28, 0x4a, 0x0a,
+	0x0b, 0xd8, 0x8a, 0xc7, 0x20, 0xf1, 0x60, 0x53, 0x9b, 0xa7, 0xa3, 0x61, 0xb4, 0x36, 0x69, 0x03,
+	0xe8, 0xb5, 0x12, 0x6a, 0x32, 0x96, 0x10, 0x72, 0x1f, 0x6a, 0x42, 0x86, 0xb2, 0x10, 0x26, 0x35,
+	0xd1, 0xa9, 0xf5, 0x8e, 0x33, 0xf4, 0x04, 0x66, 0x87, 0xff, 0xbb, 0x03, 0xdb, 0x65, 0x87, 0x2a,
+	0x4d, 0xce, 0x2e, 0x29, 0x37, 0x59, 0xb5, 0xa1, 0x52, 0xf6, 0x78, 0xd2, 0xbf, 0x90, 0x19, 0x15,
+	0x02, 0x53, 0x56, 0x83, 0x12, 0xa2, 0x4e, 0x45, 0x6c, 0xc0, 0xb8, 0x2d, 0x28, 0x1a, 0xe4, 0x3e,
+	0x34, 0x71, 0x71, 0x4e, 0xd3, 0x9c, 0xf2, 0x50, 0x16, 0xdc, 0x4e, 0xd9, 0x0c, 0xee, 0x7f, 0x07,
+	0x77, 0xce, 0xae, 0xb2, 0xe8, 0x44, 0x0d, 0x7a, 0xf6, 0x9c, 0xa9, 0xfe, 0x7e, 0x0a, 0x75, 0x53,
+	0x12, 0xd7, 0xd9, 0xaf, 0x1c, 0x6c, 0x75, 0x76, 0xca, 0x42, 0x74, 0xf1, 0xec, 0x0e, 0xff, 0xeb,
+	0xa9, 0xf3, 0xab, 0xce, 0x9f, 0xff, 0x87, 0x03, 0xb7, 0x4d, 0x8b, 0xed, 0x60, 0xed, 0x81, 0xb9,
+	0x70, 0xa6, 0x08, 0xc6, 0x22, 0x2e, 0xd4, 0x25, 0x0f, 0xb1, 0x27, 0x3a, 0x80, 0x35, 0x55, 0xbb,
+	0xec, 0xe4, 0x99, 0x12, 0x8c, 0x27, 0xd1, 0xf8, 0xd4, 0xe0, 0xa1, 0xfa, 0xf2, 0x20, 0xda, 0x91,
+	0xab, 0x96, 0x46, 0x2e, 0x9e, 0xe4, 0xf3, 0x9e, 0xe6, 0xed, 0xd9, 0x28, 0xcb, 0xaf, 0x8c, 0xc7,
+	0x46, 0xf5, 0xc9, 0x84, 0xea, 0x93, 0x65, 0xaa, 0x5d, 0xa8, 0xa7, 0x54, 0x88, 0xb0, 0x6f, 0x45,
+	0x5b, 0xb3, 0xa4, 0x01, 0xa3, 0xbf, 0x27, 0x0d, 0x3f, 0x00, 0x99, 0xf5, 0xa9, 0xa8, 0x32, 0xc9,
+	0x8d, 0x08, 0xb5, 0x54, 0x08, 0x1d, 0xe6, 0x36, 0x0f, 0x1d, 0x22, 0x1b, 0x4e, 0x45, 0x6e, 0x68,
+	0xe3, 0xba, 0x74, 0xd5, 0x4d, 0xb4, 0xd5, 0xdf, 0xb0, 0x77, 0xa3, 0xfd, 0x1b, 0x34, 0x0d, 0x68,
+	0x2e, 0x23, 0x7d, 0xf9, 0xd6, 0xfb, 0x3e, 0xbe, 0xcf, 0xeb, 0x4b, 0xef, 0xf3, 0xb7, 0xd0, 0xd4,
+	0xf8, 0x43, 0x29, 0x79, 0xd2, 0x2b, 0x24, 0x15, 0x4a, 0x43, 0xe9, 0x89, 0xc4, 0xb5, 0xba, 0xb0,
+	0xaf, 0xc2, 0x41, 0x61, 0x9f, 0x0f, 0x6d, 0xf8, 0x02, 0x76, 0xe2, 0x32, 0xb3, 0xa5, 0x4f, 0xd1,
+	0xa3, 0xd9, 0x74, 0xee, 0x3a, 0xde, 0xd5, 0xbd, 0x32, 0xc9, 0xb1, 0x37, 0x98, 0xd9, 0xef, 0xbf,
+	0x98, 0x2e, 0xc7, 0xca, 0x65, 0xff, 0x62, 0xfc, 0x40, 0x6c, 0x60, 0xd2, 0xd6, 0xc4, 0x03, 0x31,
+	0xd6, 0x30, 0x7e, 0x26, 0x9e, 0xc1, 0xee, 0x34, 0x81, 0xa5, 0x22, 0x6d, 0xfd, 0xd6, 0xe7, 0xd5,
+	0xaf, 0x52, 0xae, 0xdf, 0x11, 0xb4, 0xe8, 0x90, 0x46, 0x85, 0xa4, 0x0f, 0xb3, 0x38, 0xa0, 0x39,
+	0xe3, 0xf2, 0x88, 0xa5, 0x69, 0x98, 0x61, 0x10, 0xfc, 0xca, 0x9a, 0x26, 0x48, 0xf3, 0x47, 0x30,
+	0xa7, 0x09, 0x1c, 0x3e, 0xd0, 0x47, 0x8f, 0xa7, 0x6b, 0xb7, 0x64, 0x4e, 0xbe, 0x81, 0xcd, 0x48,
+	0x67, 0xb3, 0x4d, 0xb8, 0xab, 0xeb, 0xb1, 0x80, 0x53, 0x30, 0xda, 0xee, 0xc7, 0xe0, 0xf1, 0xb9,
+	0x39, 0x97, 0x16, 0xe7, 0x5d, 0x86, 0xf3, 0x72, 0xa1, 0xb2, 0x95, 0x5b, 0xfe, 0xd5, 0xe8, 0xa6,
+	0x29, 0x7d, 0xfb, 0x3a, 0xd9, 0x62, 0xea, 0xfa, 0xc6, 0x75, 0x3a, 0x50, 0xfd, 0x29, 0x2c, 0xe4,
+	0x05, 0xf9, 0x04, 0xaa, 0xfa, 0xcf, 0xe8, 0xb6, 0x3e, 0x69, 0xff, 0xfe, 0xbc, 0x09, 0x5b, 0xe4,
+	0xfe, 0x5a, 0xe7, 0xaf, 0x0a, 0xd4, 0x74, 0x48, 0xf2, 0x18, 0x48, 0x99, 0xb7, 0xf9, 0x52, 0x9a,
+	0x09, 0x9f, 0xbe, 0xca, 0xde, 0x5c, 0x5c, 0x85, 0x24, 0x4f, 0x60, 0xef, 0x9c, 0x87, 0x99, 0x48,
+	0x13, 0x69, 0x5e, 0x1a, 0x3b, 0x1d, 0xbb, 0xfa, 0xcc, 0xe4, 0x77, 0xc8, 0x9b, 0x83, 0xaa, 0x38,
+	0x07, 0xce, 0xe7, 0x0e, 0x79, 0x02, 0xde, 0xfc, 0x58, 0xea, 0xc1, 0x9d, 0x8a, 0x67, 0x5e, 0x78,
+	0x6f, 0x0e, 0x8a, 0xbc, 0x9e, 0x2e, 0x8a, 0xa5, 0x52, 0x92, 0xd6, 0xc4, 0xa9, 0xf1, 0xff, 0x97,
+	0x37, 0xdf, 0x81, 0x11, 0x7f, 0x81, 0xe6, 0xf7, 0x53, 0x43, 0x47, 0x3e, 0xd2, 0xdb, 0x17, 0xce,
+	0xb6, 0xf7, 0xf6, 0x0d, 0x2a, 0xee, 0x23, 0xf7, 0x9f, 0xeb, 0xb6, 0xf3, 0xe6, 0xba, 0xed, 0xfc,
+	0x77, 0xdd, 0x76, 0xfe, 0xbc, 0x69, 0xaf, 0xbd, 0xb9, 0x69, 0xaf, 0xfd, 0x7b, 0xd3, 0x5e, 0xeb,
+	0xd5, 0xf0, 0xc7, 0xfe, 0xcb, 0xff, 0x03, 0x00, 0x00, 0xff, 0xff, 0x6a, 0x86, 0x51, 0x30, 0xf3,
+	0x0b, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1542,6 +1676,8 @@ type DeviceClient interface {
 	TransmitControlCommand(c *ava.Context, req chan *ControlFileReq, opts ...ava.InvokeOptions) chan *ControlFileRsp
 	// 设备控制控制指令透传-文本
 	TransmitControlCommandWord(c *ava.Context, req *ControlWordReq, opts ...ava.InvokeOptions) (*ControlWordRsp, error)
+	// 设备控制控制指令透传-wav文件-put请求
+	TransmitControlCommandFile(c *ava.Context, req *ControlPutFileReq, opts ...ava.InvokeOptions) (*ControlPutFileRsp, error)
 	// 设备执行指令并上报结果状态
 	ExecuteAndReport(c *ava.Context, req *ReportDeviceAttributesReq, opts ...ava.InvokeOptions) (*ReportDeviceAttributesRsp, error)
 }
@@ -1601,6 +1737,12 @@ func (cc *deviceClient) TransmitControlCommandWord(c *ava.Context, req *ControlW
 	return rsp, err
 }
 
+func (cc *deviceClient) TransmitControlCommandFile(c *ava.Context, req *ControlPutFileReq, opts ...ava.InvokeOptions) (*ControlPutFileRsp, error) {
+	rsp := &ControlPutFileRsp{}
+	err := cc.c.InvokeRR(c, "/device/transmitcontrolcommandfile", req, rsp, opts...)
+	return rsp, err
+}
+
 func (cc *deviceClient) ExecuteAndReport(c *ava.Context, req *ReportDeviceAttributesReq, opts ...ava.InvokeOptions) (*ReportDeviceAttributesRsp, error) {
 	rsp := &ReportDeviceAttributesRsp{}
 	err := cc.c.InvokeRR(c, "/device/executeandreport", req, rsp, opts...)
@@ -1615,6 +1757,8 @@ type DeviceServer interface {
 	TransmitControlCommand(c *ava.Context, req chan *ControlFileReq, exit chan struct{}) chan *ControlFileRsp
 	// 设备控制控制指令透传-文本
 	TransmitControlCommandWord(c *ava.Context, req *ControlWordReq, rsp *ControlWordRsp)
+	// 设备控制控制指令透传-wav文件-put请求
+	TransmitControlCommandFile(c *ava.Context, req *ControlPutFileReq, rsp *ControlPutFileRsp)
 	// 设备执行指令并上报结果状态
 	ExecuteAndReport(c *ava.Context, req *ReportDeviceAttributesReq, rsp *ReportDeviceAttributesRsp)
 }
@@ -1624,6 +1768,7 @@ func RegisterDeviceServer(h DeviceServer) {
 	ava.AvaServer().RegisterHandler("/"+ava.AvaServer().Name()+"/device/reportdevicestatus", r.ReportDeviceStatus)
 	ava.AvaServer().RegisterChannelHandler("/"+ava.AvaServer().Name()+"/device/transmitcontrolcommand", r.TransmitControlCommand)
 	ava.AvaServer().RegisterHandler("/"+ava.AvaServer().Name()+"/device/transmitcontrolcommandword", r.TransmitControlCommandWord)
+	ava.AvaServer().RegisterHandler("/"+ava.AvaServer().Name()+"/device/transmitcontrolcommandfile", r.TransmitControlCommandFile)
 	ava.AvaServer().RegisterHandler("/"+ava.AvaServer().Name()+"/device/executeandreport", r.ExecuteAndReport)
 }
 
@@ -1695,6 +1840,25 @@ func (r *deviceHandler) TransmitControlCommandWord(c *ava.Context, req *ava.Pack
 	}
 	f := func(c *ava.Context, req proto.Message) proto.Message {
 		r.h.TransmitControlCommandWord(c, req.(*ControlWordReq), &out)
+		return &out
+	}
+	return interrupt(c, &in, f)
+}
+
+func (r *deviceHandler) TransmitControlCommandFile(c *ava.Context, req *ava.Packet, interrupt ava.Interceptor) (rsp proto.Message, err error) {
+	var in ControlPutFileReq
+	err = c.Codec().Decode(req.Bytes(), &in)
+	if err != nil {
+		c.Errorf("server decode packet err=%v |method=%s |data=%s", err, c.Metadata.Method(), req.String())
+		return nil, err
+	}
+	var out = ControlPutFileRsp{}
+	if interrupt == nil {
+		r.h.TransmitControlCommandFile(c, &in, &out)
+		return &out, err
+	}
+	f := func(c *ava.Context, req proto.Message) proto.Message {
+		r.h.TransmitControlCommandFile(c, req.(*ControlPutFileReq), &out)
 		return &out
 	}
 	return interrupt(c, &in, f)
@@ -1877,6 +2041,102 @@ func (m *TokenRsp) MarshalTo(dAtA []byte) (int, error) {
 }
 
 func (m *TokenRsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Data != nil {
+		{
+			size, err := m.Data.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintDevice(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Msg) > 0 {
+		i -= len(m.Msg)
+		copy(dAtA[i:], m.Msg)
+		i = encodeVarintDevice(dAtA, i, uint64(len(m.Msg)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Code != 0 {
+		i = encodeVarintDevice(dAtA, i, uint64(m.Code))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ControlPutFileReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ControlPutFileReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ControlPutFileReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Body) > 0 {
+		i -= len(m.Body)
+		copy(dAtA[i:], m.Body)
+		i = encodeVarintDevice(dAtA, i, uint64(len(m.Body)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.Extra) > 0 {
+		i -= len(m.Extra)
+		copy(dAtA[i:], m.Extra)
+		i = encodeVarintDevice(dAtA, i, uint64(len(m.Extra)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.FileSize != 0 {
+		i = encodeVarintDevice(dAtA, i, uint64(m.FileSize))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.FileName) > 0 {
+		i -= len(m.FileName)
+		copy(dAtA[i:], m.FileName)
+		i = encodeVarintDevice(dAtA, i, uint64(len(m.FileName)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ControlPutFileRsp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ControlPutFileRsp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ControlPutFileRsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -2832,6 +3092,50 @@ func (m *CommonData) Size() (n int) {
 }
 
 func (m *TokenRsp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Code != 0 {
+		n += 1 + sovDevice(uint64(m.Code))
+	}
+	l = len(m.Msg)
+	if l > 0 {
+		n += 1 + l + sovDevice(uint64(l))
+	}
+	if m.Data != nil {
+		l = m.Data.Size()
+		n += 1 + l + sovDevice(uint64(l))
+	}
+	return n
+}
+
+func (m *ControlPutFileReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.FileName)
+	if l > 0 {
+		n += 1 + l + sovDevice(uint64(l))
+	}
+	if m.FileSize != 0 {
+		n += 1 + sovDevice(uint64(m.FileSize))
+	}
+	l = len(m.Extra)
+	if l > 0 {
+		n += 1 + l + sovDevice(uint64(l))
+	}
+	l = len(m.Body)
+	if l > 0 {
+		n += 1 + l + sovDevice(uint64(l))
+	}
+	return n
+}
+
+func (m *ControlPutFileRsp) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -3821,6 +4125,310 @@ func (m *TokenRsp) Unmarshal(dAtA []byte) error {
 			}
 			if m.Data == nil {
 				m.Data = &TokenData{}
+			}
+			if err := m.Data.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipDevice(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthDevice
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ControlPutFileReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowDevice
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ControlPutFileReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ControlPutFileReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FileName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDevice
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthDevice
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthDevice
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.FileName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FileSize", wireType)
+			}
+			m.FileSize = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDevice
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.FileSize |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Extra", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDevice
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthDevice
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthDevice
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Extra = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Body", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDevice
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthDevice
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthDevice
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Body = append(m.Body[:0], dAtA[iNdEx:postIndex]...)
+			if m.Body == nil {
+				m.Body = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipDevice(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthDevice
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ControlPutFileRsp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowDevice
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ControlPutFileRsp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ControlPutFileRsp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Code", wireType)
+			}
+			m.Code = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDevice
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Code |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Msg", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDevice
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthDevice
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthDevice
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Msg = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowDevice
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthDevice
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthDevice
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Data == nil {
+				m.Data = &ControlDevicesData{}
 			}
 			if err := m.Data.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err

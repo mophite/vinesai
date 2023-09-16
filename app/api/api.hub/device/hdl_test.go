@@ -2,7 +2,6 @@ package device
 
 import (
 	ctx "context"
-	"fmt"
 	"io"
 	"os"
 	"runtime"
@@ -10,7 +9,7 @@ import (
 	"time"
 
 	"vinesai/internel/ava"
-	"vinesai/internel/ava/_example/tutorial/proto/phello"
+	"vinesai/proto/phub"
 
 	"github.com/jjeffcaii/reactor-go/scheduler"
 	"github.com/rsocket/rsocket-go"
@@ -21,15 +20,15 @@ import (
 
 // Other language encapsulation request api reference
 func init() {
-	//newClient()
+	newClient()
 }
 
 // srv.hello/hello/hellosrv/saychannelc5kfvl6g10l48q7pjss0{"Content-Type":"application/json","X-Api-Version":"v1.0.0"}
 func TestRequestChannel(t *testing.T) {
 
 	meta, _ := ava.EncodeMetadata(
-		"srv.hello",
-		"/hello/saysrv/channel",
+		"api.hub",
+		"/hub/device/transmitcontrolcommand",
 		"c5kep5mg10l34dfgudkg",
 		map[string]string{"X-Api-Version": "v1.0.0", "Content-Type": "application/json"},
 	)
@@ -38,19 +37,30 @@ func TestRequestChannel(t *testing.T) {
 		sendPayload = make(chan payload.Payload, 10)
 	)
 
-	var req = make(chan *phello.SayReq)
+	var req = make(chan *phub.ControlFileReq)
 
 	go func() {
-		for i := 0; i < 3; i++ {
-			req <- &phello.SayReq{
-				Ping: "ping",
-			}
+		f, err := os.Open("./test.wav")
+		if err != nil {
+			panic(err)
+		}
+		defer f.Close()
+		fd, err := io.ReadAll(f)
+		if err != nil {
+			panic(err)
 		}
 
-		//must be closed
-		time.Sleep(time.Second * 2)
+		req <- &phub.ControlFileReq{
+			HomeId:   "123",
+			TraceId:  "11111",
+			FileName: "test.wav",
+			FileSize: 1000,
+			Body:     fd,
+		}
+
+		time.Sleep(time.Second * 10)
 		//close will close socket
-		close(req)
+		//close(req)
 	}()
 
 	go func() {
@@ -145,31 +155,11 @@ func newClient() rsocket.Client {
 				ava.Error(err)
 			},
 		).
-		Transport(rsocket.TCPClient().SetAddr("172.23.26.2:20001").Build()). //setup transport and start
+		Transport(rsocket.TCPClient().SetAddr("175.178.164.183:10001").Build()). //setup transport and start
 		//Transport(rsocket.WebsocketClient().SetURL("ws://0.0.0.0:7777/test/wss").Build()). //setup transport and start
 		Start(ctx.TODO())
 	if err != nil {
 		panic(err)
 	}
 	return client
-}
-
-func TestAsr(t *testing.T) {
-	f, err := os.Open("./test.wav")
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer f.Close()
-	fd, err := io.ReadAll(f)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	rsp, err := asr(fd)
-	rsp.ToJsonString()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	fmt.Println(*rsp.Response.Result)
 }
