@@ -107,7 +107,7 @@ func ask(c *ava.Context, msg, homeId string) (*db_hub.MessageHistory, error) {
 	resp, err := gCli.CreateChatCompletion(
 		ctx,
 		openai.ChatCompletionRequest{
-			Model:       openai.GPT3Dot5Turbo,
+			Model:       openai.GPT4,
 			Messages:    mesList,
 			Temperature: config.GConfig.OpenAI.Temperature,
 			TopP:        config.GConfig.OpenAI.TopP,
