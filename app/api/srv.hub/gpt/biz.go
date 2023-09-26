@@ -99,7 +99,7 @@ func ask(c *ava.Context, msg, homeId string) (*db_hub.MessageHistory, error) {
 
 	c.Debugf("paramBuild |data=%v |homeId=%s", x.MustMarshal2String(&mesList), homeId)
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
 	defer cancel()
 
 	//c.Debugf("to gpt |data=%v", mesList)

@@ -18,7 +18,7 @@ require (
 	github.com/rs/cors v1.8.0
 	github.com/rs/xid v1.3.0
 	github.com/rsocket/rsocket-go v0.8.8
-	github.com/sashabaranov/go-openai v1.14.2
+	github.com/sashabaranov/go-openai v1.15.3
 	github.com/stretchr/testify v1.7.1
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/asr v1.0.749
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.749
