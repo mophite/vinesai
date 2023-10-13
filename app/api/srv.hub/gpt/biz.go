@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"strings"
-	"time"
 
 	"vinesai/internel/ava"
 	"vinesai/internel/config"
@@ -99,8 +98,8 @@ func ask(c *ava.Context, msg, homeId string) (*db_hub.MessageHistory, error) {
 
 	c.Debugf("paramBuild |data=%v |homeId=%s", x.MustMarshal2String(&mesList), homeId)
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
-	defer cancel()
+	//ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
+	//defer cancel()
 
 	//c.Debugf("to gpt |data=%v", mesList)
 
@@ -114,11 +113,12 @@ func ask(c *ava.Context, msg, homeId string) (*db_hub.MessageHistory, error) {
 	//	},
 	//)
 
-	resp, err := gCli.CreateCompletion(ctx, openai.CompletionRequest{
+	resp, err := gCli.CreateCompletion(context.Background(), openai.CompletionRequest{
 		Model:       openai.GPT3Dot5TurboInstruct,
 		Prompt:      msg,
 		Temperature: config.GConfig.OpenAI.Temperature,
 		TopP:        config.GConfig.OpenAI.TopP,
+		MaxTokens:   1000,
 	})
 
 	if err != nil {
