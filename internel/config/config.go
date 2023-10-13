@@ -32,8 +32,27 @@ type openAI struct {
 	TopP        float32 `json:"top_p"`
 }
 
-func Chaos() error {
-	GConfig = new(config)
+func ChaosOpenAI() error {
+	if GConfig == nil {
+		GConfig = new(config)
+	}
+
+	var o openAI
+	err := ava.ConfigDecPrivate("openai", &o)
+	if err != nil {
+		ava.Error(err)
+		return err
+	}
+
+	GConfig.OpenAI = o
+
+	return nil
+}
+
+func ChaosDB() error {
+	if GConfig == nil {
+		GConfig = new(config)
+	}
 
 	var r redis
 	err := ava.ConfigDecPublic("redis", &r)

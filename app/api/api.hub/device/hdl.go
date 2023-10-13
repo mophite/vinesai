@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"vinesai/internel/ava"
+	"vinesai/internel/db"
+	"vinesai/internel/db/db_hub"
 	"vinesai/internel/ipc"
 	"vinesai/internel/x"
 	"vinesai/proto/phub"
@@ -51,6 +53,22 @@ func (d *DevicesHub) TransmitControlCommandFile(c *ava.Context, req *phub.Contro
 	}
 
 	cRsp, err := ipc.Chat2AI(c, &phub.ChatReq{HomeId: home.HomeId, Message: *result.Response.Result})
+	if err != nil {
+		c.Error(err)
+		rsp.Code = http.StatusInternalServerError
+		rsp.Msg = x.StatusInternalServerError
+		return
+	}
+
+	var h = &db_hub.MessageHistory{
+		Message: *result.Response.Result,
+		Tip:     cRsp.Data.Tip, //todo 这里看下chatgpt返回的是什么，只需要返回语音合成tts需要内容
+		Exp:     cRsp.Data.Exp,
+		Resp:    cRsp.Data.Resp,
+		HomeID:  home.HomeId,
+	}
+	//消息入库
+	err = db.GMysql.Table(db_hub.TableMessageHistory).Create(h).Error
 	if err != nil {
 		c.Error(err)
 		rsp.Code = http.StatusInternalServerError
