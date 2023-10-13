@@ -104,15 +104,22 @@ func ask(c *ava.Context, msg, homeId string) (*db_hub.MessageHistory, error) {
 
 	//c.Debugf("to gpt |data=%v", mesList)
 
-	resp, err := gCli.CreateChatCompletion(
-		ctx,
-		openai.ChatCompletionRequest{
-			Model:       openai.GPT4,
-			Messages:    mesList,
-			Temperature: config.GConfig.OpenAI.Temperature,
-			TopP:        config.GConfig.OpenAI.TopP,
-		},
-	)
+	//resp, err := gCli.CreateChatCompletion(
+	//	ctx,
+	//	openai.ChatCompletionRequest{
+	//		Model:       openai.GPT4,
+	//		Messages:    mesList,
+	//		Temperature: config.GConfig.OpenAI.Temperature,
+	//		TopP:        config.GConfig.OpenAI.TopP,
+	//	},
+	//)
+
+	resp, err := gCli.CreateCompletion(ctx, openai.CompletionRequest{
+		Model:       openai.GPT3Dot5TurboInstruct,
+		Prompt:      msg,
+		Temperature: config.GConfig.OpenAI.Temperature,
+		TopP:        config.GConfig.OpenAI.TopP,
+	})
 
 	if err != nil {
 		c.Errorf("key=%s |err=%v", config.GConfig.OpenAI.Key, err)
@@ -123,11 +130,17 @@ func ask(c *ava.Context, msg, homeId string) (*db_hub.MessageHistory, error) {
 		return nil, errors.New("no response data")
 	}
 
-	if len(resp.Choices[0].Message.Content) == 0 {
+	//if len(resp.Choices[0].Message.Content) == 0 {
+	//	return nil, errors.New("ai didn't reply")
+	//}
+
+	if len(resp.Choices[0].Text) == 0 {
 		return nil, errors.New("ai didn't reply")
 	}
 
-	content := resp.Choices[0].Message.Content
+	//content := resp.Choices[0].Message.Content
+
+	content := resp.Choices[0].Text
 
 	c.Debugf("homeId=%s |content=%s", homeId, content)
 
