@@ -8,7 +8,6 @@ import (
 
 	"vinesai/internel/ava"
 	"vinesai/internel/config"
-	"vinesai/internel/db"
 	"vinesai/internel/db/db_hub"
 	"vinesai/internel/x"
 
@@ -66,37 +65,37 @@ func ask(c *ava.Context, msg, homeId string) (*db_hub.MessageHistory, error) {
 
 	msg = strings.TrimSpace(msg)
 
-	//从数据库取出当前用户最近的3条记录,作为上下文
-	var dbHistory []*db_hub.MessageHistory
-	err := db.
-		GMysql.
-		Table(db_hub.TableMessageHistory).
-		Where("home_id=?", homeId).
-		Order("created_at desc").
-		Limit(3).
-		Find(&dbHistory).Error
-	if err != nil {
-		return nil, err
-	}
-
-	var bucket = make([][]string, 0, 3)
-	if len(dbHistory) > 0 {
-		var tmpData = make([]string, 0, 3)
-		for i := range dbHistory {
-			tmpData = append(tmpData, dbHistory[i].Message, dbHistory[i].Resp)
-			bucket = append(bucket, tmpData)
-		}
-	}
-
-	var history = make([][]string, 0, 5)
-	history = append(history, []string{robotTemp, "设备注册成功。请描述你的场景。"})
-	if len(bucket) > 0 {
-		history = append(history, bucket...)
-	}
-
-	mesList := paramBuild(msg, history)
-
-	c.Debugf("paramBuild |data=%v |homeId=%s", x.MustMarshal2String(&mesList), homeId)
+	////从数据库取出当前用户最近的3条记录,作为上下文
+	//var dbHistory []*db_hub.MessageHistory
+	//err := db.
+	//	GMysql.
+	//	Table(db_hub.TableMessageHistory).
+	//	Where("home_id=?", homeId).
+	//	Order("created_at desc").
+	//	Limit(3).
+	//	Find(&dbHistory).Error
+	//if err != nil {
+	//	return nil, err
+	//}
+	//
+	//var bucket = make([][]string, 0, 3)
+	//if len(dbHistory) > 0 {
+	//	var tmpData = make([]string, 0, 3)
+	//	for i := range dbHistory {
+	//		tmpData = append(tmpData, dbHistory[i].Message, dbHistory[i].Resp)
+	//		bucket = append(bucket, tmpData)
+	//	}
+	//}
+	//
+	//var history = make([][]string, 0, 5)
+	//history = append(history, []string{robotTemp, "设备注册成功。请描述你的场景。"})
+	//if len(bucket) > 0 {
+	//	history = append(history, bucket...)
+	//}
+	//
+	//mesList := paramBuild(msg, history)
+	//
+	//c.Debugf("paramBuild |data=%v |homeId=%s", x.MustMarshal2String(&mesList), homeId)
 
 	//ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
 	//defer cancel()
@@ -112,6 +111,10 @@ func ask(c *ava.Context, msg, homeId string) (*db_hub.MessageHistory, error) {
 	//		TopP:        config.GConfig.OpenAI.TopP,
 	//	},
 	//)
+
+	msg = robotTemp + "\n" + msg
+
+	c.Debug(msg)
 
 	resp, err := gCli.CreateCompletion(context.Background(), openai.CompletionRequest{
 		Model:       openai.GPT3Dot5TurboInstruct,
@@ -165,7 +168,7 @@ func ask(c *ava.Context, msg, homeId string) (*db_hub.MessageHistory, error) {
 
 	c.Debugf("message=%s |tip=%s |exp=%s |resp=%s |homeId=%s", msg, tip, exp, resp, homeId)
 
-	//历史消息入库
+	////历史消息入库
 	var h = &db_hub.MessageHistory{
 		Message: msg,
 		Tip:     tip, //todo 这里看下chatgpt返回的是什么，只需要返回语音合成tts需要内容
@@ -173,10 +176,10 @@ func ask(c *ava.Context, msg, homeId string) (*db_hub.MessageHistory, error) {
 		Resp:    content,
 		HomeID:  homeId,
 	}
-	err = db.GMysql.Table(db_hub.TableMessageHistory).Create(h).Error
-	if err != nil {
-		return nil, err
-	}
+	//err = db.GMysql.Table(db_hub.TableMessageHistory).Create(h).Error
+	//if err != nil {
+	//	return nil, err
+	//}
 
 	return h, nil
 }

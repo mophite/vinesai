@@ -16,9 +16,6 @@
 package ava
 
 import (
-	"github.com/coreos/etcd/clientv3"
-	"github.com/panjf2000/ants/v2"
-	"github.com/rs/cors"
 	"net/http"
 	"os"
 	"os/signal"
@@ -27,7 +24,12 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
 	"vinesai/internel/ava/logger"
+
+	"github.com/coreos/etcd/clientv3"
+	"github.com/panjf2000/ants/v2"
+	"github.com/rs/cors"
 )
 
 type Options func(option *Option)
@@ -46,7 +48,7 @@ type Option struct {
 	RandPort *[2]int
 
 	//socket tcp ip:port address
-	TcpAddress int
+	TcpPort int
 
 	//websocket ip:port address
 	WssAddress string
@@ -100,6 +102,8 @@ type Option struct {
 
 	LocalIp string
 
+	EndpointIp string
+
 	//root router redirect
 	HttpGetRootPath string
 }
@@ -144,7 +148,6 @@ func NewOpts(opts ...Options) Option {
 	if err != nil {
 		panic(err)
 	}
-
 	opt.LocalIp = ip
 
 	if opt.RandPort == nil {
@@ -152,8 +155,8 @@ func NewOpts(opts ...Options) Option {
 	}
 
 	// NOTICE: api service only support fixed tcpAddress ,not suggest rand tcpAddress in api service
-	if opt.TcpAddress == 0 {
-		opt.TcpAddress = RandInt(opt.RandPort[0], opt.RandPort[1])
+	if opt.TcpPort == 0 {
+		opt.TcpPort = RandInt(opt.RandPort[0], opt.RandPort[1])
 	}
 
 	if opt.WssAddress != "" && opt.WssPath == "" {
@@ -178,14 +181,20 @@ func NewOpts(opts ...Options) Option {
 		opt.BuffSize = 10
 	}
 
-	tcpAddress := ip + ":" + strconv.Itoa(opt.TcpAddress)
+	tcpAddress := opt.LocalIp + ":" + strconv.Itoa(opt.TcpPort)
 
 	if opt.TransportServer == nil {
 		opt.TransportServer = newRsocketServer(tcpAddress, opt.WssAddress, opt.Name, opt.BuffSize)
 	}
 
+	var endpointIp = opt.LocalIp
+	if opt.EndpointIp != "" {
+		endpointIp = opt.EndpointIp
+	}
+
+	endpointAddress := endpointIp + ":" + strconv.Itoa(opt.TcpPort)
 	if opt.Endpoint == nil {
-		opt.Endpoint, err = newEndpoint(opt.Id, opt.Name, tcpAddress)
+		opt.Endpoint, err = newEndpoint(opt.Id, opt.Name, endpointAddress)
 		if err != nil {
 			panic(err)
 		}
@@ -404,6 +413,12 @@ func HttpApiAdd(address string) Options {
 	}
 }
 
+func EndpointIp(endpointIp string) Options {
+	return func(o *Option) {
+		o.EndpointIp = endpointIp
+	}
+}
+
 func Id(id string) Options {
 	return func(o *Option) {
 		o.Id = id
@@ -433,7 +448,7 @@ func EtcdConfig(e *clientv3.Config) Options {
 
 func TCPApiPort(port int) Options {
 	return func(o *Option) {
-		o.TcpAddress = port
+		o.TcpPort = port
 	}
 }
 

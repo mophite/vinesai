@@ -12,6 +12,7 @@ import (
 func main() {
 
 	ava.SetupService(
+		ava.EndpointIp("43.132.184.162"),
 		ava.TCPApiPort(30001),
 		ava.Namespace("srv.hub"),
 		ava.EtcdConfig(&clientv3.Config{Endpoints: []string{"175.178.164.183:2379"}}),

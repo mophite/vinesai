@@ -184,7 +184,7 @@ func (s *Server) Run() {
 
 	Infof(
 		"[TCP:%s:%d][WS:%s][HTTP:%s] start success!",
-		s.opts.LocalIp, s.opts.TcpAddress,
+		s.opts.LocalIp, s.opts.TcpPort,
 		s.opts.WssAddress,
 		s.opts.HttpAddress,
 	)

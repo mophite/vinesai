@@ -11,6 +11,8 @@ run() {
 		popd >/dev/null
 	done
 
+  kill -9 $(ps -ef|grep "\./srv" |awk '$0 !~/grep/ {print $2}' |tr -s '\n' ' ')
+
 	ps -ef|grep api.
 	ps -ef|grep srv.
 }

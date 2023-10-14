@@ -67,6 +67,7 @@ func (d *DevicesHub) TransmitControlCommandFile(c *ava.Context, req *phub.Contro
 		Resp:    cRsp.Data.Resp,
 		HomeID:  home.HomeId,
 	}
+
 	//消息入库
 	err = db.GMysql.Table(db_hub.TableMessageHistory).Create(h).Error
 	if err != nil {
