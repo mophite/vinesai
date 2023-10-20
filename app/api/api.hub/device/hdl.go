@@ -38,7 +38,7 @@ func (d *DevicesHub) TransmitControlCommandFile(c *ava.Context, req *phub.Contro
 		return
 	}
 
-	result, err := asr(req.Body)
+	result, err := asr(req.Body, home.EngSerViceType)
 
 	if err != nil {
 		c.Error(err)
@@ -113,7 +113,7 @@ func (d *DevicesHub) TransmitControlCommand(c *ava.Context, req chan *phub.Contr
 				}
 
 				//发送数据进行语音识别,chatgpt处理
-				result, err := asr(data.Body)
+				result, err := asr(data.Body, "")
 				if err != nil {
 					c.Error(err)
 					rsp <- &phub.ControlFileRsp{
