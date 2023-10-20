@@ -31,10 +31,13 @@ func init() {
 	}
 }
 
-func asr(binary []byte) (*v20190614.SentenceRecognitionResponse, error) {
+func asr(binary []byte, engSerViceType string) (*v20190614.SentenceRecognitionResponse, error) {
 
+	if engSerViceType == "" {
+		engSerViceType = "8k_zh"
+	}
 	var request = v20190614.NewSentenceRecognitionRequest()
-	request.EngSerViceType = common.StringPtr("8k_zh")
+	request.EngSerViceType = common.StringPtr(engSerViceType)
 	request.SourceType = common.Uint64Ptr(1)
 	request.VoiceFormat = common.StringPtr("wav")
 	request.Data = common.StringPtr(base64.StdEncoding.EncodeToString(binary))

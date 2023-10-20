@@ -21,7 +21,8 @@ func (d *DevicesHub) TransmitControlCommandFile(c *ava.Context, req *phub.Contro
 	}
 
 	var home struct {
-		HomeId string `json:"homeId"`
+		HomeId         string `json:"homeId"`
+		EngSerViceType string `json:"engSerViceType"`
 	}
 
 	err := x.MustUnmarshal(x.StringToBytes(req.Extra), &home)
