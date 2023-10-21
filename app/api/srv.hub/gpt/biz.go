@@ -94,7 +94,7 @@ func methodOne(c *ava.Context, req *phub.ChatReq) (*db_hub.MessageHistory, error
 	resp, err := gCli.CreateChatCompletion(
 		ctx,
 		openai.ChatCompletionRequest{
-			Model:       openai.GPT4,
+			Model:       openai.GPT3Dot5Turbo,
 			Messages:    mesList,
 			Temperature: config.GConfig.OpenAI.Temperature,
 			TopP:        config.GConfig.OpenAI.TopP,
