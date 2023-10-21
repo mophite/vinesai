@@ -30,6 +30,7 @@ type openAI struct {
 	Key         string  `json:"key"`
 	Temperature float32 `json:"temperature"`
 	TopP        float32 `json:"top_p"`
+	Method      string  `json:"method"`
 }
 
 func ChaosOpenAI() error {

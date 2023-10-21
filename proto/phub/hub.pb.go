@@ -28,6 +28,8 @@ type ChatReq struct {
 	Message    string   `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
 	DevicesIds []string `protobuf:"bytes,2,rep,name=devicesIds,proto3" json:"devicesIds,omitempty"`
 	HomeId     string   `protobuf:"bytes,3,opt,name=homeId,proto3" json:"homeId,omitempty"`
+	// 历史记录
+	ChatHistory []*ChatHistory `protobuf:"bytes,4,rep,name=chat_history,json=chatHistory,proto3" json:"chat_history,omitempty"`
 }
 
 func (m *ChatReq) Reset()         { *m = ChatReq{} }
@@ -84,6 +86,67 @@ func (m *ChatReq) GetHomeId() string {
 	return ""
 }
 
+func (m *ChatReq) GetChatHistory() []*ChatHistory {
+	if m != nil {
+		return m.ChatHistory
+	}
+	return nil
+}
+
+type ChatHistory struct {
+	// 截取需要内容
+	Message string `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
+	// chatgpt返回内容
+	Resp string `protobuf:"bytes,3,opt,name=resp,proto3" json:"resp,omitempty"`
+}
+
+func (m *ChatHistory) Reset()         { *m = ChatHistory{} }
+func (m *ChatHistory) String() string { return proto.CompactTextString(m) }
+func (*ChatHistory) ProtoMessage()    {}
+func (*ChatHistory) Descriptor() ([]byte, []int) {
+	return fileDescriptor_18e1e6df02346eb0, []int{1}
+}
+func (m *ChatHistory) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ChatHistory) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ChatHistory.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ChatHistory) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ChatHistory.Merge(m, src)
+}
+func (m *ChatHistory) XXX_Size() int {
+	return m.Size()
+}
+func (m *ChatHistory) XXX_DiscardUnknown() {
+	xxx_messageInfo_ChatHistory.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ChatHistory proto.InternalMessageInfo
+
+func (m *ChatHistory) GetMessage() string {
+	if m != nil {
+		return m.Message
+	}
+	return ""
+}
+
+func (m *ChatHistory) GetResp() string {
+	if m != nil {
+		return m.Resp
+	}
+	return ""
+}
+
 type ChatData struct {
 	// 机器人语音提示内容
 	Tip string `protobuf:"bytes,1,opt,name=tip,proto3" json:"tip,omitempty"`
@@ -97,7 +160,7 @@ func (m *ChatData) Reset()         { *m = ChatData{} }
 func (m *ChatData) String() string { return proto.CompactTextString(m) }
 func (*ChatData) ProtoMessage()    {}
 func (*ChatData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_18e1e6df02346eb0, []int{1}
+	return fileDescriptor_18e1e6df02346eb0, []int{2}
 }
 func (m *ChatData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -157,7 +220,7 @@ func (m *ChatRsp) Reset()         { *m = ChatRsp{} }
 func (m *ChatRsp) String() string { return proto.CompactTextString(m) }
 func (*ChatRsp) ProtoMessage()    {}
 func (*ChatRsp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_18e1e6df02346eb0, []int{2}
+	return fileDescriptor_18e1e6df02346eb0, []int{3}
 }
 func (m *ChatRsp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -209,6 +272,7 @@ func (m *ChatRsp) GetData() *ChatData {
 
 func init() {
 	proto.RegisterType((*ChatReq)(nil), "phub.ChatReq")
+	proto.RegisterType((*ChatHistory)(nil), "phub.chatHistory")
 	proto.RegisterType((*ChatData)(nil), "phub.chatData")
 	proto.RegisterType((*ChatRsp)(nil), "phub.ChatRsp")
 }
@@ -216,24 +280,27 @@ func init() {
 func init() { proto.RegisterFile("proto/phub/hub.proto", fileDescriptor_18e1e6df02346eb0) }
 
 var fileDescriptor_18e1e6df02346eb0 = []byte{
-	// 267 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x4c, 0x90, 0xc1, 0x4a, 0xf3, 0x40,
-	0x14, 0x85, 0x93, 0x26, 0x7f, 0xfb, 0xf7, 0x8a, 0x22, 0x17, 0x91, 0xc1, 0xc5, 0x50, 0x02, 0x42,
-	0x37, 0xa6, 0x50, 0x9f, 0xc0, 0xea, 0xa6, 0xdb, 0xb8, 0x74, 0x35, 0xc9, 0x0c, 0x99, 0x22, 0x21,
-	0x63, 0xef, 0x54, 0xfa, 0x18, 0x3e, 0x96, 0xcb, 0x2e, 0x5d, 0x4a, 0xf2, 0x22, 0x32, 0x93, 0x09,
-	0x74, 0x77, 0xce, 0xb9, 0x33, 0x1f, 0xe7, 0x5e, 0xb8, 0x31, 0xfb, 0xd6, 0xb6, 0x2b, 0xa3, 0x0f,
-	0xe5, 0x4a, 0x1f, 0xca, 0xdc, 0x5b, 0x4c, 0x9d, 0xcf, 0xde, 0x60, 0xf6, 0xac, 0x85, 0x2d, 0xd4,
-	0x07, 0x32, 0x98, 0x35, 0x8a, 0x48, 0xd4, 0x8a, 0xc5, 0x8b, 0x78, 0x39, 0x2f, 0x46, 0x8b, 0x1c,
-	0x40, 0xaa, 0xcf, 0x5d, 0xa5, 0x68, 0x2b, 0x89, 0x4d, 0x16, 0xc9, 0x72, 0x5e, 0x9c, 0x25, 0x78,
-	0x0b, 0x53, 0xdd, 0x36, 0x6a, 0x2b, 0x59, 0xe2, 0x3f, 0x06, 0x97, 0x6d, 0xe0, 0x7f, 0xa5, 0x85,
-	0x7d, 0x11, 0x56, 0xe0, 0x35, 0x24, 0x76, 0x67, 0x02, 0xd9, 0x49, 0x97, 0xa8, 0xa3, 0x61, 0x93,
-	0x21, 0x51, 0x47, 0x83, 0x08, 0xe9, 0x5e, 0x91, 0x09, 0x14, 0xaf, 0xb3, 0xd7, 0x50, 0x90, 0xfc,
-	0xb8, 0x6a, 0xe5, 0xd0, 0xee, 0x5f, 0xe1, 0xb5, 0x83, 0x34, 0x54, 0x8f, 0x90, 0x86, 0x6a, 0xcc,
-	0x20, 0x95, 0xc2, 0x0a, 0x0f, 0xb9, 0x58, 0x5f, 0xe5, 0x6e, 0xcd, 0x7c, 0xac, 0x51, 0xf8, 0xd9,
-	0xfa, 0x01, 0x52, 0x07, 0xc5, 0x7b, 0x48, 0x9e, 0xe8, 0x1d, 0x2f, 0x87, 0x47, 0xe1, 0x10, 0x77,
-	0xe7, 0x96, 0x4c, 0x16, 0x6d, 0xd8, 0x77, 0xc7, 0xe3, 0x53, 0xc7, 0xe3, 0xdf, 0x8e, 0xc7, 0x5f,
-	0x3d, 0x8f, 0x4e, 0x3d, 0x8f, 0x7e, 0x7a, 0x1e, 0x95, 0x53, 0x7f, 0xcb, 0xc7, 0xbf, 0x00, 0x00,
-	0x00, 0xff, 0xff, 0x58, 0xbe, 0xb1, 0x6e, 0x63, 0x01, 0x00, 0x00,
+	// 305 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x91, 0xb1, 0x4e, 0xc3, 0x30,
+	0x10, 0x86, 0xe3, 0x26, 0xb4, 0xf4, 0x0a, 0x08, 0x2c, 0x84, 0x2c, 0x06, 0xab, 0x8a, 0x84, 0xd4,
+	0x85, 0x56, 0x0a, 0x6c, 0x4c, 0x14, 0x06, 0xba, 0x9a, 0x07, 0x40, 0x4e, 0x62, 0xc5, 0x11, 0x8a,
+	0x62, 0x62, 0x17, 0x95, 0xb7, 0x80, 0xb7, 0x62, 0xec, 0xc8, 0x88, 0x92, 0x17, 0x41, 0x76, 0x52,
+	0x91, 0x01, 0xb1, 0xdd, 0x77, 0x7f, 0xee, 0xff, 0x2f, 0x67, 0x38, 0x55, 0x55, 0x69, 0xca, 0x85,
+	0x92, 0xeb, 0x78, 0x21, 0xd7, 0xf1, 0xdc, 0x21, 0x0e, 0x2c, 0x87, 0x1f, 0x08, 0x46, 0x77, 0x92,
+	0x1b, 0x26, 0x5e, 0x30, 0x81, 0x51, 0x21, 0xb4, 0xe6, 0x99, 0x20, 0x68, 0x8a, 0x66, 0x63, 0xb6,
+	0x43, 0x4c, 0x01, 0x52, 0xf1, 0x9a, 0x27, 0x42, 0xaf, 0x52, 0x4d, 0x06, 0x53, 0x7f, 0x36, 0x66,
+	0xbd, 0x0e, 0x3e, 0x83, 0xa1, 0x2c, 0x0b, 0xb1, 0x4a, 0x89, 0xef, 0x06, 0x3b, 0xc2, 0xd7, 0x70,
+	0x90, 0x48, 0x6e, 0x9e, 0x64, 0xae, 0x4d, 0x59, 0xbd, 0x91, 0x60, 0xea, 0xcf, 0x26, 0xd1, 0xc9,
+	0xdc, 0x46, 0xcf, 0xad, 0xf2, 0xd0, 0x0a, 0x6c, 0xd2, 0x83, 0xf0, 0x06, 0xfa, 0xf8, 0xcf, 0x5a,
+	0x18, 0x82, 0x4a, 0x68, 0xd5, 0x85, 0xba, 0x3a, 0x5c, 0xc2, 0xbe, 0x1d, 0xbe, 0xe7, 0x86, 0xe3,
+	0x63, 0xf0, 0x4d, 0xae, 0xba, 0x29, 0x5b, 0xda, 0x8e, 0xd8, 0x28, 0x32, 0x68, 0x3b, 0x62, 0xa3,
+	0xfe, 0xf4, 0x78, 0xec, 0x6e, 0xa2, 0x9d, 0x9c, 0x94, 0x69, 0x9b, 0xbc, 0xc7, 0x5c, 0x6d, 0x4d,
+	0x0a, 0x9d, 0xed, 0x4c, 0x0a, 0x9d, 0xe1, 0x10, 0x82, 0x94, 0x1b, 0xee, 0x4c, 0x26, 0xd1, 0xd1,
+	0xef, 0xff, 0xd9, 0x35, 0x98, 0xd3, 0xa2, 0x4b, 0x08, 0xac, 0x29, 0xbe, 0x00, 0xff, 0x56, 0x3f,
+	0xe3, 0xc3, 0xf6, 0xa3, 0xee, 0xf6, 0xe7, 0x7d, 0xd4, 0x2a, 0xf4, 0x96, 0xe4, 0xb3, 0xa6, 0x68,
+	0x5b, 0x53, 0xf4, 0x5d, 0x53, 0xf4, 0xde, 0x50, 0x6f, 0xdb, 0x50, 0xef, 0xab, 0xa1, 0x5e, 0x3c,
+	0x74, 0xef, 0x77, 0xf5, 0x13, 0x00, 0x00, 0xff, 0xff, 0xa0, 0x3e, 0xad, 0x72, 0xd7, 0x01, 0x00,
+	0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -314,6 +381,20 @@ func (m *ChatReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.ChatHistory) > 0 {
+		for iNdEx := len(m.ChatHistory) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ChatHistory[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintHub(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
 	if len(m.HomeId) > 0 {
 		i -= len(m.HomeId)
 		copy(dAtA[i:], m.HomeId)
@@ -329,6 +410,43 @@ func (m *ChatReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i--
 			dAtA[i] = 0x12
 		}
+	}
+	if len(m.Message) > 0 {
+		i -= len(m.Message)
+		copy(dAtA[i:], m.Message)
+		i = encodeVarintHub(dAtA, i, uint64(len(m.Message)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ChatHistory) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ChatHistory) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ChatHistory) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Resp) > 0 {
+		i -= len(m.Resp)
+		copy(dAtA[i:], m.Resp)
+		i = encodeVarintHub(dAtA, i, uint64(len(m.Resp)))
+		i--
+		dAtA[i] = 0x1a
 	}
 	if len(m.Message) > 0 {
 		i -= len(m.Message)
@@ -459,6 +577,29 @@ func (m *ChatReq) Size() (n int) {
 		}
 	}
 	l = len(m.HomeId)
+	if l > 0 {
+		n += 1 + l + sovHub(uint64(l))
+	}
+	if len(m.ChatHistory) > 0 {
+		for _, e := range m.ChatHistory {
+			l = e.Size()
+			n += 1 + l + sovHub(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *ChatHistory) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Message)
+	if l > 0 {
+		n += 1 + l + sovHub(uint64(l))
+	}
+	l = len(m.Resp)
 	if l > 0 {
 		n += 1 + l + sovHub(uint64(l))
 	}
@@ -636,6 +777,154 @@ func (m *ChatReq) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.HomeId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ChatHistory", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowHub
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthHub
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthHub
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ChatHistory = append(m.ChatHistory, &ChatHistory{})
+			if err := m.ChatHistory[len(m.ChatHistory)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipHub(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthHub
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ChatHistory) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowHub
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: chatHistory: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: chatHistory: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Message", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowHub
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthHub
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthHub
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Message = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Resp", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowHub
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthHub
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthHub
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Resp = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

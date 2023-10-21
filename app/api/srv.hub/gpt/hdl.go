@@ -2,7 +2,10 @@ package gpt
 
 import (
 	"net/http"
+
 	"vinesai/internel/ava"
+	"vinesai/internel/config"
+	"vinesai/internel/db/db_hub"
 	"vinesai/internel/x"
 	"vinesai/proto/phub"
 )
@@ -17,7 +20,15 @@ func (g *Gpt) Ask(c *ava.Context, req *phub.ChatReq, rsp *phub.ChatRsp) {
 		return
 	}
 
-	r, err := ask(c, req.Message, req.HomeId)
+	var r *db_hub.MessageHistory
+	var err error
+	switch config.GConfig.OpenAI.Method {
+	case "1":
+		r, err = methodOne(c, req)
+	case "2":
+		r, err = methodTwo(c, req)
+	}
+
 	if err != nil {
 		c.Error(err)
 		rsp.Code = http.StatusInternalServerError

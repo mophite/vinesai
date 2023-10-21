@@ -8,7 +8,17 @@ message ChatReq{
   string message = 1;
   repeated string devicesIds = 2;
   string homeId = 3;
+  //历史记录
+  repeated chatHistory chat_history =4;
 }
+
+message chatHistory{
+  //截取需要内容
+  string message = 1;
+  //chatgpt返回内容
+  string resp = 3;
+}
+
 
 message chatData{
   //机器人语音提示内容

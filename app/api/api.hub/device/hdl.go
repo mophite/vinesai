@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"vinesai/internel/ava"
+	"vinesai/internel/config"
 	"vinesai/internel/db"
 	"vinesai/internel/db/db_hub"
 	"vinesai/internel/ipc"
@@ -53,7 +54,36 @@ func (d *DevicesHub) TransmitControlCommandFile(c *ava.Context, req *phub.Contro
 		return
 	}
 
-	cRsp, err := ipc.Chat2AI(c, &phub.ChatReq{HomeId: home.HomeId, Message: *result.Response.Result})
+	cReq := &phub.ChatReq{HomeId: home.HomeId, Message: *result.Response.Result}
+	//需要历史记录
+	if config.GConfig.OpenAI.Method == "" {
+		//从数据库取出当前用户最近的3条记录,作为上下文
+		var dbHistory []*db_hub.MessageHistory
+		err := db.
+			GMysql.
+			Table(db_hub.TableMessageHistory).
+			Where("home_id=?", home.HomeId).
+			Order("created_at desc").
+			Limit(3).
+			Find(&dbHistory).Error
+		if err != nil {
+			c.Error(err)
+			rsp.Code = http.StatusInternalServerError
+			rsp.Msg = x.StatusInternalServerError
+			return
+		}
+		var tmp []*phub.ChatHistory
+		for i := range dbHistory {
+			var d = &phub.ChatHistory{
+				Message: *result.Response.Result,
+				Resp:    dbHistory[i].Resp,
+			}
+			tmp = append(tmp, d)
+		}
+		cReq.ChatHistory = tmp
+	}
+
+	cRsp, err := ipc.Chat2AI(c, cReq)
 	if err != nil {
 		c.Error(err)
 		rsp.Code = http.StatusInternalServerError
