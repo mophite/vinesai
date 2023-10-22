@@ -56,7 +56,7 @@ func (d *DevicesHub) TransmitControlCommandFile(c *ava.Context, req *phub.Contro
 
 	cReq := &phub.ChatReq{HomeId: home.HomeId, Message: *result.Response.Result}
 	//需要历史记录
-	if config.GConfig.OpenAI.Method == "" {
+	if config.GConfig.OpenAI.Method == "1" {
 		//从数据库取出当前用户最近的3条记录,作为上下文
 		var dbHistory []*db_hub.MessageHistory
 		err := db.

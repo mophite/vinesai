@@ -37,25 +37,47 @@ func ChaosOpenAI() error {
 	return nil
 }
 
-func paramBuild(msg string, history [][]string) []openai.ChatCompletionMessage {
-	maxHistory := 4
-	var mesList = make([]openai.ChatCompletionMessage, 0, maxHistory)
-	if len(history) > 0 {
-		if len(history) > maxHistory {
-			history = history[len(history)-maxHistory:]
-		}
-
-		for _, v := range history {
-			mesList = append(mesList, openai.ChatCompletionMessage{
-				Role:    openai.ChatMessageRoleUser,
-				Content: strings.Replace(v[0], "\n", "\\n", -1),
-			})
-			mesList = append(mesList, openai.ChatCompletionMessage{
-				Role:    openai.ChatMessageRoleAssistant,
-				Content: strings.Replace(v[1], "\n", "\\n", -1),
-			})
-		}
+// 判断是偶数
+func isEven(num int) bool {
+	if num%2 == 0 {
+		return true
 	}
+	return false
+}
+
+func paramBuild(msg string, history []*phub.ChatHistory) []openai.ChatCompletionMessage {
+
+	if len(history) > 3 {
+		history = history[len(history)-3:]
+	}
+
+	var mesList = make([]openai.ChatCompletionMessage, 0, 6)
+
+	//设置配置指令
+	mesList = append(mesList, openai.ChatCompletionMessage{
+		Role:    openai.ChatMessageRoleSystem,
+		Content: strings.Replace(robotTmp, "\n", "\\n", -1),
+	})
+
+	//设置第一次假设回复
+	mesList = append(mesList, openai.ChatCompletionMessage{
+		Role:    openai.ChatMessageRoleAssistant,
+		Content: "设备注册成功。请描述你的场景。",
+	})
+
+	//设置提问和回答信息
+	for i := range history {
+		mesList = append(mesList, openai.ChatCompletionMessage{
+			Role:    openai.ChatMessageRoleUser,
+			Content: history[i].Message,
+		})
+		mesList = append(mesList, openai.ChatCompletionMessage{
+			Role:    openai.ChatMessageRoleAssistant,
+			Content: history[i].Resp,
+		})
+	}
+
+	//最后加上当前的最新一次提问
 	mesList = append(mesList, openai.ChatCompletionMessage{
 		Role:    openai.ChatMessageRoleUser,
 		Content: msg,
@@ -67,22 +89,7 @@ func methodOne(c *ava.Context, req *phub.ChatReq) (*db_hub.MessageHistory, error
 
 	msg := strings.TrimSpace(req.Message)
 
-	var bucket = make([][]string, 0, 3)
-	if len(req.ChatHistory) > 0 {
-		var tmpData = make([]string, 0, 3)
-		for i := range req.ChatHistory {
-			tmpData = append(tmpData, req.ChatHistory[i].Message, req.ChatHistory[i].Resp)
-			bucket = append(bucket, tmpData)
-		}
-	}
-
-	var history = make([][]string, 0, 5)
-	history = append(history, []string{robotTemp, "设备注册成功。请描述你的场景。"})
-	if len(bucket) > 0 {
-		history = append(history, bucket...)
-	}
-
-	mesList := paramBuild(msg, history)
+	mesList := paramBuild(msg, req.ChatHistory)
 
 	c.Debugf("paramBuild |data=%v |homeId=%s", x.MustMarshal2String(&mesList), req.HomeId)
 
@@ -114,6 +121,8 @@ func methodOne(c *ava.Context, req *phub.ChatReq) (*db_hub.MessageHistory, error
 		return nil, errors.New("ai didn't reply")
 	}
 
+	c.Debug("resp=%v", x.MustMarshal2String(resp))
+
 	content := resp.Choices[0].Message.Content
 
 	c.Debugf("homeId=%s |content=%s", req.HomeId, content)
@@ -137,7 +146,7 @@ func methodOne(c *ava.Context, req *phub.ChatReq) (*db_hub.MessageHistory, error
 		}
 	}
 
-	c.Debugf("message=%s |tip=%s |exp=%s |resp=%s |homeId=%s", msg, tip, exp, resp, req.HomeId)
+	c.Debugf("message=%s |tip=%v |exp=%v |resp=%v |homeId=%s", msg, tip, exp, resp, req.HomeId)
 
 	var h = &db_hub.MessageHistory{
 		Message: msg,
