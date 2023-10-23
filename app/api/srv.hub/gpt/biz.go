@@ -56,7 +56,7 @@ func paramBuild(msg string, history []*phub.ChatHistory) []openai.ChatCompletion
 	//设置配置指令
 	mesList = append(mesList, openai.ChatCompletionMessage{
 		Role:    openai.ChatMessageRoleSystem,
-		Content: strings.Replace(robotTmp, "\n", "\\n", -1),
+		Content: strings.Replace(robotTemp, "\n", "\\n", -1),
 	})
 
 	//设置第一次假设回复
