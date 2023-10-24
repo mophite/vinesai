@@ -93,7 +93,7 @@ func methodOne(c *ava.Context, req *phub.ChatReq) (*db_hub.MessageHistory, error
 
 	c.Debugf("paramBuild |data=%v |homeId=%s", x.MustMarshal2String(&mesList), req.HomeId)
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*5)
 	defer cancel()
 
 	//c.Debugf("to gpt |data=%v", mesList)
@@ -101,10 +101,13 @@ func methodOne(c *ava.Context, req *phub.ChatReq) (*db_hub.MessageHistory, error
 	resp, err := gCli.CreateChatCompletion(
 		ctx,
 		openai.ChatCompletionRequest{
-			Model:       openai.GPT3Dot5Turbo,
-			Messages:    mesList,
-			Temperature: config.GConfig.OpenAI.Temperature,
-			TopP:        config.GConfig.OpenAI.TopP,
+			Model:    openai.GPT3Dot5Turbo,
+			Messages: mesList,
+			//Temperature: config.GConfig.OpenAI.Temperature,
+			//TopP:        config.GConfig.OpenAI.TopP,
+			Temperature: 0.5,
+			TopP:        1,
+			N:           1,
 		},
 	)
 
