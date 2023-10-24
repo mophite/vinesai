@@ -2,15 +2,16 @@ package ava
 
 import (
 	ctx "context"
+	"runtime"
+	"sync"
+	"time"
+
 	"github.com/jjeffcaii/reactor-go/scheduler"
 	"github.com/rsocket/rsocket-go"
 	"github.com/rsocket/rsocket-go/payload"
 	"github.com/rsocket/rsocket-go/rx"
 	"github.com/rsocket/rsocket-go/rx/flux"
 	"github.com/rsocket/rsocket-go/rx/mono"
-	"runtime"
-	"sync"
-	"time"
 )
 
 type rsocketClient struct {
@@ -45,7 +46,7 @@ func (cli *rsocketClient) Dial(e *endpoint, ch chan string) (err error) {
 			scheduler.NewElastic(runtime.NumCPU()<<8),
 			scheduler.NewElastic(runtime.NumCPU()<<8),
 		). //set scheduler to best
-		KeepAlive(cli.keepaliveInterval, cli.keepaliveLifetime, 1).
+		KeepAlive(cli.keepaliveInterval, cli.keepaliveLifetime, 3).
 		ConnectTimeout(cli.connectTimeout).
 		OnConnect(
 			func(client rsocket.Client, err error) { //handler when connect success
