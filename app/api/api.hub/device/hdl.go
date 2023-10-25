@@ -73,7 +73,7 @@ func (d *DevicesHub) TransmitControlCommandFile(c *ava.Context, req *phub.Contro
 			return
 		}
 		var tmp []*phub.ChatHistory
-		for i := range dbHistory {
+		for i := len(dbHistory) - 1; i >= 0; i-- {
 			var d = &phub.ChatHistory{
 				Message: *result.Response.Result,
 				Resp:    dbHistory[i].Resp,
@@ -82,6 +82,8 @@ func (d *DevicesHub) TransmitControlCommandFile(c *ava.Context, req *phub.Contro
 		}
 		cReq.ChatHistory = tmp
 	}
+
+	c.Debugf("ChatHistory |%v", x.MustMarshal2String(cReq))
 
 	cRsp, err := ipc.Chat2AI(c, cReq)
 	if err != nil {

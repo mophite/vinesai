@@ -59,13 +59,13 @@ func paramBuild(msg string, history []*phub.ChatHistory) []openai.ChatCompletion
 		Content: strings.Replace(robotTemp, "\n", "\\n", -1),
 	})
 
-	//设置第一次假设回复
-	mesList = append(mesList, openai.ChatCompletionMessage{
-		Role:    openai.ChatMessageRoleAssistant,
-		Content: "设备注册成功。请描述你的场景。",
-	})
+	////设置第一次假设回复
+	//mesList = append(mesList, openai.ChatCompletionMessage{
+	//	Role:    openai.ChatMessageRoleAssistant,
+	//	Content: "设备注册成功。请描述你的场景。",
+	//})
 
-	//设置提问和回答信息
+	//设置历史提问和回答信息
 	for i := range history {
 		mesList = append(mesList, openai.ChatCompletionMessage{
 			Role:    openai.ChatMessageRoleUser,
