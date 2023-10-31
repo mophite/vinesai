@@ -2,6 +2,8 @@ package device
 
 import (
 	"encoding/base64"
+	"fmt"
+	"strings"
 
 	v20190614 "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/asr/v20190614"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
@@ -45,4 +47,41 @@ func asr(binary []byte, engSerViceType string) (*v20190614.SentenceRecognitionRe
 	request.SubServiceType = common.Uint64Ptr(2)
 
 	return gClient.SentenceRecognition(request)
+}
+
+const magicStr = "AiavaControl:###"
+const magicStr2 = "AiavaControl：###"
+
+func parseRobotCom(s string) (string, string, error) {
+
+	var mgic = magicStr
+	i := strings.Index(s, magicStr)
+	if i < 0 {
+		mgic = magicStr2
+		i := strings.Index(s, magicStr2)
+		if i < 0 {
+			return "", "", fmt.Errorf("err")
+		}
+	}
+
+	j := strings.Index(s, "&&&&&")
+	if j < 1 {
+		return "", "", fmt.Errorf("%s err", s)
+	}
+
+	h := strings.Index(s, "<<<")
+	he := strings.Index(s, ">>>")
+	if h < 0 || he < 0 {
+		return "", "", fmt.Errorf("%s <> err", s)
+	}
+
+	d := s[h+3 : he]
+
+	s = s[:h]
+
+	s = strings.Replace(s, mgic, "", -1)
+	s = strings.Replace(s, "&&&&&", "", -1)
+	s = strings.Replace(s, "【", "", 1)
+	s = strings.Replace(s, "】", "", 1)
+	return s, d, nil
 }

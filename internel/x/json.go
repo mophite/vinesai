@@ -1,14 +1,21 @@
 package x
 
 import (
-	jsoniter "github.com/json-iterator/go"
+	"encoding/json"
 	"unsafe"
+
+	jsoniter "github.com/json-iterator/go"
 )
 
-var Json = jsoniter.ConfigFastest
+var Json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 func MustUnmarshal(b []byte, v interface{}) error {
 	_ = Json.Unmarshal(b, v)
+	return nil
+}
+
+func MustNativeUnmarshal(b []byte, v interface{}) error {
+	_ = json.Unmarshal(b, v)
 	return nil
 }
 

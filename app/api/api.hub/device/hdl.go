@@ -2,6 +2,7 @@ package device
 
 import (
 	"net/http"
+	"strings"
 
 	"vinesai/internel/ava"
 	"vinesai/internel/config"
@@ -11,8 +12,6 @@ import (
 	"vinesai/internel/lib"
 	"vinesai/internel/x"
 	"vinesai/proto/phub"
-
-	"vinesai/app/api/srv.hub/gpt"
 )
 
 type DevicesHub struct{}
@@ -91,7 +90,7 @@ func (d *DevicesHub) TransmitControlCommandFile(c *ava.Context, req *phub.Contro
 	var httpRep = struct {
 		Text string `json:"text"`
 	}{Text: cReq.Message}
-	httpRsp, err := lib.POST(c, "http://127.0.0.1:8000/receive_text", x.MustMarshal(&httpRep), map[string]string{
+	httpRsp, err := lib.POST(c, "http://127.0.0.1:8001/receive_text", x.MustMarshal(&httpRep), map[string]string{
 		"Content-type": "application/json",
 	})
 
@@ -108,15 +107,24 @@ func (d *DevicesHub) TransmitControlCommandFile(c *ava.Context, req *phub.Contro
 		Result  string `json:"result"`
 	}{}
 
-	err = x.MustUnmarshal(httpRsp, &toPython)
+	c.Debug(x.BytesToString(httpRsp))
+
+	var s = string(httpRsp)
+	s = strings.ReplaceAll(s, "‘", "'")
+	s = strings.ReplaceAll(s, "’", "'")
+
+	err = x.MustNativeUnmarshal([]byte(s), &toPython)
 	if err != nil {
 		c.Error(err)
 		rsp.Code = http.StatusInternalServerError
 		rsp.Msg = x.StatusInternalServerError
 		return
 	}
-	_, exp, tip, err := gpt.ParseRobotCom(c, toPython.Result)
+
+	c.Debug(toPython.Result)
+	exp, tip, err := parseRobotCom(toPython.Result)
 	if err != nil && toPython.Result != "" {
+		c.Error(err)
 		exp = toPython.Result
 		tip = toPython.Result
 	}
