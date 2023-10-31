@@ -75,6 +75,7 @@ func paramBuild(msg string, history []*phub.ChatHistory) []openai.ChatCompletion
 			Role:    openai.ChatMessageRoleAssistant,
 			Content: history[i].Resp,
 		})
+		break
 	}
 
 	//最后加上当前的最新一次提问
@@ -133,8 +134,8 @@ func methodOne(c *ava.Context, req *phub.ChatReq) (*db_hub.MessageHistory, error
 	var tip, exp string
 	if len(content) > 0 {
 		if isComStr(content) {
-			//m, ep, tts, err := parseRobotCom(content)
-			_, exp, tip, err = parseRobotCom(c, content)
+			//m, ep, tts, err := ParseRobotCom(content)
+			_, exp, tip, err = ParseRobotCom(c, content)
 			if err != nil {
 				ava.Errorf("parse robot comm failed %v |respText=%s", err, content)
 				return nil, err
@@ -198,8 +199,8 @@ func methodTwo(c *ava.Context, req *phub.ChatReq) (*db_hub.MessageHistory, error
 	var tip, exp string
 	if len(content) > 0 {
 		if isComStr(content) {
-			//m, ep, tts, err := parseRobotCom(content)
-			_, exp, tip, err = parseRobotCom(c, content)
+			//m, ep, tts, err := ParseRobotCom(content)
+			_, exp, tip, err = ParseRobotCom(c, content)
 			if err != nil {
 				ava.Errorf("parse robot comm failed %v |respText=%s", err, content)
 				return nil, err
@@ -236,7 +237,7 @@ func isComStr(s string) bool {
 }
 
 // id:cmd:param:val
-func parseRobotCom(c *ava.Context, s string) (map[string]map[string]interface{}, string, string, error) {
+func ParseRobotCom(c *ava.Context, s string) (map[string]map[string]interface{}, string, string, error) {
 
 	var mgic = magicStr
 	i := strings.Index(s, magicStr)

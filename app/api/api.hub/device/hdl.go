@@ -8,8 +8,11 @@ import (
 	"vinesai/internel/db"
 	"vinesai/internel/db/db_hub"
 	"vinesai/internel/ipc"
+	"vinesai/internel/lib"
 	"vinesai/internel/x"
 	"vinesai/proto/phub"
+
+	"vinesai/app/api/srv.hub/gpt"
 )
 
 type DevicesHub struct{}
@@ -84,9 +87,41 @@ func (d *DevicesHub) TransmitControlCommandFile(c *ava.Context, req *phub.Contro
 	}
 
 	c.Debugf("ChatHistory |%v", x.MustMarshal2String(cReq))
+	//请求python
+	var httpRep = struct {
+		Text string `json:"text"`
+	}{Text: cReq.Message}
+	httpRsp, err := lib.POST(c, "http://127.0.0.1:8000/receive_text", x.MustMarshal(&httpRep), map[string]string{
+		"Content-type": "application/json",
+	})
 
-	cRsp, err := ipc.Chat2AI(c, cReq)
 	if err != nil {
+		c.Error(err)
+		rsp.Code = http.StatusInternalServerError
+		rsp.Msg = x.StatusInternalServerError
+		return
+	}
+
+	var toPython = struct {
+		Message string `json:"message"`
+		Code    int    `json:"code"`
+		Result  string `json:"result"`
+	}{}
+
+	err = x.MustUnmarshal(httpRsp, &toPython)
+	if err != nil {
+		c.Error(err)
+		rsp.Code = http.StatusInternalServerError
+		rsp.Msg = x.StatusInternalServerError
+		return
+	}
+	_, exp, tip, err := gpt.ParseRobotCom(c, toPython.Result)
+	if err != nil && toPython.Result != "" {
+		exp = toPython.Result
+		tip = toPython.Result
+	}
+
+	if err != nil && toPython.Result == "" {
 		c.Error(err)
 		rsp.Code = http.StatusInternalServerError
 		rsp.Msg = x.StatusInternalServerError
@@ -95,11 +130,27 @@ func (d *DevicesHub) TransmitControlCommandFile(c *ava.Context, req *phub.Contro
 
 	var h = &db_hub.MessageHistory{
 		Message: *result.Response.Result,
-		Tip:     cRsp.Data.Tip, //todo 这里看下chatgpt返回的是什么，只需要返回语音合成tts需要内容
-		Exp:     cRsp.Data.Exp,
-		Resp:    cRsp.Data.Resp,
+		Tip:     tip, //todo 这里看下chatgpt返回的是什么，只需要返回语音合成tts需要内容
+		Exp:     exp,
+		Resp:    toPython.Result,
 		HomeID:  home.HomeId,
 	}
+
+	//cRsp, err := ipc.Chat2AI(c, cReq)
+	//if err != nil {
+	//	c.Error(err)
+	//	rsp.Code = http.StatusInternalServerError
+	//	rsp.Msg = x.StatusInternalServerError
+	//	return
+	//}
+	//
+	//var h = &db_hub.MessageHistory{
+	//	Message: *result.Response.Result,
+	//	Tip:     cRsp.Data.Tip, //todo 这里看下chatgpt返回的是什么，只需要返回语音合成tts需要内容
+	//	Exp:     cRsp.Data.Exp,
+	//	Resp:    cRsp.Data.Resp,
+	//	HomeID:  home.HomeId,
+	//}
 
 	//消息入库
 	err = db.GMysql.Table(db_hub.TableMessageHistory).Create(h).Error
@@ -113,10 +164,16 @@ func (d *DevicesHub) TransmitControlCommandFile(c *ava.Context, req *phub.Contro
 	rsp.Code = http.StatusOK
 	rsp.Msg = x.StatusOK
 
+	//data := &phub.ControlDevicesData{
+	//	Tip:  cRsp.Data.Tip,
+	//	Exp:  cRsp.Data.Exp,
+	//	Resp: cRsp.Data.Resp,
+	//}
+
 	data := &phub.ControlDevicesData{
-		Tip:  cRsp.Data.Tip,
-		Exp:  cRsp.Data.Exp,
-		Resp: cRsp.Data.Resp,
+		Tip:  tip,
+		Exp:  exp,
+		Resp: toPython.Result,
 	}
 	rsp.Data = data
 }
