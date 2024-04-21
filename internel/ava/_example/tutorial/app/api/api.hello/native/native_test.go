@@ -8,6 +8,7 @@ import (
 	"time"
 	"vinesai/internel/ava"
 	"vinesai/internel/ava/_example/tutorial/proto/phello"
+	"vinesai/internel/x"
 
 	"github.com/jjeffcaii/reactor-go/scheduler"
 	"github.com/rsocket/rsocket-go"
@@ -145,6 +146,48 @@ func TestRequestChannel(t *testing.T) {
 	<-done
 }
 
+func TestRequestStream(t *testing.T) {
+
+	meta, _ := ava.EncodeMetadata(
+		"srv.hello",
+		"/hello/saysrv/stream",
+		"c5kep5mg10l34dfgudkg",
+		map[string]string{"X-Api-Version": "v1.0.0", "Content-Type": "application/json"},
+	)
+
+	gClient := newClient()
+
+	var (
+		f = gClient.RequestStream(payload.New(x.MustMarshal(&phello.SayReq{Ping: "ping"}), meta.Payload()))
+	)
+
+	var done = make(chan struct{})
+	f.
+		SubscribeOn(scheduler.Parallel()).
+		DoFinally(
+			func(s rx.SignalType) {
+				//todo handler rx.SignalType
+				ava.Debug("DoFinally")
+				done <- struct{}{}
+			},
+		).
+		Subscribe(
+			ctx.Background(),
+			rx.OnNext(
+				func(p payload.Payload) error {
+					ava.Infof("from server |data=%s", p.DataUTF8())
+					return nil
+				},
+			),
+			rx.OnError(
+				func(err error) {
+					ava.Error(err)
+				},
+			),
+		)
+	<-done
+}
+
 func newClient() rsocket.Client {
 	client, err := rsocket.
 		Connect().
@@ -164,7 +207,7 @@ func newClient() rsocket.Client {
 				ava.Error(err)
 			},
 		).
-		Transport(rsocket.TCPClient().SetAddr("172.23.26.2:20001").Build()). //setup transport and start
+		Transport(rsocket.TCPClient().SetAddr("192.168.0.106:20001").Build()). //setup transport and start
 		//Transport(rsocket.WebsocketClient().SetURL("ws://0.0.0.0:7777/test/wss").Build()). //setup transport and start
 		Start(ctx.TODO())
 	if err != nil {

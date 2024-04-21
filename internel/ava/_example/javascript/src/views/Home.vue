@@ -20,7 +20,6 @@
 <script>
 import {RSocketClient} from "rsocket-core";
 import RSocketWebSocketClient from "rsocket-websocket-client";
-// @ is an alias to /src
 import RequestResponse from "@/components/RequestResponse.vue";
 import RequestStream from "@/components/RequestStream.vue";
 import RequestChannel from "@/components/RequestChannel.vue";

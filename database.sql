@@ -2,16 +2,17 @@ DROP TABLE `message_history`;
 CREATE TABLE IF NOT EXISTS `message_history`
 (
     `id`          BIGINT UNSIGNED AUTO_INCREMENT,
-    `merchant_id` VARCHAR(30) NOT NULL,
+    `option`      tinyint,
+    `merchant_id` VARCHAR(30),
     `message`     text        NOT NULL,
     `tip`         text,
     `exp`         text,
     `resp`        text,
-    `home_id`     VARCHAR(40) NOT NULL,
+    `identity`    VARCHAR(40) COMMENT '用户身份标识',
     `updated_at`  timestamp   NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '数据修改时间',
     `created_at`  timestamp   NULL DEFAULT CURRENT_TIMESTAMP COMMENT '数据入库时间',
     PRIMARY KEY (`id`),
-    INDEX index_created_home (`created_at`, `home_id`)
+    INDEX index_created_home (`created_at`, `identity`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 100000 COMMENT ='家庭发送消息历史记录表'
   DEFAULT CHARSET = utf8;

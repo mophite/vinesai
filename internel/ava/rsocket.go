@@ -2,7 +2,7 @@ package ava
 
 import (
 	ctx "context"
-	"runtime"
+	"errors"
 	"sync"
 	"time"
 
@@ -42,10 +42,10 @@ func (cli *rsocketClient) Dial(e *endpoint, ch chan string) (err error) {
 		Connect().
 		//MetadataMimeType(extension.ApplicationProtobuf.String()).
 		//DataMimeType(extension.ApplicationProtobuf.String()).
-		Scheduler(
-			scheduler.NewElastic(runtime.NumCPU()<<8),
-			scheduler.NewElastic(runtime.NumCPU()<<8),
-		). //set scheduler to best
+		//Scheduler(
+		//	scheduler.NewElastic(runtime.NumCPU()<<8),
+		//	scheduler.NewElastic(runtime.NumCPU()<<8),
+		//). //set scheduler to best
 		KeepAlive(cli.keepaliveInterval, cli.keepaliveLifetime, 3).
 		ConnectTimeout(cli.connectTimeout).
 		OnConnect(
@@ -270,10 +270,10 @@ func (r *rsocketServer) Accept(route *Router) {
 		},
 	)
 
-	r.serverBuilder.Scheduler(
-		scheduler.NewElastic(runtime.NumCPU()<<8),
-		scheduler.NewElastic(runtime.NumCPU()<<8),
-	) // setting scheduler goroutine on numCPU*2 to better working
+	//r.serverBuilder.Scheduler(
+	//	scheduler.NewElastic(runtime.NumCPU()<<8),
+	//	scheduler.NewElastic(runtime.NumCPU()<<8),
+	//) // setting scheduler goroutine on numCPU*2 to better working
 
 	r.serverBuilder.Resume()
 	r.serverStart = r.serverBuilder.
@@ -377,7 +377,7 @@ func setupRequestResponse(r *Router, remoteIp string, setup payload.SetupPayload
 
 			err = r.RR(c, req, rsp)
 
-			if err == errNotFoundHandler {
+			if errors.Is(err, errNotFoundHandler) {
 				c.Errorf("err=%v |path=%s", err, c.Metadata.Method())
 				return mono.JustOneshot(payload.New(r.Error().Error404(c), nil))
 			}
@@ -413,11 +413,12 @@ func setupFireAndForget(r *Router, remoteIp string, setup payload.SetupPayload) 
 				Fatalf("err=%v |metadata=%s |mimeType=%s", err, BytesToString(mustGetMetadata(p)), setup.MetadataMimeType())
 				return
 			}
+
 			c.RemoteAddr = remoteIp
 
 			err = r.FF(c, req)
 
-			if err == errNotFoundHandler {
+			if errors.Is(err, errNotFoundHandler) {
 				c.Errorf("err=%v |path=%s", err, c.Metadata.Method())
 				return
 			}
@@ -476,6 +477,7 @@ func setupRequestStream(router *Router, remoteIp string, setup payload.SetupPayl
 							c.Errorf("transport RS Encode failure |method=%s |err=%v", c.Metadata.Method(), err)
 							continue
 						}
+
 						sink.Next(payload.New(data, nil))
 					}
 					sink.Complete()
@@ -487,8 +489,11 @@ func setupRequestStream(router *Router, remoteIp string, setup payload.SetupPayl
 			}).DoOnComplete(func() {
 				Debug("setup setupRequestStream OnComplete")
 			}).DoFinally(func(s rx.SignalType) {
+				exit <- struct{}{}
 				close(exit)
 				Debug("setup setupRequestStream DoFinally")
+			}).DoOnSubscribe(func(ctx ctx.Context, s rx.Subscription) {
+				Debug("setup setupRequestStream DoOnSubscribe")
 			})
 		},
 	)
@@ -568,6 +573,7 @@ func setupRequestChannel(router *Router, remoteIp string, buffSize int, setup pa
 			}).DoOnComplete(func() {
 				Debug("setup setupRequestChannel OnComplete")
 			}).DoFinally(func(s rx.SignalType) {
+				exit <- struct{}{}
 				close(exit)
 				Debug("setup setupRequestChannel DoFinally")
 			})

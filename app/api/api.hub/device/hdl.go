@@ -64,7 +64,7 @@ func (d *DevicesHub) TransmitControlCommandFile(c *ava.Context, req *phub.Contro
 		err := db.
 			GMysql.
 			Table(db_hub.TableMessageHistory).
-			Where("home_id=?", home.HomeId).
+			Where("identity=?", home.HomeId).
 			Order("created_at desc").
 			Limit(3).
 			Find(&dbHistory).Error
@@ -77,7 +77,7 @@ func (d *DevicesHub) TransmitControlCommandFile(c *ava.Context, req *phub.Contro
 		var tmp []*phub.ChatHistory
 		for i := len(dbHistory) - 1; i >= 0; i-- {
 			var d = &phub.ChatHistory{
-				Message: *result.Response.Result,
+				Message: dbHistory[i].Message,
 				Resp:    dbHistory[i].Resp,
 			}
 			tmp = append(tmp, d)
@@ -137,11 +137,12 @@ func (d *DevicesHub) TransmitControlCommandFile(c *ava.Context, req *phub.Contro
 	}
 
 	var h = &db_hub.MessageHistory{
-		Message: *result.Response.Result,
-		Tip:     tip, //todo 这里看下chatgpt返回的是什么，只需要返回语音合成tts需要内容
-		Exp:     exp,
-		Resp:    toPython.Result,
-		HomeID:  home.HomeId,
+		Message:  *result.Response.Result,
+		Tip:      tip, //todo 这里看下chatgpt返回的是什么，只需要返回语音合成tts需要内容
+		Exp:      exp,
+		Resp:     toPython.Result,
+		Identity: home.HomeId,
+		Option:   1,
 	}
 
 	//cRsp, err := ipc.Chat2AI(c, cReq)

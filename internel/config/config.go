@@ -67,7 +67,7 @@ func ChaosDB() error {
 	GConfig.Redis = r
 
 	//初始化redis
-	err = db.ChaosRedis(r.Address)
+	err = db.ChaosRedis(r.Address, r.Password)
 	if err != nil {
 		ava.Error(err)
 		return err

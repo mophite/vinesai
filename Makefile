@@ -8,6 +8,12 @@ proto:
 		done; \
 	done
 
+d:
+	export GOOS=linux; \
+	./bin/build.sh; \
+	./bin/deploy.sh; \
+	./bin/run.sh
+
 # build
 build:
 	./bin/build.sh

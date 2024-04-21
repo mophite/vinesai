@@ -18,7 +18,7 @@ func TestAsr(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	rsp, err := asr(fd)
+	rsp, err := asr(fd, "2")
 	rsp.ToJsonString()
 	if err != nil {
 		t.Fatal(err)

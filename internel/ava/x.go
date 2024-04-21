@@ -50,6 +50,15 @@ func MustUnmarshal(b []byte, v interface{}) {
 	}
 }
 
+func Unmarshal(b []byte, v interface{}) error {
+	err := jsonFast.Unmarshal(b, v)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func MustMarshalString(v interface{}) string {
 	b, _ := jsonFast.MarshalToString(v)
 	return b

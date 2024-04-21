@@ -72,10 +72,6 @@ cd /code/guashu_api
 
 tail -f /code/guashu_api/cmd/srv.feed/nohup.out
 
-谭戬欠钱
-2000x6.46=12,920+500
-500
-
 官网:http://guashu.com:8099
 
 api.sns http://guashu.com:8099/sns
@@ -94,25 +90,38 @@ psql -U postgres
 {"DatabaseDsn":"host=localhost user=postgres password=ojo1QbOygiKjT1uZ dbname=guashu port=5432 sslmode=disable TimeZone=Asia/Shanghai"}
 
 
-黔ICP备2021009356号
-
-底部改为这个 ©2021-2022 贵州小枝丫科技有限公司 · 挂书 · 黔ICP 备 2021009356号 · 黔ICP证 B2-20180050
-
-
 http://82.157.14.79:2382/etcdkeeper/
 
 
 
+1.
+redis安装：
+https://cloud.tencent.com/developer/article/2303238
+2.
+mysql安装：
+https://www.mysqltutorial.org/getting-started-with-mysql/install-mysql-centos/
+3.
+etcd安装：
+https://github.com/etcd-io/etcd
+直接下载压缩包
+wget https://github.com/etcd-io/etcd/releases/download/v3.5.12/etcd-v3.5.12-linux-amd64.tar.gz
+etcd启动:
+nohup ./etcd --listen-client-urls http://0.0.0.0:2379 --advertise-client-urls http://0.0.0.0:2379 &
+4.
+etcdkeeper安装:
+wget https://github.com/evildecay/etcdkeeper/releases/download/v0.7.6/etcdkeeper-v0.7.6-linux_x86_64.zip
+启动：
+nohup ./etcdkeeper -p 2378 &
+http://ip:2378/etcdkeeper/
 
+需要开放的端口：
+22,2378,2379,3306,6379,10000,10002
 
 服务重启步骤:
-ssh -p 22 root@175.178.164.183
-Aixiaozhiya2023
+ssh -p 22 root@101.32.191.191
+Xuliyang2024
 
-scp api.hub  root@175.178.164.183:/root/vinesai/cmd/api.hub
-
-ssh -p 22 root@43.132.184.162
-Xiaozhiya@2023
+scp api.hub  root@175.178.164.183:/root/code/cmd/api.hub
 
 scp srv.hub root@43.132.184.162:/root
 
@@ -121,16 +130,12 @@ cd /opt/app
 
 systemctl start nginx
 systemctl start redis
+service mysqld start
+
+mysql配置文件位置:
+/etc/my.cnf.d/mysql-server.cnf
 
 mosquitto -c /etc/mosquitto/mosquitto.conf -d -v
-
-
-source  venv/bin/activate
-nohup python first.py &
-deactivate
-
-cd /opt/app/cgpt
-go run main.go
 
 
  git clone https://oauth2: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@github.com/mophite/cgpt.git
@@ -148,8 +153,6 @@ rsync -e "ssh -p 22" -avzrC   cmd  root@175.178.164.183:/opt/app/cgpt/
 UDP:2378,6379,3306,10000,10001,2379
 
 
- ./etcd --listen-client-urls http://0.0.0.0:2379 --advertise-client-urls http://0.0.0.0:2379
-
 
 
 
@@ -160,4 +163,9 @@ UDP:2378,6379,3306,10000,10001,2379
 
     }
 }
+
+autogen
+cdoegemma 7b
+devin
+opendevin
 

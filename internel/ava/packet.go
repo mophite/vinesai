@@ -21,8 +21,9 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"github.com/oxtoacart/bpool"
 	"io"
+
+	"github.com/oxtoacart/bpool"
 )
 
 const (

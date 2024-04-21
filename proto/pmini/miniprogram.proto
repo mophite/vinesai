@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package pmini;
+// this proto file is for api.hello/srv.hello
+
+message ChatReq{
+  uint32 option = 1; //0表示文本
+  string content = 2;//文本内容
+  string userId = 3;
+}
+
+message chatRspData{
+  string content = 1;
+  string userId = 2;
+}
+
+message ChatRsp{
+  int32 code = 1;
+  string msg = 2;
+  chatRspData data = 3;
+}
+
+message ChatStreamReq{
+  string userId = 1;
+}
+
+message chatStreamData{
+  string content = 1;
+  string userId = 2;
+  string sender = 3;
+  bool isUser = 4;
+  bool end=5;
+  bool displayName=6;
+}
+
+message ChatStreamRsp{
+  int32 code = 1;
+  string msg = 2;
+  chatStreamData data = 3;
+}
+
+service Chat4mini{
+  rpc Chat(ChatReq)returns(ChatRsp){};
+  rpc ChatStream(ChatStreamReq)returns(stream ChatStreamRsp){};
+}
+
+message AskReq{
+  string content = 1;
+}
+
+message askData{
+  string content = 1;
+}
+
+message AskRsp{
+  int32 code = 1;
+  string msg = 2;
+  askData data = 3;
+}
+
+service Ask2Ai{
+  rpc Ask(AskReq)returns(AskRsp){};
+}
