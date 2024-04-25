@@ -2,7 +2,7 @@
 
 user="root"
 remote_path="/root/"
-remote_host="175.178.164.183"
+remote_host="43.139.244.233"
 port="22"
 
 #VERSION=`git describe --tags`
@@ -16,6 +16,6 @@ log()
 }
 
 ssh -t -t $user@$remote_host << EOF
-         cd /vines; sh restart.sh; \
+         cd /root/code/vinesai; sh restart.sh; \
          exit
 EOF

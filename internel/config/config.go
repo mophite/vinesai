@@ -85,7 +85,7 @@ func ChaosDB() error {
 	//初始化mysql
 	err = db.ChaosMysql(m.Dsn)
 	if err != nil {
-		ava.Error(err)
+		ava.Errorf("dns=%s |err=%v", m.Dsn, err)
 		return err
 	}
 

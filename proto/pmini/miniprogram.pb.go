@@ -531,6 +531,110 @@ func (m *AskRsp) GetData() *AskData {
 	return nil
 }
 
+type OrderReq struct {
+	Content string `protobuf:"bytes,1,opt,name=content,proto3" json:"content,omitempty"`
+	UserId  string `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+}
+
+func (m *OrderReq) Reset()         { *m = OrderReq{} }
+func (m *OrderReq) String() string { return proto.CompactTextString(m) }
+func (*OrderReq) ProtoMessage()    {}
+func (*OrderReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_12d563a99ea57a02, []int{9}
+}
+func (m *OrderReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *OrderReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_OrderReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *OrderReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OrderReq.Merge(m, src)
+}
+func (m *OrderReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *OrderReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_OrderReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_OrderReq proto.InternalMessageInfo
+
+func (m *OrderReq) GetContent() string {
+	if m != nil {
+		return m.Content
+	}
+	return ""
+}
+
+func (m *OrderReq) GetUserId() string {
+	if m != nil {
+		return m.UserId
+	}
+	return ""
+}
+
+type OrderRsp struct {
+	Code int32  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	Msg  string `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg,omitempty"`
+}
+
+func (m *OrderRsp) Reset()         { *m = OrderRsp{} }
+func (m *OrderRsp) String() string { return proto.CompactTextString(m) }
+func (*OrderRsp) ProtoMessage()    {}
+func (*OrderRsp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_12d563a99ea57a02, []int{10}
+}
+func (m *OrderRsp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *OrderRsp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_OrderRsp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *OrderRsp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OrderRsp.Merge(m, src)
+}
+func (m *OrderRsp) XXX_Size() int {
+	return m.Size()
+}
+func (m *OrderRsp) XXX_DiscardUnknown() {
+	xxx_messageInfo_OrderRsp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_OrderRsp proto.InternalMessageInfo
+
+func (m *OrderRsp) GetCode() int32 {
+	if m != nil {
+		return m.Code
+	}
+	return 0
+}
+
+func (m *OrderRsp) GetMsg() string {
+	if m != nil {
+		return m.Msg
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*ChatReq)(nil), "pmini.ChatReq")
 	proto.RegisterType((*ChatRspData)(nil), "pmini.chatRspData")
@@ -541,39 +645,45 @@ func init() {
 	proto.RegisterType((*AskReq)(nil), "pmini.AskReq")
 	proto.RegisterType((*AskData)(nil), "pmini.askData")
 	proto.RegisterType((*AskRsp)(nil), "pmini.AskRsp")
+	proto.RegisterType((*OrderReq)(nil), "pmini.OrderReq")
+	proto.RegisterType((*OrderRsp)(nil), "pmini.OrderRsp")
 }
 
 func init() { proto.RegisterFile("proto/pmini/miniprogram.proto", fileDescriptor_12d563a99ea57a02) }
 
 var fileDescriptor_12d563a99ea57a02 = []byte{
-	// 426 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x53, 0x41, 0x6b, 0xdb, 0x30,
-	0x18, 0xb5, 0x12, 0xc7, 0x59, 0xbe, 0x90, 0x30, 0xc4, 0x36, 0x44, 0x60, 0xc6, 0x68, 0x6c, 0xf3,
-	0x2e, 0xc9, 0xf0, 0x76, 0x1c, 0x8c, 0x6c, 0xbb, 0xec, 0xb2, 0x83, 0xc3, 0xd8, 0x75, 0x9a, 0x2d,
-	0x32, 0x93, 0xda, 0x56, 0x2d, 0xf5, 0xd0, 0x7f, 0xd1, 0x5f, 0xd1, 0xdf, 0xd2, 0x63, 0x8e, 0x3d,
-	0x96, 0xe4, 0x8f, 0x14, 0xc9, 0x4a, 0x62, 0x43, 0x53, 0x42, 0x2f, 0x41, 0xef, 0x7b, 0xfa, 0x5e,
-	0xde, 0x7b, 0xc8, 0xf0, 0x5a, 0x54, 0xa5, 0x2a, 0x67, 0x22, 0xcf, 0x8a, 0x6c, 0xa6, 0x7f, 0x44,
-	0x55, 0x2e, 0x2b, 0x96, 0x4f, 0xcd, 0x1c, 0xf7, 0x0c, 0x41, 0x17, 0xd0, 0xff, 0xfe, 0x9f, 0xa9,
-	0x98, 0x9f, 0xe3, 0x57, 0xe0, 0x95, 0x42, 0x65, 0x65, 0x41, 0x50, 0x80, 0xc2, 0x51, 0x6c, 0x11,
-	0x26, 0xd0, 0x4f, 0xca, 0x42, 0xf1, 0x42, 0x91, 0x4e, 0x80, 0xc2, 0x41, 0xbc, 0x83, 0x7a, 0xe3,
-	0x42, 0xf2, 0xea, 0x67, 0x4a, 0xba, 0x86, 0xb0, 0x88, 0x7e, 0x85, 0x61, 0xa2, 0x45, 0xa5, 0xf8,
-	0xc1, 0x14, 0x6b, 0x0a, 0xa0, 0x63, 0x02, 0x9d, 0x96, 0xc0, 0x1f, 0xeb, 0x4a, 0x0a, 0x8c, 0xc1,
-	0x4d, 0xca, 0x94, 0x9b, 0xcd, 0x5e, 0x6c, 0xce, 0xf8, 0x39, 0x74, 0x73, 0xb9, 0xb4, 0x3b, 0xfa,
-	0x88, 0xdf, 0x81, 0x9b, 0x32, 0xc5, 0x8c, 0x8f, 0x61, 0x84, 0xa7, 0x26, 0xdc, 0xb4, 0x61, 0x22,
-	0x36, 0x3c, 0x7d, 0x0f, 0x23, 0x2d, 0xbc, 0x50, 0x15, 0x67, 0xb9, 0x0d, 0x6d, 0x1d, 0xa0, 0x96,
-	0x83, 0x6b, 0x04, 0xe3, 0x64, 0x7f, 0xf3, 0x69, 0x31, 0xf4, 0x5c, 0xf2, 0x22, 0xe5, 0xd5, 0xae,
-	0x9f, 0x1a, 0xe9, 0x79, 0x26, 0x7f, 0x4b, 0x5e, 0x11, 0x37, 0x40, 0xe1, 0xb3, 0xd8, 0x22, 0x9d,
-	0x8b, 0x17, 0x29, 0xe9, 0x99, 0xa1, 0x3e, 0xe2, 0x00, 0x86, 0x69, 0x26, 0xc5, 0x19, 0xbb, 0xfc,
-	0xc5, 0x72, 0x4e, 0x3c, 0xc3, 0x34, 0x47, 0xf4, 0x6f, 0x2b, 0xd1, 0xc9, 0x85, 0x7d, 0x68, 0x15,
-	0xf6, 0xb2, 0x51, 0xd8, 0x21, 0xb1, 0xed, 0x8c, 0x82, 0x37, 0x97, 0x2b, 0x5d, 0xd6, 0xd1, 0x06,
-	0xe8, 0x1b, 0xe8, 0x33, 0xb9, 0x7a, 0xbc, 0x26, 0x1a, 0xd7, 0x42, 0x27, 0x7b, 0xa4, 0x2d, 0x8f,
-	0x63, 0xeb, 0xd1, 0xfe, 0x4f, 0x6d, 0x2e, 0x92, 0x30, 0xd0, 0xf1, 0x3f, 0x6b, 0x0a, 0x87, 0xe0,
-	0x6a, 0x80, 0x77, 0x57, 0xed, 0xcb, 0x9e, 0xb4, 0xb0, 0x14, 0xd4, 0xc1, 0x5f, 0x00, 0x0e, 0xad,
-	0xe1, 0x17, 0x0d, 0x7e, 0xff, 0x34, 0x26, 0x0f, 0x4c, 0xf5, 0xee, 0x47, 0x14, 0xcd, 0x4c, 0x90,
-	0x68, 0x9e, 0xe1, 0xb7, 0xd0, 0x9d, 0xcb, 0x15, 0x1e, 0xd9, 0xab, 0x75, 0x4f, 0x93, 0x26, 0xd4,
-	0x2b, 0xdf, 0xc8, 0xcd, 0xc6, 0x47, 0xeb, 0x8d, 0x8f, 0xee, 0x36, 0x3e, 0xba, 0xda, 0xfa, 0xce,
-	0x7a, 0xeb, 0x3b, 0xb7, 0x5b, 0xdf, 0xf9, 0xe7, 0x99, 0xaf, 0xf1, 0xd3, 0x7d, 0x00, 0x00, 0x00,
-	0xff, 0xff, 0x33, 0xf4, 0x09, 0xce, 0xae, 0x03, 0x00, 0x00,
+	// 481 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0x5d, 0x6b, 0xd4, 0x40,
+	0x14, 0xdd, 0xe9, 0x7e, 0xb5, 0x77, 0xd9, 0x2a, 0x17, 0x3f, 0xc2, 0x82, 0x61, 0x19, 0x51, 0x23,
+	0xc2, 0x6e, 0x89, 0x3e, 0x56, 0x64, 0x6d, 0x5f, 0x7c, 0x51, 0x48, 0x11, 0x1f, 0x75, 0x4c, 0x86,
+	0x1a, 0xb6, 0xc9, 0xc4, 0x99, 0x51, 0xf0, 0x5f, 0xf8, 0x2b, 0xfc, 0x2d, 0x3e, 0xf6, 0xd1, 0x47,
+	0xd9, 0xfd, 0x23, 0x72, 0x67, 0x27, 0x6d, 0x22, 0xb6, 0x2c, 0xbe, 0x84, 0x39, 0xf7, 0xce, 0xb9,
+	0x39, 0xe7, 0xcc, 0x24, 0x70, 0xaf, 0xd2, 0xca, 0xaa, 0x79, 0x55, 0xe4, 0x65, 0x3e, 0xa7, 0x47,
+	0xa5, 0xd5, 0xa9, 0x16, 0xc5, 0xcc, 0xd5, 0xb1, 0xef, 0x1a, 0xfc, 0x04, 0x86, 0x47, 0x9f, 0x84,
+	0x4d, 0xe4, 0x67, 0xbc, 0x03, 0x03, 0x55, 0xd9, 0x5c, 0x95, 0x01, 0x9b, 0xb2, 0x68, 0x9c, 0x78,
+	0x84, 0x01, 0x0c, 0x53, 0x55, 0x5a, 0x59, 0xda, 0x60, 0x67, 0xca, 0xa2, 0xbd, 0xa4, 0x86, 0xc4,
+	0xf8, 0x62, 0xa4, 0x7e, 0x95, 0x05, 0x5d, 0xd7, 0xf0, 0x88, 0xbf, 0x80, 0x51, 0x4a, 0x43, 0x4d,
+	0x75, 0x2c, 0xac, 0x68, 0x0e, 0x60, 0x57, 0x0d, 0xd8, 0x69, 0x0d, 0x78, 0xe7, 0x55, 0x99, 0x0a,
+	0x11, 0x7a, 0xa9, 0xca, 0xa4, 0x63, 0xf6, 0x13, 0xb7, 0xc6, 0x9b, 0xd0, 0x2d, 0xcc, 0xa9, 0xe7,
+	0xd0, 0x12, 0x1f, 0x42, 0x2f, 0x13, 0x56, 0x38, 0x1d, 0xa3, 0x18, 0x67, 0xce, 0xdc, 0xac, 0x21,
+	0x22, 0x71, 0x7d, 0xfe, 0x08, 0xc6, 0x34, 0xf8, 0xc4, 0x6a, 0x29, 0x0a, 0x6f, 0xda, 0x2b, 0x60,
+	0x2d, 0x05, 0x3f, 0x18, 0xec, 0xa7, 0x17, 0x3b, 0xff, 0xcf, 0x06, 0xd5, 0x8d, 0x2c, 0x33, 0xa9,
+	0xeb, 0x7c, 0x36, 0x88, 0xea, 0xb9, 0x79, 0x6b, 0xa4, 0x0e, 0x7a, 0x53, 0x16, 0xed, 0x26, 0x1e,
+	0x91, 0x2f, 0x59, 0x66, 0x41, 0xdf, 0x15, 0x69, 0x89, 0x53, 0x18, 0x65, 0xb9, 0xa9, 0xce, 0xc4,
+	0xb7, 0xd7, 0xa2, 0x90, 0xc1, 0xc0, 0x75, 0x9a, 0x25, 0xfe, 0xa1, 0xe5, 0x68, 0xeb, 0xc0, 0x1e,
+	0xb7, 0x02, 0xbb, 0xdd, 0x08, 0xec, 0xd2, 0xb1, 0xcf, 0x8c, 0xc3, 0x60, 0x61, 0x96, 0x14, 0xd6,
+	0x95, 0x09, 0xf0, 0xfb, 0x30, 0x14, 0x66, 0x79, 0x7d, 0x4c, 0x3c, 0xd9, 0x0c, 0xda, 0x5a, 0x23,
+	0x6f, 0x69, 0xdc, 0xf7, 0x1a, 0xfd, 0x7b, 0xbc, 0xb8, 0xe7, 0xb0, 0xfb, 0x46, 0x67, 0x52, 0x5f,
+	0x2b, 0x0f, 0xef, 0xc2, 0x90, 0x8e, 0xe4, 0x7d, 0xfe, 0xf7, 0x45, 0x3b, 0xa8, 0xe9, 0xdb, 0x8a,
+	0x8a, 0x0d, 0xec, 0x51, 0xde, 0xcf, 0x48, 0x0b, 0x46, 0xd0, 0x23, 0x80, 0xb5, 0x36, 0xff, 0x29,
+	0x4d, 0x5a, 0xd8, 0x54, 0xbc, 0x83, 0x87, 0x00, 0x97, 0xc7, 0x84, 0xb7, 0x1a, 0xfd, 0x8b, 0xbb,
+	0x38, 0xf9, 0x47, 0x95, 0xb8, 0x07, 0x2c, 0x9e, 0xbb, 0xe4, 0xe2, 0x45, 0x8e, 0x0f, 0xa0, 0xbb,
+	0x30, 0x4b, 0x1c, 0xfb, 0xad, 0x9b, 0x83, 0x99, 0x34, 0x21, 0x51, 0xe2, 0x43, 0x18, 0x1f, 0xcb,
+	0xaf, 0x79, 0x2a, 0x8f, 0x54, 0x69, 0xb5, 0x3a, 0xc3, 0x27, 0xd0, 0x77, 0x46, 0xf1, 0x86, 0xdf,
+	0x5a, 0xa7, 0x36, 0x69, 0x17, 0x88, 0xfd, 0x32, 0xf8, 0xb9, 0x0a, 0xd9, 0xf9, 0x2a, 0x64, 0xbf,
+	0x57, 0x21, 0xfb, 0xbe, 0x0e, 0x3b, 0xe7, 0xeb, 0xb0, 0xf3, 0x6b, 0x1d, 0x76, 0x3e, 0x0e, 0xdc,
+	0xcf, 0xe3, 0xe9, 0x9f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x53, 0x44, 0x93, 0x20, 0x5d, 0x04, 0x00,
+	0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -729,6 +839,57 @@ func (r *ask2AiHandler) Ask(c *ava.Context, req *ava.Packet, interrupt ava.Inter
 	}
 	f := func(c *ava.Context, req proto.Message) proto.Message {
 		r.h.Ask(c, req.(*AskReq), &out)
+		return &out
+	}
+	return interrupt(c, &in, f)
+}
+
+type DeviceControlClient interface {
+	Order(c *ava.Context, req *OrderReq, opts ...ava.InvokeOptions) (*OrderRsp, error)
+}
+
+type deviceControlClient struct {
+	c *ava.Client
+}
+
+func NewDeviceControlClient() DeviceControlClient {
+	return &deviceControlClient{c: ava.AvaClient()}
+}
+
+func (cc *deviceControlClient) Order(c *ava.Context, req *OrderReq, opts ...ava.InvokeOptions) (*OrderRsp, error) {
+	rsp := &OrderRsp{}
+	err := cc.c.InvokeRR(c, "/devicecontrol/order", req, rsp, opts...)
+	return rsp, err
+}
+
+// DeviceControlServer is the server API for DeviceControl ava.
+type DeviceControlServer interface {
+	Order(c *ava.Context, req *OrderReq, rsp *OrderRsp)
+}
+
+func RegisterDeviceControlServer(h DeviceControlServer) {
+	var r = &deviceControlHandler{h: h}
+	ava.AvaServer().RegisterHandler("/"+ava.AvaServer().Name()+"/devicecontrol/order", r.Order)
+}
+
+type deviceControlHandler struct {
+	h DeviceControlServer
+}
+
+func (r *deviceControlHandler) Order(c *ava.Context, req *ava.Packet, interrupt ava.Interceptor) (rsp proto.Message, err error) {
+	var in OrderReq
+	err = c.Codec().Decode(req.Bytes(), &in)
+	if err != nil {
+		c.Errorf("server decode packet err=%v |method=%s |data=%s", err, c.Metadata.Method(), req.String())
+		return nil, err
+	}
+	var out = OrderRsp{}
+	if interrupt == nil {
+		r.h.Order(c, &in, &out)
+		return &out, err
+	}
+	f := func(c *ava.Context, req proto.Message) proto.Message {
+		r.h.Order(c, req.(*OrderReq), &out)
 		return &out
 	}
 	return interrupt(c, &in, f)
@@ -1118,6 +1279,78 @@ func (m *AskRsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *OrderReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *OrderReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *OrderReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.UserId) > 0 {
+		i -= len(m.UserId)
+		copy(dAtA[i:], m.UserId)
+		i = encodeVarintMiniprogram(dAtA, i, uint64(len(m.UserId)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Content) > 0 {
+		i -= len(m.Content)
+		copy(dAtA[i:], m.Content)
+		i = encodeVarintMiniprogram(dAtA, i, uint64(len(m.Content)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *OrderRsp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *OrderRsp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *OrderRsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Msg) > 0 {
+		i -= len(m.Msg)
+		copy(dAtA[i:], m.Msg)
+		i = encodeVarintMiniprogram(dAtA, i, uint64(len(m.Msg)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Code != 0 {
+		i = encodeVarintMiniprogram(dAtA, i, uint64(m.Code))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintMiniprogram(dAtA []byte, offset int, v uint64) int {
 	offset -= sovMiniprogram(v)
 	base := offset
@@ -1290,6 +1523,39 @@ func (m *AskRsp) Size() (n int) {
 	}
 	if m.Data != nil {
 		l = m.Data.Size()
+		n += 1 + l + sovMiniprogram(uint64(l))
+	}
+	return n
+}
+
+func (m *OrderReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Content)
+	if l > 0 {
+		n += 1 + l + sovMiniprogram(uint64(l))
+	}
+	l = len(m.UserId)
+	if l > 0 {
+		n += 1 + l + sovMiniprogram(uint64(l))
+	}
+	return n
+}
+
+func (m *OrderRsp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Code != 0 {
+		n += 1 + sovMiniprogram(uint64(m.Code))
+	}
+	l = len(m.Msg)
+	if l > 0 {
 		n += 1 + l + sovMiniprogram(uint64(l))
 	}
 	return n
@@ -2389,6 +2655,221 @@ func (m *AskRsp) Unmarshal(dAtA []byte) error {
 			if err := m.Data.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipMiniprogram(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthMiniprogram
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *OrderReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowMiniprogram
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: OrderReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: OrderReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Content", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMiniprogram
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMiniprogram
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthMiniprogram
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Content = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UserId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMiniprogram
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMiniprogram
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthMiniprogram
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.UserId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipMiniprogram(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthMiniprogram
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *OrderRsp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowMiniprogram
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: OrderRsp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: OrderRsp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Code", wireType)
+			}
+			m.Code = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMiniprogram
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Code |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Msg", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMiniprogram
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMiniprogram
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthMiniprogram
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Msg = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

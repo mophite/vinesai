@@ -169,3 +169,25 @@ cdoegemma 7b
 devin
 opendevin
 
+ALTER USER 'root'@'%' IDENTIFIED BY 'JBLjb#l123';
+
+43.139.244.233
+root
+Xuliyang2024
+
+ssh root@43.139.244.233
+
+通用账号密码:
+root
+000000
+mysql(例外):JBLjbl#123
+
+端口
+mqtt 1883
+redis  6379
+mysql 3306
+etcd 2379
+etcdkeeper 2378
+
+开放端口:1883,6379,3306,2379,2378,10005
+systemctl

@@ -29,8 +29,8 @@ message chatStreamData{
   string userId = 2;
   string sender = 3;
   bool isUser = 4;
-  bool end=5;
-  bool displayName=6;
+  bool end = 5;
+  bool displayName = 6;
 }
 
 message ChatStreamRsp{
@@ -60,4 +60,18 @@ message AskRsp{
 
 service Ask2Ai{
   rpc Ask(AskReq)returns(AskRsp){};
+}
+
+message OrderReq{
+  string content = 1;
+  string user_id = 2; //测试用，由客户端发起
+}
+
+message OrderRsp{
+  int32 code = 1;
+  string msg = 2;
+}
+
+service DeviceControl {
+  rpc Order(OrderReq)returns(OrderRsp){};
 }
