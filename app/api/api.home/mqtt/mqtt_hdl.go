@@ -49,7 +49,7 @@ func (m *MqttHub) Order(c *ava.Context, req *pmini.OrderReq, rsp *pmini.OrderRsp
 	data := ava.MustMarshal(deviceList)
 	c.Debugf("content=%s |deviceList=%s", req.Content, string(data))
 
-	toAI := fmt.Sprintf(botTmp, string(data))
+	toAI := fmt.Sprintf(botTmp, string(data), req.Content)
 	c.Debugf("TO |data=%s", toAI)
 
 	resp, err := miniprogram.OpenAi.CreateCompletion(context.Background(), openai.CompletionRequest{
@@ -69,16 +69,23 @@ func (m *MqttHub) Order(c *ava.Context, req *pmini.OrderReq, rsp *pmini.OrderRsp
 
 	c.Debugf("FROM |data=%s", ava.MustMarshalString(&resp))
 
-	var result struct {
-		Result  string `json:"result"`
-		Message string `json:"message"`
+	if len(resp.Choices) == 0 {
+		c.Error(err)
+		rsp.Code = http.StatusInternalServerError
+		rsp.Msg = x.StatusInternalServerError
+		return
 	}
 
-	ava.MustUnmarshal(ava.MustMarshal(&resp), &result)
+	var result struct {
+		Result  []*db_hub.Device `json:"result"`
+		Message string           `json:"message"`
+	}
 
-	var device []*db_hub.Device
-	ava.MustUnmarshal(ava.StringToBytes(result.Result), device)
+	ava.MustUnmarshal(ava.StringToBytes(resp.Choices[0].Text), &result)
 
+	c.Debugf("text=%s |result=%v", resp.Choices[0].Text, result)
+
+	device := result.Result
 	//更新设备状态,并向设备发送推送
 	for i := range device {
 		var d db_hub.Device
