@@ -28,6 +28,7 @@ gen
 
 .github
 
-.cmd
+cmd/
+
 
 go.sum
