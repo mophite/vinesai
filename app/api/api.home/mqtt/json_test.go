@@ -19,4 +19,8 @@ func TestUnamsh(t *testing.T) {
 
 	json.Unmarshal([]byte(s), &result)
 	fmt.Println(result)
+
+	var b []string
+	b = append(b, "1", "2")
+	fmt.Println(b)
 }

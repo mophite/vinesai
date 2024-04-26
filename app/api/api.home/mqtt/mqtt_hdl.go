@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"vinesai/internel/ava"
-	"vinesai/internel/config"
 	"vinesai/internel/db"
 	"vinesai/internel/db/db_hub"
 	"vinesai/internel/x"
@@ -50,15 +49,43 @@ func (m *MqttHub) Order(c *ava.Context, req *pmini.OrderReq, rsp *pmini.OrderRsp
 	c.Debugf("content=%s |deviceList=%s", req.Content, string(data))
 
 	toAI := fmt.Sprintf(botTmp, string(data), req.Content)
-	c.Debugf("TO |data=%s", toAI)
 
-	resp, err := miniprogram.OpenAi.CreateCompletion(context.Background(), openai.CompletionRequest{
-		Model:       openai.GPT3Dot5TurboInstruct,
-		Prompt:      toAI,
-		Temperature: config.GConfig.OpenAI.Temperature,
-		TopP:        config.GConfig.OpenAI.TopP,
-		MaxTokens:   1000,
-	})
+	//resp, err := miniprogram.OpenAi.CreateCompletion(context.Background(), openai.CompletionRequest{
+	//	Model:       openai.GPT3Dot5TurboInstruct,
+	//	Prompt:      toAI,
+	//	Temperature: config.GConfig.OpenAI.Temperature,
+	//	TopP:        config.GConfig.OpenAI.TopP,
+	//	MaxTokens:   1000,
+	//})
+
+	var top = openai.ChatCompletionMessage{
+		Role:    openai.ChatMessageRoleSystem,
+		Content: toAI,
+	}
+
+	var next = openai.ChatCompletionMessage{
+		Role:    openai.ChatMessageRoleSystem,
+		Content: req.Content,
+	}
+
+	var msgList = make([]openai.ChatCompletionMessage, 0, 3)
+	msgList = append(msgList, top, next)
+
+	c.Debugf("TO |data=%s", ava.MustMarshalString(msgList))
+
+	resp, err := miniprogram.OpenAi.CreateChatCompletion(
+		context.Background(),
+		openai.ChatCompletionRequest{
+			Model:    openai.GPT3Dot5Turbo,
+			Messages: msgList,
+			//Temperature: config.GConfig.OpenAI.Temperature,
+			//TopP:        config.GConfig.OpenAI.TopP,
+			Temperature: 0.5,
+			TopP:        1,
+			N:           1,
+			MaxTokens:   4000,
+		},
+	)
 
 	if err != nil {
 		c.Error(err)
@@ -81,9 +108,9 @@ func (m *MqttHub) Order(c *ava.Context, req *pmini.OrderReq, rsp *pmini.OrderRsp
 		Message string           `json:"message"`
 	}
 
-	ava.MustUnmarshal(ava.StringToBytes(resp.Choices[0].Text), &result)
+	ava.MustUnmarshal(ava.StringToBytes(resp.Choices[0].Message.Content), &result)
 
-	c.Debugf("text=%s |result=%v", resp.Choices[0].Text, result)
+	c.Debugf("text=%s |result=%v", resp.Choices[0].Message.Content, ava.MustMarshalString(&result))
 
 	device := result.Result
 	//更新设备状态,并向设备发送推送

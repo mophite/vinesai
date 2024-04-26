@@ -39,3 +39,15 @@
 }
 
 ```
+
+```shell
+curl --location --request POST 'http://43.139.244.233:10005/home/devicecontrol/order' \
+--header 'X-Api-Version: 1.1.1' \
+--header 'X-Api-Trace: 123' \
+--header 'User-Agent: Apifox/1.0.0 (https://apifox.com)' \
+--header 'Content-Type: multipart/form-data' \
+--data-raw '{
+    "content":"打开中央空调",
+    "user_id":"123"
+}'
+```
