@@ -51,3 +51,15 @@ curl --location --request POST 'http://43.139.244.233:10005/home/devicecontrol/o
     "user_id":"123"
 }'
 ```
+
+db.createUser({
+user: "root",
+pwd: "000000",
+roles: [{ role: "root", db: "admin" }]
+})
+
+mongo -u root -p 000000 --authenticationDatabase admin
+
+db.changeUserPassword("root", "000000")
+
+

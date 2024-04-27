@@ -67,9 +67,16 @@ message OrderReq{
   string user_id = 2; //测试用，由客户端发起
 }
 
+message orderData{
+  string order=1;
+  string toAi=2;
+  string fromAi=3;
+}
+
 message OrderRsp{
   int32 code = 1;
   string msg = 2;
+  orderData data=3;
 }
 
 service DeviceControl {

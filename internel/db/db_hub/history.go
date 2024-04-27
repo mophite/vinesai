@@ -1,7 +1,12 @@
 package db_hub
 
+import "go.mongodb.org/mongo-driver/bson/primitive"
+
 var TableMessageHistory = "message_history"
 var TableDeviceList = "device"
+
+var DatabaseMongoVinesai = "vinesai"
+var CollectionDevice = "device"
 
 type MessageHistory struct {
 	ID         uint   `gorm:"column:id;primary_key;AUTO_INCREMENT"`
@@ -21,16 +26,14 @@ func (m *MessageHistory) TableName() string {
 }
 
 type Device struct {
-	ID         uint   `gorm:"column:id;primary_key;AUTO_INCREMENT" json:"id"`
-	DeviceType string `gorm:"column:device_type" json:"device_type"`
-	DeviceName string `gorm:"column:device_name" json:"device_name"`
-	DeviceId   string `gorm:"column:device_id" json:"device_id"`
-	UserId     string `gorm:"column:user_id;NOT NULL" json:"user_id"`
-	Action     string `gorm:"column:action" json:"action"`
-	Timestamp  int    `gorm:"column:timestamp" json:"timestamp"`
-	Data       string `gorm:"column:data" json:"data"`
-	CreatedAt  string `gorm:"column:created_at;<-:false;default:null" json:"created_at"` // 数据入库时间
-	UpdatedAt  string `gorm:"column:updated_at;<-:false;default:null" json:"updated_at"` // 数据修改时间
+	ID         primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	DeviceType string             `bson:"device_type" json:"device_type"`
+	DeviceName string             `bson:"device_name" json:"device_name"`
+	DeviceID   string             `bson:"device_id" json:"device_id"`
+	UserID     string             `bson:"user_id" json:"user_id"`
+	Action     string             `bson:"action" json:"action"`
+	Data       string             `bson:"data" json:"data"`
+	Timestamp  int                `bson:"timestamp" json:"timestamp"`
+	CreatedAt  string             `bson:"created_at,omitempty" json:"created_at"`
+	UpdatedAt  string             `bson:"updated_at,omitempty" json:"updated_at"`
 }
-
-func (m *Device) TableName() string { return "device" }

@@ -191,3 +191,19 @@ etcdkeeper 2378
 
 开放端口:1883,6379,3306,2379,2378,10005
 systemctl
+
+mongo "mongodb://root:000000@127.0.0.1:27017"
+
+mongo -u root -p 000000 --authenticationDatabase admin
+
+db.changeUserPassword("root", "000000")
+
+db.createUser(
+  {
+    user: "admin",
+    pwd: "000000",
+    roles: [ { role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase" ]
+  }
+)
+
+ETCDCTL_API=3 etcdctl put configava/v1.0.0/public/ava.mongo '{ "dsn":"mongodb://admin:000000@127.0.0.1:27017"}'

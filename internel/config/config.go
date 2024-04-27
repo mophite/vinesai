@@ -13,24 +13,29 @@ type config struct {
 	OpenAI openAI `json:"openai"`
 }
 
-//go:generate etcdctl put  configava/v1.0.0/public/ava.redis "{ \"address\":\"127.0.0.1:6379\", \"password\":\"\" }"
+//go:generate ETCDCTL_API=3 etcdctl put  configava/v1.0.0/public/ava.redis "{ \"address\":\"127.0.0.1:6379\", \"password\":\"\" }"
 type redis struct {
 	Address  string `json:"address"`
 	Password string `json:"password"`
 }
 
-//go:generate etcdctl put  configava/v1.0.0/public/ava.mysql "{ \"dsn\":\"root:12345678@tcp(127.0.0.1:3306)/vinesai?charset=utf8mb4&loc=Local\"}"
+//go:generate ETCDCTL_API=3 etcdctl put  configava/v1.0.0/public/ava.mysql "{ \"dsn\":\"root:12345678@tcp(127.0.0.1:3306)/vinesai?charset=utf8mb4&loc=Local\"}"
 type mysql struct {
 	Dsn string
 }
 
-//go:generate etcdctl put  configava/v1.0.0/private/openai "{ \"base_url\":\"https://api.openai-proxy.com/v1/\",\"key\":\"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\",\"temperature\":0.1,\"top_p\":0}"
+//go:generate ETCDCTL_API=3 etcdctl put  configava/v1.0.0/private/openai "{ \"base_url\":\"https://api.openai-proxy.com/v1/\",\"key\":\"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\",\"temperature\":0.1,\"top_p\":0}"
 type openAI struct {
 	BaseURL     string  `json:"base_url"`
 	Key         string  `json:"key"`
 	Temperature float32 `json:"temperature"`
 	TopP        float32 `json:"top_p"`
 	Method      string  `json:"method"`
+}
+
+//go:generate ETCDCTL_API=3 etcdctl put  configava/v1.0.0/public/ava.mongo "{ \"dsn\":\"mongodb://admin:000000@127.0.0.1:27017\"}"
+type Mongo struct {
+	Dsn string
 }
 
 func ChaosOpenAI() error {
@@ -89,6 +94,21 @@ func ChaosDB() error {
 		return err
 	}
 
+	var mgo Mongo
+	err = ava.ConfigDecPublic("mongo", &mgo)
+	if err != nil {
+		ava.Error(err)
+	}
+
+	if mgo.Dsn != "" {
+		err = db.ChaosMongo(mgo.Dsn)
+		if err != nil {
+			ava.Errorf("dns=%s |err=%v", mgo.Dsn, err)
+			return err
+		}
+	}
+
+	GConfig.Mysql = m
 	//初始化openai
 	var o openAI
 	err = ava.ConfigDecPrivate("openai", &o)
