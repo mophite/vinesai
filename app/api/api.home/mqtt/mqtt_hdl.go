@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-	"time"
 	"vinesai/internel/ava"
 	"vinesai/internel/db"
 	"vinesai/internel/db/db_hub"
@@ -54,6 +53,7 @@ func (m *MqttHub) Order(c *ava.Context, req *pmini.OrderReq, rsp *pmini.OrderRsp
 			c.Error(err)
 			continue
 		}
+
 		devices = append(devices, device)
 	}
 
@@ -150,22 +150,39 @@ func (m *MqttHub) Order(c *ava.Context, req *pmini.OrderReq, rsp *pmini.OrderRsp
 	//更新设备状态,并向设备发送推送
 	for i := range result.Result {
 		var d = result.Result[i]
-		// 定义更新条件
-		filterDeviceId := bson.M{"user_id": d.UserID, "device_id": d.DeviceID}
-		// 定义更新内容
-		update := bson.M{"$set": bson.M{"data": d.Data, "action": d.Action, "updated_at": time.Now().Format(x.MgoDateFormat)}}
+		//// 定义更新条件
+		//filterDeviceId := bson.M{"user_id": d.UserID, "device_id": d.DeviceID}
+		//updateMap := bson.M{
+		//	"updated_at": time.Now().UnixMilli(),
+		//}
+		////判断开关
+		//if d.Switch != 0 {
+		//	updateMap["switch"] = d.Switch
+		//}
+		////todo 其他判断
+		//
+		//// 定义更新内容
+		//update := bson.M{"$set": updateMap}
+		//
+		//// 执行更新操作
+		//_, err = collection.UpdateMany(context.Background(), filterDeviceId, update)
+		//if err != nil {
+		//	c.Error(err)
+		//	rsp.Code = http.StatusInternalServerError
+		//	rsp.Msg = x.StatusInternalServerError
+		//	return
+		//}
 
-		// 执行更新操作
-		_, err = collection.UpdateMany(context.Background(), filterDeviceId, update)
+		//向设备发送推送
+		//发送推送的时候要做转换处理
+		toDevice, err := db_hub.Device2Adaptor(d)
 		if err != nil {
 			c.Error(err)
 			rsp.Code = http.StatusInternalServerError
 			rsp.Msg = x.StatusInternalServerError
 			return
 		}
-
-		//向设备发送推送
-		mqttPublish(d.DeviceID, req.UserId, ava.MustMarshalString(d))
+		mqttPublish(c, d.DeviceID, req.UserId, ava.MustMarshalString(toDevice))
 	}
 
 	rsp.Code = http.StatusOK
