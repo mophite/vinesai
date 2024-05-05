@@ -1,7 +1,7 @@
 package mqtt
 
 import (
-	"context"
+	"errors"
 	"fmt"
 	"time"
 	"vinesai/internel/ava"
@@ -9,8 +9,7 @@ import (
 	"vinesai/internel/db/db_hub"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"gorm.io/gorm"
 )
 
 var deviceReportTopic = "home/report/device"
@@ -73,7 +72,8 @@ func mqttPublish(c *ava.Context, deviceId, userId, data string) {
 func mqttReportSubscribe() {
 	token := client.Subscribe(deviceReportTopic, byte(0), func(c mqtt.Client, message mqtt.Message) {
 		ava.Debugf("subscribe topic=%s|payload=%s", deviceReportTopic, string(message.Payload()))
-		//将数据存到mongodb
+
+		//todo 不同品牌的设备不同的topic
 		var adaptor db_hub.SocketMiniV2
 		err := ava.Unmarshal(message.Payload(), &adaptor)
 		if err != nil {
@@ -83,31 +83,41 @@ func mqttReportSubscribe() {
 
 		device := adaptor.Adaptor2Device()
 
-		//消息入库,如果数据库存在该数据直接替换
-		collection := db.GMongo.Database(db_hub.DatabaseMongoVinesai).Collection(db_hub.CollectionDevice)
+		err = db.GMysql.Transaction(func(tx *gorm.DB) error {
 
-		// 设置查询条件
-		filter := bson.M{"device_id": device.DeviceID, "user_id": "123"}
+			var d db_hub.Device
+			err = tx.Table(db_hub.TableDeviceList).
+				Where("device_id=? AND user_id=?", device.DeviceID, "123").
+				Take(&d).
+				Error
 
-		//var updateMap bson.M
-		//err = bson.Unmarshal(ava.MustMarshal(device), updateMap)
-		//if err != nil {
-		//	ava.Error(err)
-		//	return
-		//}
-		// 设置更新内容
-		update := bson.M{
-			//"$set": bson.M{
-			//	"switch": device.Switch,
-			//},
-			"$set": device,
-		}
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				//数据不存在,插入数据
+				return tx.Table(db_hub.TableDeviceList).Create(&d).Error
+			}
 
-		// 执行存在即更新，不存在即插入操作
-		opts := options.Update().SetUpsert(true)
-		if _, err := collection.UpdateOne(context.Background(), filter, update, opts); err != nil {
+			//存在则更新数据
+			updates := make(map[string]interface{}, 10)
+			if device.DeviceZn != "" {
+				updates["device_zn"] = device.DeviceZn
+			}
+			if device.DeviceEn != "" {
+				updates["device_en"] = device.DeviceEn
+			}
+			if device.DeviceDes != "" {
+				updates["device_des"] = device.DeviceDes
+			}
+			if device.Control != 0 {
+				updates["control"] = device.Control
+			}
+			return db.GMysql.Table(db_hub.TableDeviceList).
+				Where("device_id=? AND user_id=?", device.DeviceID, "123").
+				Updates(updates).Error
+
+		})
+
+		if err != nil {
 			ava.Error(err)
-			return
 		}
 	})
 
@@ -117,25 +127,32 @@ func mqttReportSubscribe() {
 
 }
 
-var botTmp = `希望你充当一个智能家居的中控系统，根据我提供的设备数据清单，你需要通过英文命名的字段和值去判断和分析设备当前的信息，
-并根据我提出的智能家居场景控制他们。当我向你说出场景时，你要按照下面的数据规则格式在唯一的代码块中输出回复，而不是其他内容，
-不能遗漏任何一项，否则你作为智能家居中控系统将被断电，以下是当前设备数据：
-%s
-
-字段说明,没有说明的字段你用不上,直接忽略：
+var botTmp = `你现在是一个智能家居中控系统。根据我提供的设备数据,通过英文字段和值来分析设备的当前状态,并根据我描述的场景来控制它们。
+场景控制指令下达后,请严格按照以下JSON格式,在唯一的代码块中输出结果,不要有其他多余内容:
+{
+"result": [
+{
+"user_id": "123",
+"device_type": 1,
+"device_id": "8CCE4E522308",
+"control": 1
+}
+],
+"message": "您好,主人!卧室灯已经关闭。今晚祝您做个好梦~"
+}
+字段说明如下,未提及的字段直接忽略:
 device_type:设备类型
 device_zn:设备中文名称
 device_en:设备英文名称
-device_id:设备id
-user_id:设备所属用户
-switch:设备开关，1表示断电，2表示通电
+device_id:设备ID
+user_id:所属用户ID
+control:开关状态,1为断电,2为通电
+注意事项:
 
-你需要做的事情有：
-把你修改了的数据重新组装成一个新的数组(user_id,device_id,device_type字段必须按照原来的数据保留，其他修改到的才会填入，否则忽略)放到result字段中；
-在message字段中，以调皮幽默的智能家居管家的语气对我做出回应，回应后把你调整的设备说清楚，没有修改的设备数据就直接忽略。
-当你整理好数据之后必须严格按照下面的格式以文本的形式返回给我,{}前后不要添加任何内容，否则我无法识别，
-例如:
-{
-"result":[{"user_id":"123",device_type":1,"device_id":"8CCE4E522308","switch":1}],
-"message":"好的，主人。已经关闭卧室开关。"
-}`
+1、user_id、device_id、device_type 是必须字段,不可修改它们的值,其他字段只保留有变更的。
+2、将处理后的设备数据放入 result 数组中。
+3、以幽默活泼的口吻回应场景执行结果,在 message 字段中说明调整的设备。
+
+我会提供设备数据如下:
+%s
+请分析以上数据,等待我的控制指令。一旦收到指令,即刻按要求输出JSON结果。`

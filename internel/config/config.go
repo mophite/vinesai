@@ -33,11 +33,6 @@ type openAI struct {
 	Method      string  `json:"method"`
 }
 
-//go:generate ETCDCTL_API=3 etcdctl put  configava/v1.0.0/public/ava.mongo "{ \"dsn\":\"mongodb://admin:000000@127.0.0.1:27017\"}"
-type Mongo struct {
-	Dsn string
-}
-
 func ChaosOpenAI() error {
 	if GConfig == nil {
 		GConfig = new(config)
@@ -94,21 +89,6 @@ func ChaosDB() error {
 		return err
 	}
 
-	var mgo Mongo
-	err = ava.ConfigDecPublic("mongo", &mgo)
-	if err != nil {
-		ava.Error(err)
-	}
-
-	if mgo.Dsn != "" {
-		err = db.ChaosMongo(mgo.Dsn)
-		if err != nil {
-			ava.Errorf("dns=%s |err=%v", mgo.Dsn, err)
-			return err
-		}
-	}
-
-	GConfig.Mysql = m
 	//初始化openai
 	var o openAI
 	err = ava.ConfigDecPrivate("openai", &o)

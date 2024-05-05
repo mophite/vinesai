@@ -2,12 +2,16 @@ package x
 
 import (
 	"encoding/json"
+	"regexp"
 	"unsafe"
 
 	jsoniter "github.com/json-iterator/go"
 )
 
 var Json = jsoniter.ConfigCompatibleWithStandardLibrary
+
+// 定义正则表达式，匹配大括号内的内容
+var AiResultRex = regexp.MustCompile(`\{[^}]+\}`)
 
 func MustUnmarshal(b []byte, v interface{}) error {
 	_ = Json.Unmarshal(b, v)

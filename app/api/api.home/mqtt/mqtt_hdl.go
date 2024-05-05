@@ -12,12 +12,82 @@ import (
 	"vinesai/proto/pmini"
 
 	"github.com/sashabaranov/go-openai"
-	"go.mongodb.org/mongo-driver/bson"
 	"vinesai/app/api/api.home/miniprogram"
 )
 
 // 用户向云后台发送指令
 type MqttHub struct {
+}
+
+func (m *MqttHub) DeviceEdit(c *ava.Context, req *pmini.DeviceEditReq, rsp *pmini.DeviceEditRsp) {
+	if req.UserId == "" || req.DeviceId == "" {
+		rsp.Code = http.StatusBadRequest
+		rsp.Msg = "请求参数错误"
+		return
+	}
+
+	if req.DeviceDes == "" && req.DeviceEn == "" && req.DeviceZn == "" {
+		rsp.Code = http.StatusBadRequest
+		rsp.Msg = "请输入要修改的数据"
+		return
+	}
+
+	var updates = make(map[string]interface{}, 10)
+	if req.DeviceEn != "" {
+		updates["device_en"] = req.DeviceZn
+	}
+
+	if req.DeviceZn != "" {
+		updates["device_zn"] = req.DeviceZn
+	}
+
+	if req.DeviceDes != "" {
+		updates["device_des"] = req.DeviceDes
+	}
+
+	err := db.GMysql.
+		Table(db_hub.TableDeviceList).
+		Where("id=? AND device_id=?", req.UserId, req.DeviceId).
+		Updates(updates).Error
+
+	if err != nil {
+		c.Error(err)
+		rsp.Code = http.StatusInternalServerError
+		rsp.Msg = "更新数据失败"
+		return
+	}
+
+	rsp.Code = http.StatusOK
+	rsp.Msg = "设备描述已更新"
+
+}
+
+func (m *MqttHub) DeviceList(c *ava.Context, req *pmini.DeviceListReq, rsp *pmini.DeviceListRsp) {
+	if req.UserId == "" {
+		rsp.Code = http.StatusBadRequest
+		rsp.Msg = "user_id不能为空"
+		return
+	}
+
+	var devices []*db_hub.Device
+	err := db.
+		GMysql.
+		Table(db_hub.TableDeviceList).
+		Where("user_id=?", req.UserId).
+		Order("created_at desc").
+		Limit(100).
+		Find(&devices).Error
+	if err != nil {
+		c.Error(err)
+		rsp.Code = http.StatusInternalServerError
+		rsp.Msg = x.StatusInternalServerError
+		return
+	}
+
+	c.Debugf("result=%s", ava.MustMarshalString(devices))
+
+	rsp.Code = http.StatusOK
+	rsp.Data = ava.MustMarshalString(devices)
 }
 
 func (m *MqttHub) Order(c *ava.Context, req *pmini.OrderReq, rsp *pmini.OrderRsp) {
@@ -29,36 +99,15 @@ func (m *MqttHub) Order(c *ava.Context, req *pmini.OrderReq, rsp *pmini.OrderRsp
 	}
 
 	//根据用户id查询出用户的所有设备
-	// 定义查询条件
-	filter := bson.M{"user_id": req.UserId}
-
-	collection := db.GMongo.Database(db_hub.DatabaseMongoVinesai).Collection(db_hub.CollectionDevice)
-
-	// 执行查询操作
-	cursor, err := collection.Find(context.Background(), filter)
-	if err != nil {
-		c.Error(err)
-		rsp.Code = http.StatusInternalServerError
-		rsp.Msg = x.StatusInternalServerError
-		return
-	}
-
-	defer cursor.Close(context.Background())
-
-	// 遍历查询结果
 	var devices []*db_hub.Device
-	for cursor.Next(context.Background()) {
-		var device *db_hub.Device
-		if err := cursor.Decode(&device); err != nil {
-			c.Error(err)
-			continue
-		}
-
-		devices = append(devices, device)
-	}
-
-	// 检查遍历过程中是否出错
-	if err := cursor.Err(); err != nil {
+	err := db.
+		GMysql.
+		Table(db_hub.TableDeviceList).
+		Where("user_id=?", req.UserId).
+		Order("created_at desc").
+		Limit(100).
+		Find(&devices).Error
+	if err != nil {
 		c.Error(err)
 		rsp.Code = http.StatusInternalServerError
 		rsp.Msg = x.StatusInternalServerError
@@ -80,14 +129,6 @@ func (m *MqttHub) Order(c *ava.Context, req *pmini.OrderReq, rsp *pmini.OrderRsp
 
 	toAI := fmt.Sprintf(botTmp, string(data))
 
-	//resp, err := miniprogram.OpenAi.CreateCompletion(context.Background(), openai.CompletionRequest{
-	//	Model:       openai.GPT3Dot5TurboInstruct,
-	//	Prompt:      toAI,
-	//	Temperature: config.GConfig.OpenAI.Temperature,
-	//	TopP:        config.GConfig.OpenAI.TopP,
-	//	MaxTokens:   1000,
-	//})
-
 	var top = openai.ChatCompletionMessage{
 		Role:    openai.ChatMessageRoleSystem,
 		Content: toAI,
@@ -106,7 +147,8 @@ func (m *MqttHub) Order(c *ava.Context, req *pmini.OrderReq, rsp *pmini.OrderRsp
 	resp, err := miniprogram.OpenAi.CreateChatCompletion(
 		context.Background(),
 		openai.ChatCompletionRequest{
-			Model:    openai.GPT3Dot5Turbo,
+			//Model:    openai.GPT3Dot5Turbo,
+			Model:    "claude-3-haiku-20240307",
 			Messages: msgList,
 			//Temperature: config.GConfig.OpenAI.Temperature,
 			//TopP:        config.GConfig.OpenAI.TopP,
@@ -120,7 +162,7 @@ func (m *MqttHub) Order(c *ava.Context, req *pmini.OrderReq, rsp *pmini.OrderRsp
 	if err != nil {
 		c.Error(err)
 		rsp.Code = http.StatusInternalServerError
-		rsp.Msg = x.StatusInternalServerError
+		rsp.Msg = "我有点晕。"
 		return
 	}
 
@@ -129,7 +171,7 @@ func (m *MqttHub) Order(c *ava.Context, req *pmini.OrderReq, rsp *pmini.OrderRsp
 	if len(resp.Choices) == 0 {
 		c.Error(err)
 		rsp.Code = http.StatusInternalServerError
-		rsp.Msg = x.StatusInternalServerError
+		rsp.Msg = "我犯迷糊了。"
 		return
 	}
 
@@ -142,6 +184,7 @@ func (m *MqttHub) Order(c *ava.Context, req *pmini.OrderReq, rsp *pmini.OrderRsp
 	str = strings.ReplaceAll(str, "\n", "")
 	str = strings.ReplaceAll(str, "\t", "")
 	str = strings.ReplaceAll(str, `\`, "")
+	str = x.AiResultRex.FindString(str)
 
 	ava.MustUnmarshal(ava.StringToBytes(str), &result)
 
@@ -150,28 +193,6 @@ func (m *MqttHub) Order(c *ava.Context, req *pmini.OrderReq, rsp *pmini.OrderRsp
 	//更新设备状态,并向设备发送推送
 	for i := range result.Result {
 		var d = result.Result[i]
-		//// 定义更新条件
-		//filterDeviceId := bson.M{"user_id": d.UserID, "device_id": d.DeviceID}
-		//updateMap := bson.M{
-		//	"updated_at": time.Now().UnixMilli(),
-		//}
-		////判断开关
-		//if d.Switch != 0 {
-		//	updateMap["switch"] = d.Switch
-		//}
-		////todo 其他判断
-		//
-		//// 定义更新内容
-		//update := bson.M{"$set": updateMap}
-		//
-		//// 执行更新操作
-		//_, err = collection.UpdateMany(context.Background(), filterDeviceId, update)
-		//if err != nil {
-		//	c.Error(err)
-		//	rsp.Code = http.StatusInternalServerError
-		//	rsp.Msg = x.StatusInternalServerError
-		//	return
-		//}
 
 		//向设备发送推送
 		//发送推送的时候要做转换处理
@@ -179,7 +200,7 @@ func (m *MqttHub) Order(c *ava.Context, req *pmini.OrderReq, rsp *pmini.OrderRsp
 		if err != nil {
 			c.Error(err)
 			rsp.Code = http.StatusInternalServerError
-			rsp.Msg = x.StatusInternalServerError
+			rsp.Msg = "我想我不太懂。"
 			return
 		}
 		mqttPublish(c, d.DeviceID, req.UserId, ava.MustMarshalString(toDevice))

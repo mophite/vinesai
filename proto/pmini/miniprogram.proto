@@ -68,17 +68,51 @@ message OrderReq{
 }
 
 message orderData{
-  string order=1;
-  string toAi=2;
-  string fromAi=3;
+  string order = 1;
+  string toAi = 2;
+  string fromAi = 3;
 }
 
 message OrderRsp{
   int32 code = 1;
   string msg = 2;
-  orderData data=3;
+  orderData data = 3;
 }
 
 service DeviceControl {
   rpc Order(OrderReq)returns(OrderRsp){};
+  rpc DeviceList(DeviceListReq)returns(DeviceListRsp);
+  rpc DeviceEdit(DeviceEditReq)returns(DeviceEditRsp);
+}
+
+message DeviceEditReq{
+  string user_id = 1;
+  string device_id = 2;
+  string device_des = 3;
+  string device_zn = 4;
+  string device_en = 5;
+}
+
+message DeviceEditRsp{
+  int32 code = 1;
+  string msg = 2;
+}
+
+message DeviceListReq {
+  string user_id = 1;
+}
+
+message DeviceListRsp{
+  int32 code = 1;
+  string msg = 2;
+  string data = 3;
+}
+
+message deviceListData{
+  int64 id = 1;
+  int64 device_type = 2;
+  string device_zn = 3;
+  string device_en = 4;
+  string device_id = 5;
+  string device_des = 6;
 }
