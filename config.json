@@ -1,1 +1,22 @@
-{"ava.redis":{"address":"175.178.164.183:6379","password":""},"ava.mysql":{"dsn":"root:12345678@tcp(175.178.164.183:3306)/vinesai?charset=utf8mb4&loc=Local"},"openai":{"base_url":"https://api.kuaiwenwen.top/v1","key":"sk-pKr13DitdJS9dJU9E39436257d884467A49dC505885aAf83","temperature":0.1,"top_p":0,"method":"0"}}
+{
+  "id": "chatcmpl-Bxa09ExwcqQEDBHEwmPmIYGv38TRX",
+  "object": "chat.completion",
+  "created": 1715100755,
+  "model": "claude-3-haiku-20240307",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "好的,根据您的需求,我为您生成以下控制命令:\n\n{{\n    \"voice\": \"好的,已为您准备就绪。祝您晚安,睡个好觉!\",\n    \"commands\": [\n        {{\"user_id\": \"123\", \"device_type\": 1,\"device_id\": \"8CCE4E521E53\", \"key\": 1}},\n        {{\"user_id\": \"123\", \"device_type\": 1,\"device_id\": \"8CCE4E522299\", \"key\": 1}}\n    ]\n}}\n\n这条命令将关闭 ID 为 \"8CCE4E521E53\" 的台灯和 ID 为 \"8CCE4E522299\" 的氛围灯,为您营造一个舒适的睡眠环境。祝您晚安,睡个好觉!"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 720,
+    "completion_tokens": 233,
+    "total_tokens": 953
+  },
+  "system_fingerprint": ""
+}

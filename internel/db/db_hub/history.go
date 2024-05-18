@@ -34,10 +34,12 @@ type Device struct {
 	Version    string `gorm:"column:version" json:"version"`                             //设备版本
 	UserID     string `gorm:"column:user_id" json:"user_id"`                             //用户id
 	Control    int    `gorm:"column:control" json:"control"`                             //开关，1关，2表示开
+	Delay      int    `gorm:"column:delay" json:"delay"`                                 //是否延时
+	DelayTime  int    `gorm:"column:delay_time" json:"delay_time"`                       //延时时间
 	Ip         string `gorm:"column:ip" json:"ip"`                                       //ip
 	Wifi       string `gorm:"column:wifi" json:"wifi"`                                   //wifi名称
-	CreatedAt  int64  `gorm:"column:created_at;<-:false;default:null" json:"created_at"` //创建时间
-	UpdatedAt  int64  `gorm:"column:updated_at;<-:false;default:null" json:"updated_at"` //更新时间
+	CreatedAt  string `gorm:"column:created_at;<-:false;default:null" json:"created_at"` //创建时间
+	UpdatedAt  string `gorm:"column:updated_at;<-:false;default:null" json:"updated_at"` //更新时间
 }
 
 func (m *Device) TableName() string {
@@ -83,6 +85,36 @@ func (s *SocketMiniV2) Adaptor2Device() *Device {
 	}
 }
 
+type Infrared struct {
+	Beep     string `json:"Beep"`
+	Celsius  string `json:"Celsius"`
+	Clean    string `json:"Clean"`
+	Econo    string `json:"Econo"`
+	FanSpeed string `json:"FanSpeed"`
+	Filter   string `json:"Filter"`
+	Light    string `json:"Light"`
+	Mode     string `json:"Mode"`
+	Model    int64  `json:"Model"`
+	Power    string `json:"Power"`
+	Quiet    string `json:"Quiet"`
+	Sleep    int64  `json:"Sleep"`
+	SwingH   string `json:"SwingH"`
+	SwingV   string `json:"SwingV"`
+	Temp     int64  `json:"Temp"`
+	Turbo    string `json:"Turbo"`
+	Vendor   string `json:"Vendor"`
+}
+
+func (i *Infrared) Adaptor2Device() *Device {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (i *Infrared) Adaptor2Native(device *Device) DeviceAdaptor {
+	//TODO implement me
+	panic("implement me")
+}
+
 func Device2Adaptor(device *Device) (DeviceAdaptor, error) {
 
 	switch device.DeviceType {
@@ -91,6 +123,9 @@ func Device2Adaptor(device *Device) (DeviceAdaptor, error) {
 			Type: "event",
 			Key:  device.Control - 1,
 		}, nil
+
+	case 2:
+		return &Infrared{Power: ""}, nil
 	}
 
 	return nil, errors.New("no such device")

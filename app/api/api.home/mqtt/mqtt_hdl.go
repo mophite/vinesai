@@ -47,7 +47,7 @@ func (m *MqttHub) DeviceEdit(c *ava.Context, req *pmini.DeviceEditReq, rsp *pmin
 
 	err := db.GMysql.
 		Table(db_hub.TableDeviceList).
-		Where("id=? AND device_id=?", req.UserId, req.DeviceId).
+		Where("user_id=? AND device_id=?", req.UserId, req.DeviceId).
 		Updates(updates).Error
 
 	if err != nil {
@@ -148,14 +148,16 @@ func (m *MqttHub) Order(c *ava.Context, req *pmini.OrderReq, rsp *pmini.OrderRsp
 		context.Background(),
 		openai.ChatCompletionRequest{
 			//Model:    openai.GPT3Dot5Turbo,
-			Model:    "claude-3-haiku-20240307",
+			//Model:    "claude-3-haiku-20240307",
+			Model:    openai.GPT3Dot5Turbo,
 			Messages: msgList,
 			//Temperature: config.GConfig.OpenAI.Temperature,
 			//TopP:        config.GConfig.OpenAI.TopP,
-			Temperature: 0.5,
-			TopP:        1,
-			N:           1,
-			MaxTokens:   4000,
+			Temperature:    0.5,
+			TopP:           1,
+			N:              1,
+			MaxTokens:      4000,
+			ResponseFormat: &openai.ChatCompletionResponseFormat{Type: openai.ChatCompletionResponseFormatTypeJSONObject},
 		},
 	)
 
@@ -176,43 +178,55 @@ func (m *MqttHub) Order(c *ava.Context, req *pmini.OrderReq, rsp *pmini.OrderRsp
 	}
 
 	var result struct {
-		Result  []*db_hub.Device `json:"result"`
-		Message string           `json:"message"`
+		Commands []*db_hub.Device `json:"commands"`
+		Voice    string           `json:"voice"`
 	}
 
 	str := resp.Choices[0].Message.Content
 	str = strings.ReplaceAll(str, "\n", "")
 	str = strings.ReplaceAll(str, "\t", "")
 	str = strings.ReplaceAll(str, `\`, "")
-	str = x.AiResultRex.FindString(str)
+	//str = x.AiResultRex.FindString(str)
 
 	ava.MustUnmarshal(ava.StringToBytes(str), &result)
 
 	c.Debugf("text=%s |result=%v", str, ava.MustMarshalString(&result))
 
 	//更新设备状态,并向设备发送推送
-	for i := range result.Result {
-		var d = result.Result[i]
+	for i := range result.Commands {
+		//是否延时推送
+		var d = result.Commands[i]
 
 		//向设备发送推送
 		//发送推送的时候要做转换处理
-		toDevice, err := db_hub.Device2Adaptor(d)
-		if err != nil {
-			c.Error(err)
-			rsp.Code = http.StatusInternalServerError
-			rsp.Msg = "我想我不太懂。"
-			return
+		switch d.DeviceType {
+		case 1:
+			toDevice := &db_hub.SocketMiniV2{
+				Type: "event",
+				Key:  d.Control - 1,
+			}
+
+			mqttPublish(d.Delay, d.DelayTime, d.DeviceID, req.UserId, ava.MustMarshalString(toDevice))
+
+		case 2:
+			power := ""
+			if d.Control == 1 {
+				power = "Off"
+			}
+			if d.Control == 2 {
+				power = "On"
+			}
+			toDevice := &db_hub.Infrared{Power: power}
+			mqttPublishInfrared(d.Delay, d.DelayTime, d.DeviceID, req.UserId, ava.MustMarshalString(toDevice))
 		}
-		mqttPublish(c, d.DeviceID, req.UserId, ava.MustMarshalString(toDevice))
 	}
 
 	rsp.Code = http.StatusOK
-	rsp.Msg = result.Message
+	rsp.Msg = result.Voice
 	order := pmini.OrderData{
 		Order:  req.Content,
 		ToAi:   ava.MustMarshalString(msgList),
 		FromAi: ava.MustMarshalString(&resp),
 	}
 	rsp.Data = &order
-
 }

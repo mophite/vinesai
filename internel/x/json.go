@@ -11,6 +11,7 @@ import (
 var Json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 // 定义正则表达式，匹配大括号内的内容
+// todo 这个正则有问题
 var AiResultRex = regexp.MustCompile(`\{[^}]+\}`)
 
 func MustUnmarshal(b []byte, v interface{}) error {

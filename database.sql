@@ -51,6 +51,8 @@ CREATE TABLE IF NOT EXISTS `device`
     `version`     VARCHAR(30) COMMENT '版本',
     `user_id`     VARCHAR(30) COMMENT '用户id',
     `control`     TINYINT COMMENT '控制',
+    `delay`       TINYINT        DEFAULT 0 COMMENT '是否延时，0不延时，1延时',
+    `delay_time`  INT            DEFAULT 0 COMMENT '延时的时间，单位是秒',
     `ip`          VARCHAR(30) COMMENT 'ip',
     `wifi`        VARCHAR(100) COMMENT 'wifi',
     `updated_at`  timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '数据修改时间',
@@ -60,3 +62,8 @@ CREATE TABLE IF NOT EXISTS `device`
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 100000 COMMENT ='设备列表'
   DEFAULT CHARSET = utf8;
+
+ALTER TABLE `device`
+    ADD COLUMN `delay` TINYINT COMMENT '是否延时，0不延时，1延时' AFTER `control`;
+ALTER TABLE `device`
+    ADD COLUMN `delay_time` INT COMMENT '延时的时间，单位是秒' AFTER `delay`;

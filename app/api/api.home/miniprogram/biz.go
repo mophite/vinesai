@@ -76,7 +76,6 @@ func ChaosOpenAI() error {
 	} else {
 		OpenAi = openai.NewClient(config.GConfig.OpenAI.Key)
 	}
-
 	//_, err := ask(ava.Background(), "你是一个得力的居家助手", "test")
 
 	if OpenAi == nil {
