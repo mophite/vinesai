@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 	"vinesai/internel/ava"
 	"vinesai/internel/db"
@@ -196,28 +197,45 @@ func (m *MqttHub) Order(c *ava.Context, req *pmini.OrderReq, rsp *pmini.OrderRsp
 	for i := range result.Commands {
 		//是否延时推送
 		var d = result.Commands[i]
-
 		//向设备发送推送
 		//发送推送的时候要做转换处理
 		switch d.DeviceType {
-		case 1:
+		case "1":
+			key, err := strconv.Atoi(d.Control)
+			if err != nil {
+				c.Error(err)
+				continue
+			}
 			toDevice := &db_hub.SocketMiniV2{
 				Type: "event",
-				Key:  d.Control - 1,
+				Key:  key - 1,
+			}
+			delayTime, err := strconv.Atoi(d.DelayTime)
+			if err != nil {
+				c.Error(err)
+				continue
 			}
 
-			mqttPublish(d.Delay, d.DelayTime, d.DeviceID, req.UserId, ava.MustMarshalString(toDevice))
+			mqttPublish(delayTime, d.DeviceID, req.UserId, ava.MustMarshalString(toDevice))
 
-		case 2:
+		case "2":
 			power := ""
-			if d.Control == 1 {
+			if d.Control == "1" {
 				power = "Off"
 			}
-			if d.Control == 2 {
+			if d.Control == "2" {
 				power = "On"
 			}
+
 			toDevice := &db_hub.Infrared{Power: power}
-			mqttPublishInfrared(d.Delay, d.DelayTime, d.DeviceID, req.UserId, ava.MustMarshalString(toDevice))
+
+			delayTime, err := strconv.Atoi(d.DelayTime)
+			if err != nil {
+				c.Error(err)
+				continue
+			}
+
+			mqttPublishInfrared(delayTime, d.DeviceID, req.UserId, ava.MustMarshalString(toDevice))
 		}
 	}
 

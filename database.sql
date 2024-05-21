@@ -50,9 +50,8 @@ CREATE TABLE IF NOT EXISTS `device`
     `device_des`  VARCHAR(200) COMMENT '设备描述',
     `version`     VARCHAR(30) COMMENT '版本',
     `user_id`     VARCHAR(30) COMMENT '用户id',
-    `control`     TINYINT COMMENT '控制',
-    `delay`       TINYINT        DEFAULT 0 COMMENT '是否延时，0不延时，1延时',
-    `delay_time`  INT            DEFAULT 0 COMMENT '延时的时间，单位是秒',
+    `control`     VARCHAR(30) COMMENT '控制',
+    `delay_time`  VARCHAR(30)    DEFAULT "0" COMMENT '延时的时间，单位是秒',
     `ip`          VARCHAR(30) COMMENT 'ip',
     `wifi`        VARCHAR(100) COMMENT 'wifi',
     `updated_at`  timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '数据修改时间',
@@ -67,3 +66,9 @@ ALTER TABLE `device`
     ADD COLUMN `delay` TINYINT COMMENT '是否延时，0不延时，1延时' AFTER `control`;
 ALTER TABLE `device`
     ADD COLUMN `delay_time` INT COMMENT '延时的时间，单位是秒' AFTER `delay`;
+
+
+ALTER TABLE `device` MODIFY device_type VARCHAR(30);
+ALTER TABLE `device` MODIFY control VARCHAR(30);
+ALTER TABLE `device` MODIFY delay_time VARCHAR(200);
+ALTER TABLE `device` DROP COLUMN delay;

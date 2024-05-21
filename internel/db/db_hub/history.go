@@ -1,7 +1,8 @@
 package db_hub
 
 import (
-	"errors"
+	"strconv"
+	"vinesai/internel/ava"
 )
 
 var TableMessageHistory = "message_history"
@@ -26,16 +27,15 @@ func (m *MessageHistory) TableName() string {
 
 type Device struct {
 	ID         uint   `gorm:"column:id;primary_key;AUTO_INCREMENT"`
-	DeviceType int    `gorm:"column:device_type" json:"device_type"`                     //设备类型
+	DeviceType string `gorm:"column:device_type" json:"device_type"`                     //设备类型
 	DeviceZn   string `gorm:"column:device_zn" json:"device_zn"`                         //设备中文j名称
 	DeviceEn   string `gorm:"column:device_en" json:"device_en"`                         //设备英文名称
 	DeviceID   string `gorm:"column:device_id" json:"device_id"`                         //设备id
 	DeviceDes  string `gorm:"column:device_des" json:"device_des"`                       //设备描述
 	Version    string `gorm:"column:version" json:"version"`                             //设备版本
 	UserID     string `gorm:"column:user_id" json:"user_id"`                             //用户id
-	Control    int    `gorm:"column:control" json:"control"`                             //开关，1关，2表示开
-	Delay      int    `gorm:"column:delay" json:"delay"`                                 //是否延时
-	DelayTime  int    `gorm:"column:delay_time" json:"delay_time"`                       //延时时间
+	Control    string `gorm:"column:control" json:"control"`                             //开关，1关，2表示开
+	DelayTime  string `gorm:"column:delay_time" json:"delay_time"`                       //延时时间
 	Ip         string `gorm:"column:ip" json:"ip"`                                       //ip
 	Wifi       string `gorm:"column:wifi" json:"wifi"`                                   //wifi名称
 	CreatedAt  string `gorm:"column:created_at;<-:false;default:null" json:"created_at"` //创建时间
@@ -64,21 +64,26 @@ type SocketMiniV2 struct {
 }
 
 func (s *SocketMiniV2) Adaptor2Native(device *Device) DeviceAdaptor {
+	control, err := strconv.Atoi(device.Control)
+	if err != nil {
+		ava.Error(err)
+	}
 	return &SocketMiniV2{
 		MAC:     device.DeviceID,
 		Type:    device.DeviceEn,
 		Version: device.Version,
-		Key:     device.Control - 1,
+		Key:     control - 1,
 	}
 }
 
 func (s *SocketMiniV2) Adaptor2Device() *Device {
+	key := strconv.Itoa(s.Key + 1)
 	return &Device{
-		DeviceType: 1,
+		DeviceType: "1",
 		DeviceEn:   s.Type,
 		DeviceID:   s.MAC,
 		Version:    s.Version,
-		Control:    s.Key + 1,
+		Control:    key,
 		Ip:         s.IP,
 		Wifi:       s.SSID,
 		UserID:     "123",
@@ -113,20 +118,4 @@ func (i *Infrared) Adaptor2Device() *Device {
 func (i *Infrared) Adaptor2Native(device *Device) DeviceAdaptor {
 	//TODO implement me
 	panic("implement me")
-}
-
-func Device2Adaptor(device *Device) (DeviceAdaptor, error) {
-
-	switch device.DeviceType {
-	case 1:
-		return &SocketMiniV2{
-			Type: "event",
-			Key:  device.Control - 1,
-		}, nil
-
-	case 2:
-		return &Infrared{Power: ""}, nil
-	}
-
-	return nil, errors.New("no such device")
 }

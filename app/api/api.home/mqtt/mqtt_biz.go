@@ -59,24 +59,24 @@ var f mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
 }
 
 // 发布消息给指定的客户端
-func mqttPublish(delay, delayTime int, deviceId, userId, data string) {
+func mqttPublish(delayTime int, deviceId, userId, data string) {
+
+	var topic = fmt.Sprintf(deviceControlTopic, userId, deviceId)
+	ava.Debugf("mqttPublish |topic=%s |data=%s |delay_time=%v", topic, data, delayTime)
 
 	f := func() {
-		var topic = fmt.Sprintf(deviceControlTopic, userId, deviceId)
-		ava.Debugf("mqttPublish |topic=%s |data=%s", topic, data)
+
 		//retained false服务器不保留消息
 		token := client.Publish(topic, 0, false, data)
-		//保证消息推送成功
-		go func() {
-			if !(token.Wait() && token.Error() == nil) {
-				ava.Debugf("publish failure |deviceId=%s |err=%v", deviceId, token.Error())
-				ava.Error(token.Error())
-			}
-		}()
+		token.Wait()
+		if token.Error() != nil {
+			ava.Debugf("mqttPublish failure |deviceId=%s |err=%v", deviceId, token.Error())
+			ava.Error(token.Error())
+		}
 	}
 
 	//延时执行
-	if delay == 1 {
+	if delayTime > 0 {
 		x.TimingwheelAfter(time.Second*time.Duration(delayTime), f)
 		return
 	}
@@ -86,23 +86,23 @@ func mqttPublish(delay, delayTime int, deviceId, userId, data string) {
 }
 
 // 发布消息给指定的客户端,红外设备
-func mqttPublishInfrared(delay, delayTime int, deviceId, userId, data string) {
+func mqttPublishInfrared(delayTime int, deviceId, userId, data string) {
+
+	var topic = fmt.Sprintf(deviceControlInfrared, deviceId)
+	ava.Debugf("mqttPublishInfrared |topic=%s |data=%s |delay_time=%v", topic, data, delayTime)
 
 	f := func() {
-		var topic = fmt.Sprintf(deviceControlInfrared, deviceId)
-		ava.Debugf("mqttPublish |topic=%s |data=%s", topic, data)
 		//retained false服务器不保留消息
 		token := client.Publish(topic, 0, false, data)
-		//保证消息推送成功
-		go func() {
-			if !(token.Wait() && token.Error() == nil) {
-				ava.Debugf("publish failure |deviceId=%s |err=%v", deviceId, token.Error())
-				ava.Error(token.Error())
-			}
-		}()
+		//todo 保证消息推送成功
+		token.Wait()
+		if token.Error() != nil {
+			ava.Debugf("mqttPublishInfrared failure |deviceId=%s |err=%v", deviceId, token.Error())
+			ava.Error(token.Error())
+		}
 	}
 
-	if delay == 1 {
+	if delayTime > 0 {
 		x.TimingwheelAfter(time.Second*time.Duration(delayTime), f)
 		return
 	}
@@ -159,14 +159,14 @@ func mqttReportSubscribeInfrared() {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				//数据不存在,插入数据
 				device := db_hub.Device{
-					DeviceType: 2,
+					DeviceType: "2",
 					DeviceZn:   "红外控制器",
 					DeviceEn:   "Infrared",
 					DeviceID:   did,
 					DeviceDes:  "红外控制设备，请编辑描述",
 					Version:    "0.0.1",
 					UserID:     "123",
-					Control:    1,
+					Control:    "1",
 					Ip:         "",
 					Wifi:       "",
 				}
@@ -303,7 +303,7 @@ func mqttReportSubscribe() {
 			//if device.DeviceDes != "" {
 			//	updates["device_des"] = device.DeviceDes
 			//}
-			if device.Control != 0 {
+			if device.Control != "" {
 				updates["control"] = device.Control
 			}
 			return db.GMysql.Table(db_hub.TableDeviceList).
@@ -363,16 +363,16 @@ var botTmp = `
 {
     "voice": "风趣幽默的智能音箱语气回复的文本内容",
     "commands": [
-        {"user_id": "设备清单中的用户ID", "device_type": "设备清单设备类型1","device_id": "设备清单设备ID1", "control": 1,"delay":0,"delay_time":0},
-        {"user_id": "设备清单中的用户ID", "device_type": "设备清单设备类型2","device_id": "设备清单设备ID1", "control": 2,"delay":1,"delay_time":5}
+        {"user_id": "设备清单中的用户ID", "device_type": "设备清单设备类型1","device_id": "设备清单设备ID1", "control": "开关控制，1关，2开","delay_time":"延时执行执行时间，例如：5表示5秒"},
+        {"user_id": "设备清单中的用户ID", "device_type": "设备清单设备类型2","device_id": "设备清单设备ID1", "control": "开关控制，1关，2开","delay_time":"延时执行执行时间，例如：5表示5秒"}
     ]
 }
 
 可生成的命令类型包括:
-1、关闭设备: {"user_id": "设备清单中的用户ID", "device_type": "设备清单设备类型1","device_id": "设备清单设备ID1", "control": 1,"delay":1,"delay_time":10}
-2、打开设备: {"user_id": "设备清单中的用户ID", "device_type": "设备清单设备类型2","device_id": "设备清单设备ID1", "control": 2,"delay":0,"delay_time":0}
+1、关闭设备: {"user_id": "设备清单中的用户ID", "device_type": "设备清单设备类型","device_id": "设备清单设备ID1", "control": "1","delay_time":"10"}
+2、打开设备: {"user_id": "设备清单中的用户ID", "device_type": "设备清单设备类型","device_id": "设备清单设备ID1", "control": "2","delay_time":"0"}
 3、延时10秒执行,其中delay(1表示延时操作，0表示非延时),delay_time表示延时多少秒执行:
-{"user_id": "设备清单中的用户ID", "device_type": "设备清单设备类型1","device_id": "设备清单设备ID1", "control": 1,"delay":1,"delay_time":10}
+{"user_id": "设备清单中的用户ID", "device_type": "设备清单设备类型1","device_id": "设备清单设备ID1", "control": "1","delay_time":"10"}
 
 
 如果无法根据用户的描述生成合适的控制命令,请回复 "无法生成控制命令"。`
