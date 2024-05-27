@@ -1,22 +1,29 @@
 {
-  "id": "chatcmpl-Bxa09ExwcqQEDBHEwmPmIYGv38TRX",
-  "object": "chat.completion",
-  "created": 1715100755,
-  "model": "claude-3-haiku-20240307",
-  "choices": [
-    {
-      "index": 0,
-      "message": {
-        "role": "assistant",
-        "content": "好的,根据您的需求,我为您生成以下控制命令:\n\n{{\n    \"voice\": \"好的,已为您准备就绪。祝您晚安,睡个好觉!\",\n    \"commands\": [\n        {{\"user_id\": \"123\", \"device_type\": 1,\"device_id\": \"8CCE4E521E53\", \"key\": 1}},\n        {{\"user_id\": \"123\", \"device_type\": 1,\"device_id\": \"8CCE4E522299\", \"key\": 1}}\n    ]\n}}\n\n这条命令将关闭 ID 为 \"8CCE4E521E53\" 的台灯和 ID 为 \"8CCE4E522299\" 的氛围灯,为您营造一个舒适的睡眠环境。祝您晚安,睡个好觉!"
-      },
-      "finish_reason": "stop"
+  "domain": "light",
+  "services": {
+    "turn_on": {
+      "name": "Turn on",
+      "fields": {
+        "rgb_color": {
+          "filter": {
+            "attribute": {
+              "supported_color_modes": [
+                "hs",
+                "xy",
+                "rgb",
+                "rgbw",
+                "rgbww"
+              ]
+            }
+          },
+          "selector": {
+            "color_rgb": null
+          },
+          "example": "[255, 100, 100, 50]",
+          "name": "Color",
+          "description": "The color in RGB format. A list of three integers between 0 and 255 representing the values of red, green, and blue."
+        }
+      }
     }
-  ],
-  "usage": {
-    "prompt_tokens": 720,
-    "completion_tokens": 233,
-    "total_tokens": 953
-  },
-  "system_fingerprint": ""
+  }
 }

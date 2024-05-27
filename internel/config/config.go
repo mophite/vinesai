@@ -11,6 +11,18 @@ type config struct {
 	Redis  redis  `json:"redis"`
 	Mysql  mysql  `json:"mysql"`
 	OpenAI openAI `json:"openai"`
+	Tuya   tuya   `json:"tuya"`
+}
+
+// 涂鸦开放者平台配置
+//
+//go:generate ETCDCTL_API=3 etcdctl put  configava/v1.0.0/private/tuya '{"client_id":"5wxqk97nxcmnfdw8jjgu","client_secret":"39381fc7af394435bf49961a0c4b0733","code":"p1716437079043pf53ca"}'
+type tuya struct {
+	ClientId     string `json:"client_id"`     //涂鸦id
+	ClientSecret string `json:"client_secret"` //密钥1
+	Code         string `json:"code"`          //项目code
+	ApiHost      string `json:"api_host"`      //接口api
+	MsgHost      string `json:"msg_host"`      //消息推送host
 }
 
 //go:generate ETCDCTL_API=3 etcdctl put  configava/v1.0.0/public/ava.redis "{ \"address\":\"127.0.0.1:6379\", \"password\":\"\" }"
@@ -98,6 +110,13 @@ func ChaosDB() error {
 	}
 
 	GConfig.OpenAI = o
+
+	var tuya tuya
+	err = ava.ConfigDecPrivate("tuya", &tuya)
+	if err != nil {
+		ava.Error(err)
+		return err
+	}
 
 	return nil
 }

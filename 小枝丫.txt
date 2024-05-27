@@ -207,3 +207,21 @@ db.createUser(
 )
 
 ETCDCTL_API=3 etcdctl put configava/v1.0.0/public/ava.mongo '{ "dsn":"mongodb://admin:000000@127.0.0.1:27017"}'
+
+docker run -d \
+--restart always \
+--name homeassistant  \
+-v /data/homeassistant/config:/config \
+-e TZ=Asia/Shanghai   \
+-p 8123:8123   \
+homeassistant/home-assistant:latest
+
+docker exec -it 54eca8404f2e /bin/bash
+
+
+涂鸦：
+Access ID/Client ID: 5wxqk97nxcmnfdw8jjgu
+Access Secret/Client Secret: 39381fc7af394435bf49961a0c4b0733
+项目 Code: p1716437079043pf53ca
+
+{"client_id":"5wxqk97nxcmnfdw8jjgu","client_secret":"39381fc7af394435bf49961a0c4b0733","code":"p1716437079043pf53ca"}

@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package pha;
+
+//设备控制
+message CallReq{
+  string message = 1;
+  string home = 2;
+}
+
+message CallRsp{
+  int32 code = 1;
+  string msg = 2;
+}
+
+//获取指令集
+message ServicesReq{
+}
+
+message servicesData{
+  string services = 1;
+}
+
+message ServicesRsp{
+  int32 code = 1;
+  string msg = 2;
+  servicesData data = 3;
+}
+
+//获取当前设备列表和状态
+message StatesReq{
+
+}
+
+message statesData{
+  string states = 1;
+}
+
+message StatesRsp{
+  int32 code = 1;
+  string msg = 3;
+  statesData data = 2;
+}
+
+service llm{
+  rpc Call(CallReq)returns (CallRsp);
+  rpc Services(ServicesReq)returns(ServicesRsp);
+  rpc States(StatesReq)returns(StatesRsp);
+}

@@ -130,3 +130,48 @@
     ]
 }
 ```
+
+```shell
+curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkOTQyYzVlYWI1ZWI0OWVhOWQxNzM2MjhhMDg0YWNlMyIsImlhdCI6MTcxNjM5MzU0OCwiZXhwIjoyMDMxNzUzNTQ4fQ.qqpUAAALF4-DQOsPT6sTuEXaZX8REjJkGM5rQF2bghY" -H "Content-Type: application/json"  http://43.139.244.233:8123/api/services
+
+
+curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkOTQyYzVlYWI1ZWI0OWVhOWQxNzM2MjhhMDg0YWNlMyIsImlhdCI6MTcxNjM5MzU0OCwiZXhwIjoyMDMxNzUzNTQ4fQ.qqpUAAALF4-DQOsPT6sTuEXaZX8REjJkGM5rQF2bghY" -H "Content-Type: application/json"  -d '{"device_id": "85ae07efb54d69fb9d8a14ac25131b19"}'  http://43.139.244.233:8123/api/services/switch/toggle 
+curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkOTQyYzVlYWI1ZWI0OWVhOWQxNzM2MjhhMDg0YWNlMyIsImlhdCI6MTcxNjM5MzU0OCwiZXhwIjoyMDMxNzUzNTQ4fQ.qqpUAAALF4-DQOsPT6sTuEXaZX8REjJkGM5rQF2bghY" -H "Content-Type: application/json"  -d '{"device_id": "30d1e889abd193b6b0c36337877510fc"}'  http://43.139.244.233:8123/api/services/switch/toggle 
+curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkOTQyYzVlYWI1ZWI0OWVhOWQxNzM2MjhhMDg0YWNlMyIsImlhdCI6MTcxNjM5MzU0OCwiZXhwIjoyMDMxNzUzNTQ4fQ.qqpUAAALF4-DQOsPT6sTuEXaZX8REjJkGM5rQF2bghY" -H "Content-Type: application/json"   http://43.139.244.233:8123/api/states
+
+curl -X POST -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkOTQyYzVlYWI1ZWI0OWVhOWQxNzM2MjhhMDg0YWNlMyIsImlhdCI6MTcxNjM5MzU0OCwiZXhwIjoyMDMxNzUzNTQ4fQ.qqpUAAALF4-DQOsPT6sTuEXaZX8REjJkGM5rQF2bghY" -H "Content-Type: application/json"  -d '{"template": "{% set area_name = \"wo_shi\" %} {% set devices = area_devices(area_name) %} {% for device in devices %} {{ device.name }}: {{ device.entity_id }}<br> {% endfor %}"}'  http://43.139.244.233:8123/api/template
+curl -X POST -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkOTQyYzVlYWI1ZWI0OWVhOWQxNzM2MjhhMDg0YWNlMyIsImlhdCI6MTcxNjM5MzU0OCwiZXhwIjoyMDMxNzUzNTQ4fQ.qqpUAAALF4-DQOsPT6sTuEXaZX8REjJkGM5rQF2bghY" -H "Content-Type: application/json"  -d '{"template": "{{ area_id('wo_shi') }}"}'  http://43.139.244.233:8123/api/template
+
+
+curl -X POST -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkOTQyYzVlYWI1ZWI0OWVhOWQxNzM2MjhhMDg0YWNlMyIsImlhdCI6MTcxNjM5MzU0OCwiZXhwIjoyMDMxNzUzNTQ4fQ.qqpUAAALF4-DQOsPT6sTuEXaZX8REjJkGM5rQF2bghY" -H "Content-Type: application/json" -d '{"template": "{{ area_entities('\''wo_shi'\'') }}"}' http://43.139.244.233:8123/api/template
+
+
+curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkOTQyYzVlYWI1ZWI0OWVhOWQxNzM2MjhhMDg0YWNlMyIsImlhdCI6MTcxNjM5MzU0OCwiZXhwIjoyMDMxNzUzNTQ4fQ.qqpUAAALF4-DQOsPT6sTuEXaZX8REjJkGM5rQF2bghY" -H "Content-Type: application/json"  -d '{ "rgb_color": [255, 0, 0],"entity_id":"8de7933bfbabc360d650644840f5b600"}'  http://43.139.244.233:8123/api/services/light/turn_on 
+
+curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkOTQyYzVlYWI1ZWI0OWVhOWQxNzM2MjhhMDg0YWNlMyIsImlhdCI6MTcxNjM5MzU0OCwiZXhwIjoyMDMxNzUzNTQ4fQ.qqpUAAALF4-DQOsPT6sTuEXaZX8REjJkGM5rQF2bghY" \
+-H "Content-Type: application/json" \
+-d '{ "device_id": "bb5563b19238dc8689c90f12ad0608e4", "rgb_color": [255, 255, 0] }' \
+http://127.0.0.1:8123/api/services/light/turn_on
+
+curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkOTQyYzVlYWI1ZWI0OWVhOWQxNzM2MjhhMDg0YWNlMyIsImlhdCI6MTcxNjM5MzU0OCwiZXhwIjoyMDMxNzUzNTQ4fQ.qqpUAAALF4-DQOsPT6sTuEXaZX8REjJkGM5rQF2bghY" \
+-H "Content-Type: application/json" \
+-d '{ "entity_id": "light.smart_led_strip", "rgb_color": [255, 0, 0] }' \
+http://43.139.244.233:8123/api/services/light/turn_on
+```
+
+http://43.139.244.233:8123/auth/authorize?response_type=code&client_id=http://43.139.244.233:8123/&redirect_uri=http://43.139.244.233:8123/auth/callback
+
+curl -X POST -H "Content-Type: application/x-www-form-urlencoded" \
+-d "grant_type=authorization_code" \
+-d "code=fda4623f714948629a17896053859e60" \
+-d "client_id=http:/43.139.244.233:8123/" \
+-d "redirect_uri=http:/43.139.244.233:8123/auth/callback" \
+http:/43.139.244.233:8123/auth/token
+
+
+curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkOTQyYzVlYWI1ZWI0OWVhOWQxNzM2MjhhMDg0YWNlMyIsImlhdCI6MTcxNjM5MzU0OCwiZXhwIjoyMDMxNzUzNTQ4fQ.qqpUAAALF4-DQOsPT6sTuEXaZX8REjJkGM5rQF2bghY" \
+-H "Content-Type: application/json" \
+-d '{"entity_id":"light.smart_led_strip_2","rgb_color":[255,255,0]}' \
+http://43.139.244.233:8123/api/services/light/turn_on
+
+curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkOTQyYzVlYWI1ZWI0OWVhOWQxNzM2MjhhMDg0YWNlMyIsImlhdCI6MTcxNjM5MzU0OCwiZXhwIjoyMDMxNzUzNTQ4fQ.qqpUAAALF4-DQOsPT6sTuEXaZX8REjJkGM5rQF2bghY" -H "Content-Type: application/json" -d '{"entity_id":"light.smart_led_strip_2","rgb_color":[255,255,0]}' http://localhost:8123/api/services/light/turn_on
