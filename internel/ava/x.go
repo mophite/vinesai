@@ -104,6 +104,13 @@ func RandInt(min, max int) int {
 	return rRand.Intn(max-min) + min
 }
 
+func RandInt32(min, max int32) int32 {
+	if min >= max || min == 0 || max == 0 {
+		return max
+	}
+	return rRand.Int31n(max-min) + min
+}
+
 func LocalIp() (string, error) {
 	addr, err := net.InterfaceAddrs()
 	if err != nil {

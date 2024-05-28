@@ -29,3 +29,7 @@ func (s *EveryScheduler) Next(prev time.Time) time.Time {
 func TimingwheelAfter(t time.Duration, f func()) {
 	tw.AfterFunc(t, f)
 }
+
+func TimingwheelTicker(t time.Duration, f func()) {
+	tw.ScheduleFunc(&EveryScheduler{Interval: t}, f)
+}

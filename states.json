@@ -1,0 +1,305 @@
+[
+  {
+    "attributes": {
+      "friendly_name": "Home Assistant"
+    },
+    "context": {
+      "id": "01HYTNA7D2TQQMYQVNV1GRXRPF",
+      "parent_id": null,
+      "user_id": "94b4baac240646069282442afdb582d0"
+    },
+    "entity_id": "conversation.home_assistant",
+    "last_changed": "2024-05-26T14:36:45.347044+00:00",
+    "last_reported": "2024-05-26T14:36:45.347044+00:00",
+    "last_updated": "2024-05-26T14:36:45.347044+00:00",
+    "state": "2024-05-26T14:36:45.347008+00:00"
+  },
+  {
+    "attributes": {
+      "content": "小米智能多模网关2",
+      "ctime": 1716380026,
+      "device_id": "551752065",
+      "entity_class": "MihomeMessageSensor",
+      "event": "2.1",
+      "event_data": [
+        {
+          "piid": 1,
+          "value": 1
+        },
+        {
+          "piid": 2,
+          "value": "192.168.2.42"
+        },
+        {
+          "piid": 3,
+          "value": "ChinaNet-RU952G"
+        },
+        {
+          "piid": 4,
+          "value": "1716380026"
+        }
+      ],
+      "exclude_types": [
+        13
+      ],
+      "filter_homes": [],
+      "friendly_name": "小米网关-客厅",
+      "home_name": "2174298090",
+      "icon": "mdi:message",
+      "is_new": 1,
+      "model": "lumi.gateway.mcn001",
+      "msg_id": 1793253921398079500,
+      "room_name": "",
+      "timestamp": "2024-05-22T20:13:46+08:00",
+      "title": "已切换到2.4GHz Wi-Fi连接",
+      "type": 6,
+      "user_id": 2174298090
+    },
+    "context": {
+      "id": "01HYV59K24Z8023SNDHY8ZQ01A",
+      "parent_id": null,
+      "user_id": null
+    },
+    "entity_id": "sensor.mi_2174298090_message",
+    "last_changed": "2024-05-25T19:11:44.186347+00:00",
+    "last_reported": "2024-05-26T19:26:45.093832+00:00",
+    "last_updated": "2024-05-26T19:16:01.732118+00:00",
+    "state": "小米智能多模网关2: 已切换到2.4GHz Wi-Fi连接"
+  },
+  {
+    "attributes": {
+      "count_down_time-4-1": 300,
+      "device_class": "outlet",
+      "electric_current-3-4": 76,
+      "electric_power-3-2": 10.575,
+      "enable_count_down-4-3": false,
+      "entity_class": "MiotSwitchEntity",
+      "exclude_miot_services": [
+        "simulation"
+      ],
+      "friendly_name": "客厅插座",
+      "home_room": "2174298090 卧室",
+      "lan_ip": "",
+      "mac_address": "84:46:93:35:40:67",
+      "miot_type": "urn:miot-spec-v2:device:outlet:0000A002:qmi-psv3:1:0000C816",
+      "model": "qmi.plug.psv3",
+      "power_consumption": 0.48,
+      "power_consumption.voltage": 239080,
+      "power_cost_month": 0.683,
+      "power_cost_today": 0.16,
+      "relay_count_down.remain_time": 0,
+      "relay_loop_task.close_time": 0,
+      "relay_loop_task.enable": false,
+      "relay_loop_task.open_time": 0,
+      "state_updater": "cloud",
+      "sub_entities": [
+        "power_cost_today",
+        "power_cost_month",
+        "switch-2.temperature-3",
+        "power_consumption-3.electric_power-2",
+        "power_consumption-3.voltage-3",
+        "power_consumption-3.electric_current-4"
+      ],
+      "supported_features": 0,
+      "switch.mode": 1,
+      "switch.on": true,
+      "switch.temperature": 38.6,
+      "switch.working_time": 10,
+      "system.enable_buzzer": true,
+      "system.enable_led": true,
+      "system.keep_relay": true,
+      "system.update_power": false,
+      "test_simulation.current": 0,
+      "test_simulation.temperature": 0
+    },
+    "context": {
+      "id": "01HYX3JBS0NDM7GZZRM0H4AXRF",
+      "parent_id": null,
+      "user_id": null
+    },
+    "entity_id": "switch.qmi_psv3_4067_switch",
+    "last_changed": "2024-05-27T10:07:04.119001+00:00",
+    "last_reported": "2024-05-27T13:24:20.896787+00:00",
+    "last_updated": "2024-05-27T13:24:20.896787+00:00",
+    "state": "on"
+  },
+  {
+    "attributes": {
+      "brightness": 255,
+      "color_mode": "hs",
+      "friendly_name": "卧室led",
+      "hs_color": [
+        240,
+        100
+      ],
+      "rgb_color": [
+        0,
+        0,
+        255
+      ],
+      "supported_color_modes": [
+        "hs"
+      ],
+      "supported_features": 0,
+      "xy_color": [
+        0.136,
+        0.04
+      ]
+    },
+    "context": {
+      "id": "01HYWTHGTZQDN8RN09W49NTBWE",
+      "parent_id": null,
+      "user_id": "94b4baac240646069282442afdb582d0"
+    },
+    "entity_id": "light.smart_led_strip",
+    "last_changed": "2024-05-27T08:57:20.754022+00:00",
+    "last_reported": "2024-05-27T10:46:36.644570+00:00",
+    "last_updated": "2024-05-27T10:46:36.643137+00:00",
+    "state": "on"
+  },
+  {
+    "attributes": {
+      "friendly_name": "客厅的智能插座 上电行为",
+      "options": [
+        "power_off",
+        "power_on",
+        "last"
+      ]
+    },
+    "context": {
+      "id": "01HYWDNQV5SSJP9S3TDPWNC309",
+      "parent_id": null,
+      "user_id": null
+    },
+    "entity_id": "select.smart_plug_power_on_behavior",
+    "last_changed": "2024-05-27T07:01:42.885693+00:00",
+    "last_reported": "2024-05-27T07:01:42.887446+00:00",
+    "last_updated": "2024-05-27T07:01:42.885693+00:00",
+    "state": "unavailable"
+  },
+  {
+    "attributes": {
+      "friendly_name": "客厅的智能插座 指示灯模式",
+      "options": [
+        "relay",
+        "pos",
+        "none"
+      ]
+    },
+    "context": {
+      "id": "01HYWDNQV5H4KZBMR5D7B9VW0G",
+      "parent_id": null,
+      "user_id": null
+    },
+    "entity_id": "select.smart_plug_indicator_light_mode",
+    "last_changed": "2024-05-27T07:01:42.885762+00:00",
+    "last_reported": "2024-05-27T07:01:42.887469+00:00",
+    "last_updated": "2024-05-27T07:01:42.885762+00:00",
+    "state": "unavailable"
+  },
+  {
+    "attributes": {
+      "friendly_name": "客厅的智能插座 儿童锁"
+    },
+    "context": {
+      "id": "01HYWDNQV5TK2QMB35M2W3WEMX",
+      "parent_id": null,
+      "user_id": null
+    },
+    "entity_id": "switch.smart_plug_child_lock",
+    "last_changed": "2024-05-27T07:01:42.885787+00:00",
+    "last_reported": "2024-05-27T07:01:42.887483+00:00",
+    "last_updated": "2024-05-27T07:01:42.885787+00:00",
+    "state": "unavailable"
+  },
+  {
+    "attributes": {
+      "device_class": "outlet",
+      "friendly_name": "卧室插座"
+    },
+    "context": {
+      "id": "01HYWHNBQARTQD53SAZ1N72QS4",
+      "parent_id": null,
+      "user_id": null
+    },
+    "entity_id": "switch.smart_plug_socket_1",
+    "last_changed": "2024-05-27T07:01:42.885807+00:00",
+    "last_reported": "2024-05-27T08:11:24.778392+00:00",
+    "last_updated": "2024-05-27T08:11:24.778392+00:00",
+    "state": "unavailable"
+  },
+  {
+    "attributes": {
+      "device_class": "power",
+      "electric_power-3-2": 10.575,
+      "entity_class": "MiotSensorSubEntity",
+      "friendly_name": "Xiaomi Smart Power Strip 2 (5 Outlet) Power Consumption Electric",
+      "parent_entity_id": "switch.qmi_psv3_4067_switch",
+      "property_description": "Electric Power",
+      "service_description": "Power Consumption",
+      "state_class": "measurement",
+      "supported_features": 0,
+      "unit_of_measurement": "W",
+      "updated_time": "2024-05-27T18:09:20.238965+08:00"
+    },
+    "context": {
+      "id": "01HYWRD9BFC37V0TT5HNQTVWTG",
+      "parent_id": null,
+      "user_id": null
+    },
+    "entity_id": "sensor.qmi_psv3_4067_electric_power",
+    "last_changed": "2024-05-27T10:09:20.239512+00:00",
+    "last_reported": "2024-05-27T10:11:20.273020+00:00",
+    "last_updated": "2024-05-27T10:09:20.239512+00:00",
+    "state": "10.575"
+  },
+  {
+    "attributes": {
+      "brightness": 255,
+      "color_mode": "hs",
+      "friendly_name": "客厅led",
+      "hs_color": [
+        60,
+        100
+      ],
+      "rgb_color": [
+        255,
+        255,
+        0
+      ],
+      "supported_color_modes": [
+        "hs"
+      ],
+      "supported_features": 0,
+      "xy_color": [
+        0.444,
+        0.517
+      ]
+    },
+    "context": {
+      "id": "01HYWTDB4JDSR49XMD4DH2K8F5",
+      "parent_id": null,
+      "user_id": "94b4baac240646069282442afdb582d0"
+    },
+    "entity_id": "light.smart_led_strip_2",
+    "last_changed": "2024-05-27T10:44:19.732629+00:00",
+    "last_reported": "2024-05-27T10:44:19.733608+00:00",
+    "last_updated": "2024-05-27T10:44:19.732629+00:00",
+    "state": "on"
+  },
+  {
+    "attributes": {
+      "friendly_name": "OpenAI Conversation"
+    },
+    "context": {
+      "id": "01HYTMXWKDB8VXDQN6K2P7AR7C",
+      "parent_id": null,
+      "user_id": "94b4baac240646069282442afdb582d0"
+    },
+    "entity_id": "conversation.openai_conversation",
+    "last_changed": "2024-05-26T14:30:01.069627+00:00",
+    "last_reported": "2024-05-26T14:30:01.069627+00:00",
+    "last_updated": "2024-05-26T14:30:01.069627+00:00",
+    "state": "2024-05-26T14:30:01.069590+00:00"
+  }
+]

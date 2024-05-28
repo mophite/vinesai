@@ -1,6 +1,11 @@
 package main
 
 import (
+	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 	"vinesai/internel/ava"
 	"vinesai/internel/config"
 	"vinesai/internel/ipc"
@@ -12,7 +17,7 @@ import (
 )
 
 func main() {
-
+	// Setup the service
 	ava.SetupService(
 		ava.Namespace("api.hub"),
 		ava.HttpApiAdd("0.0.0.0:10000"),
@@ -28,5 +33,22 @@ func main() {
 
 	ipc.InitIpc()
 
-	ava.Run()
+	go func() {
+		// Run the service
+		ava.Run()
+	}()
+
+	// Setup signal handling
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+
+	select {
+	case <-sigChan:
+		shutdown()
+	}
+}
+
+func shutdown() {
+	fmt.Println("-------------------exit------------------")
+	time.Sleep(time.Second * 2)
 }

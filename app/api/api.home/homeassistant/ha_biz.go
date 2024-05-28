@@ -5,17 +5,26 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"net/url"
+	"os"
+	"os/signal"
 	"strings"
 	"time"
 	"vinesai/internel/ava"
 	"vinesai/internel/x"
+
+	"github.com/gorilla/websocket"
 )
+
+func init() {
+	go websocketHa("123")
+}
 
 // 用户对应的url每个用户都有不同的端口号,后期配置成域名
 // 手动后台配置,123是家庭标识符,后期做授权
 // 授权之后才能使用家庭的api
 var mapHome2Url = map[string]string{
-	"123": "http://127.0.0.1:8123",
+	"123": "127.0.0.1:8123",
 }
 
 var mapUserToken = map[string]string{
@@ -64,7 +73,7 @@ var filterServiceDomain = map[string]bool{
 }
 
 func getServices(c *ava.Context, home string) (string, error) {
-	req, _ := http.NewRequest("GET", mapHome2Url[home]+"/api/services", nil)
+	req, _ := http.NewRequest("GET", "http://"+mapHome2Url[home]+"/api/services", nil)
 	req.Header.Set("Authorization", mapUserToken[home])
 	req.Header.Set("Content-Type", "application/json")
 
@@ -115,7 +124,7 @@ var filterState = map[string]bool{
 }
 
 func getStates(c *ava.Context, home string) (string, error) {
-	req, _ := http.NewRequest("GET", mapHome2Url[home]+"/api/states", nil)
+	req, _ := http.NewRequest("GET", "http://"+mapHome2Url[home]+"/api/states", nil)
 	req.Header.Set("Authorization", mapUserToken[home])
 	req.Header.Set("Content-Type", "application/json")
 
@@ -183,15 +192,15 @@ func init() {
 	}
 }
 
-func callService(c *ava.Context, home, service string, data []byte) {
-	c.Debugf("callService |url=%s |data=%s", mapHome2Url[home]+"/api/services/"+service, string(data))
-	req, _ := http.NewRequest("POST", mapHome2Url[home]+"/api/services/"+service, bytes.NewReader(data))
+func callService(home, service string, data []byte) {
+	ava.Debugf("callService |url=%s |data=%s", "http://"+mapHome2Url[home]+"/api/services/"+service, string(data))
+	req, _ := http.NewRequest("POST", "http://"+mapHome2Url[home]+"/api/services/"+service, bytes.NewReader(data))
 	req.Header.Set("Authorization", mapUserToken[home])
 	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := httpClient.Do(req)
 	if err != nil {
-		c.Error(err)
+		ava.Error(err)
 		return
 	}
 
@@ -199,11 +208,11 @@ func callService(c *ava.Context, home, service string, data []byte) {
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		c.Error(err)
+		ava.Error(err)
 		return
 	}
 
-	c.Infof("callService |body=%s", x.BytesToString(body))
+	ava.Infof("callService |body=%s", x.BytesToString(body))
 }
 
 var aiTmp = `你是一个home-assistant智能家居管家，当我想要控制智能家居设备时，通过friendly_name去判断设备位置。
@@ -354,26 +363,197 @@ message:以友好、俏皮的口吻告知操作结果。
 {"command":[{"data":{"entity_id":"switch.qmi_psv3_4067_switch"},"service":"switch/turn_on"}],"message":"客厅插座已打开"}
 请直接给出 JSON 格式的指令结果,不要有其他文字。当前的指令清单和设备清单如下: 【指令清单】:%s 【设备清单】:%s`
 
-var aiTmp2 = `你是一个智能家居助手,负责理解用户意图，然后通过 Home Assistant REST API 控制家中的智能设备。
-你能控制的设备及其指令如下：
+var aiTmp2 = `你是一个理解home-assistant REST API的智能家居助手，我将为您提供此任务的基础知识，请在之后使用它来完成任务。
+<services></services>表示调用的服务，<states></states>表示设备清单，<notice></notice>表示设备清单数据使用注意事项，非常重要。
 
-【设备清单】:%s，【指令清单】:%s 。
+<services>
+%s
+</services>
+
+<states>
+%s
+</states>
+
+<notice>
+- 在<states>中，friendly_name(只能通过这个字段去识别设备名称和设备位置)，state(设备状态,on表示打开，off表示关闭，unavailable表示不可用,unavailable状态的设备你无法控制)
+- {"entity_id": "select.smart_plug_power_on_behavior","state":"unavailable"}表示设备不可用，这个时候直接告诉我设备发生故障即可
+"state": "unavailable",
+</notice>
 
 请根据用户意图，选择合适的设备和指令执行相应的操作,并以 JSON 格式返回指令结果。
-例如:
+<example>
 1.将【客厅led】改为黄色:
 {"command":[{"data":{"entity_id":"light.smart_led_strip_2","rgb_color":[255,255,0]},"service":"light/turn_on"}],"message":"好的主人，已将客厅led改为黄色"}
 2.关闭【客厅led】:
 {"command":[{"data":{"entity_id":"light.smart_led_strip_2"},"service":"light/turn_off"}],"message":"客厅led已乖乖睡觉啦~"}
 3.打开【客厅插座】:
 {"command":[{"data":{"entity_id":"switch.qmi_psv3_4067_switch"},"service":"switch/turn_on"}],"message":"客厅插座已打开"}
-4.设备不可用:
+4.不可用设备:
 {"command":[{"data":{"entity_id":"switch.smart_plug_socket_1","state":"unavailable"},"service":""}],"message":"卧室插座不可用"}
 
-注意：
-在判断设备位置时,请使用 friendly_name 字段。指令结果中包含以下字段:
-- service:结合指令清单中的 【domain】 和 【services】 得到,如 "light/turn_on" 。
-- data:根据设备当前状态和指令要求,生成修改后的设备数据 。
-- message:以友好、俏皮的口吻告知操作结果。`
+- service:根据<services>中的domain和services 得到请求home-assistant的服务,如 "light/turn_on" 。
+- data:你要修改的设备状态数据，其中entity_id将要修改的设备实体标识 。
+- message:以友好、俏皮的口吻告知修改结果。
+</example>`
 
 //- 【设备清单】中如果是{ "entity_id": "switch.smart_plug_socket_1", "state": "unavailable"},则提示我“xxx不可用”,参考第4点。
+
+func websocketHa(home string) {
+
+	interrupt := make(chan os.Signal, 1)
+	signal.Notify(interrupt, os.Interrupt)
+
+	var host, accessToken = mapHome2Url[home], mapUserToken[home]
+
+	accessToken = strings.TrimPrefix(accessToken, "Bearer ")
+
+	u := url.URL{Scheme: "ws", Host: host, Path: "/api/websocket"}
+	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
+	if err != nil {
+		ava.Errorf("host=%s |token=%s |err=%v", host, accessToken, err)
+		return
+	}
+
+	defer c.Close()
+
+	//过滤掉要求
+	c.ReadMessage()
+
+	//鉴权
+	var authReq = struct {
+		Type        string `json:"type"`
+		AccessToken string `json:"access_token"`
+	}{Type: "auth", AccessToken: accessToken}
+
+	err = c.WriteJSON(&authReq)
+	if err != nil {
+		ava.Errorf("host=%s |token=%s |err=%v", host, accessToken, err)
+		return
+	}
+
+	_, message, err := c.ReadMessage()
+	if err != nil {
+		ava.Errorf("host=%s |token=%s |err=%v", host, accessToken, err)
+		return
+	}
+
+	ava.Debugf("auth |message=%s", string(message))
+
+	type Result struct {
+		Type    string `json:"type"`
+		Success bool   `json:"success"`
+	}
+	var result Result
+
+	err = x.MustUnmarshal(message, &result)
+	if err != nil {
+		ava.Errorf("host=%s |token=%s |err=%v", host, accessToken, err)
+		return
+	}
+
+	if result.Type != "auth_ok" {
+		ava.Errorf("host=%s |token=%s", host, accessToken)
+		return
+	}
+
+	ava.Debugf("handshake suscess |host=%s |token=%s", host, accessToken)
+
+	//监听状态变化
+	var state = struct {
+		Id        int    `json:"id"`
+		Type      string `json:"type"`
+		EventType string `json:"event_type"`
+	}{Id: ava.RandInt(1, 100000), Type: "subscribe_events", EventType: "state_changed"}
+
+	err = c.WriteJSON(&state)
+	if err != nil {
+		ava.Errorf("host=%s |token=%s |err=%v", host, accessToken, err)
+		return
+	}
+
+	_, stateMessage, err := c.ReadMessage()
+	if err != nil {
+		ava.Errorf("host=%s |token=%s |err=%v", host, accessToken, err)
+		return
+	}
+
+	ava.Debugf("state_changed |message=%s", string(stateMessage))
+
+	var stateResult Result
+
+	err = x.MustUnmarshal(stateMessage, &stateResult)
+	if err != nil {
+		ava.Errorf("host=%s |token=%s |err=%v", host, accessToken, err)
+		return
+	}
+
+	if !stateResult.Success {
+		ava.Errorf("host=%s |token=%s |stateResult=%v", host, accessToken, stateResult)
+		return
+	}
+
+	done := make(chan struct{})
+
+	go func() {
+		defer close(done)
+		for {
+			_, message, err := c.ReadMessage()
+			if err != nil {
+				ava.Error(err)
+				return
+			}
+			// todo 检测一些需要通知或主动改变状态，通知用户,例如煤气传感器
+			ava.Debug("------", string(message))
+		}
+	}()
+
+	// todo {"id":40,"type":"result","success":false,"error":{"code":"id_reuse","message":"Identifier values have to increase."}}
+	//var idIncrease = ava.RandInt32(1, 100)
+	//
+	////发送心跳包
+	//var quit = make(chan string)
+	//x.TimingwheelTicker(time.Second*5, func() {
+	//	err := c.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintf(`{ "id": %d, "type": "ping" }`, atomic.AddInt32(&idIncrease, 1))))
+	//	if err != nil {
+	//		ava.Error(err)
+	//	}
+	//
+	//	<-quit
+	//})
+
+	//退出
+	for {
+		select {
+		//case <-quit:
+		//
+		//	// Cleanly close the connection by sending a close message and then
+		//	// waiting (with timeout) for the server to close the connection.
+		//	err := c.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
+		//	if err != nil {
+		//		ava.Error(err)
+		//		return
+		//	}
+		//	select {
+		//	case <-done:
+		//	case <-time.After(time.Second):
+		//	}
+		//	return
+		case <-done:
+			return
+		case <-interrupt:
+
+			// Cleanly close the connection by sending a close message and then
+			// waiting (with timeout) for the server to close the connection.
+			err := c.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
+			if err != nil {
+				ava.Error(err)
+				return
+			}
+			select {
+			case <-done:
+			case <-time.After(time.Second):
+			}
+			return
+		}
+	}
+}

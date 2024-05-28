@@ -47,6 +47,8 @@ func (h *HomeAssistant) Call(c *ava.Context, req *pha.CallReq, rsp *pha.CallRsp)
 		return
 	}
 
+	//c.Debugf("-----services-----%s", servcies)
+	//c.Debugf("-----states-----%s", states)
 	//告诉ai指令
 	var top = openai.ChatCompletionMessage{
 		Role:    openai.ChatMessageRoleSystem,
@@ -65,8 +67,8 @@ func (h *HomeAssistant) Call(c *ava.Context, req *pha.CallReq, rsp *pha.CallRsp)
 		context.Background(),
 		openai.ChatCompletionRequest{
 			//Model:    openai.GPT3Dot5Turbo,
-			//Model:    "claude-3-haiku-20240307",
-			Model:    openai.GPT3Dot5Turbo,
+			//Model: "claude-3-haiku-20240307",
+			Model:    "gpt-4o",
 			Messages: msgList,
 			//Temperature: config.GConfig.OpenAI.Temperature,
 			//TopP:        config.GConfig.OpenAI.TopP,
@@ -114,7 +116,7 @@ func (h *HomeAssistant) Call(c *ava.Context, req *pha.CallReq, rsp *pha.CallRsp)
 	for i := range result.Command {
 		command := result.Command[i]
 		//发起设备控制
-		callService(c, "123", command.Service, x.MustMarshal(command.Data))
+		callService("123", command.Service, x.MustMarshal(command.Data))
 	}
 
 	rsp.Code = http.StatusOK

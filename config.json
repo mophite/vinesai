@@ -1,29 +1,2981 @@
-{
-  "domain": "light",
-  "services": {
-    "turn_on": {
-      "name": "Turn on",
-      "fields": {
-        "rgb_color": {
-          "filter": {
-            "attribute": {
-              "supported_color_modes": [
-                "hs",
-                "xy",
-                "rgb",
-                "rgbw",
-                "rgbww"
+[
+  {
+    "domain": "switch",
+    "services": {
+      "toggle": {
+        "description": "Toggles a switch on/off.",
+        "fields": {},
+        "name": "Toggle",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "switch"
               ]
             }
+          ]
+        }
+      },
+      "turn_off": {
+        "description": "Turns a switch off.",
+        "fields": {},
+        "name": "Turn off",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "switch"
+              ]
+            }
+          ]
+        }
+      },
+      "turn_on": {
+        "description": "Turns a switch on.",
+        "fields": {},
+        "name": "Turn on",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "switch"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "domain": "light",
+    "services": {
+      "toggle": {
+        "description": "Toggles one or more lights, from on to off, or, off to on, based on their current state.",
+        "fields": {
+          "brightness": {
+            "advanced": true,
+            "description": "Number indicating brightness, where 0 turns the light off, 1 is the minimum brightness, and 255 is the maximum brightness.",
+            "filter": {
+              "attribute": {
+                "supported_color_modes": [
+                  "brightness",
+                  "color_temp",
+                  "hs",
+                  "xy",
+                  "rgb",
+                  "rgbw",
+                  "rgbww"
+                ]
+              }
+            },
+            "name": "Brightness value",
+            "selector": {
+              "number": {
+                "max": 255,
+                "min": 0
+              }
+            }
           },
-          "selector": {
-            "color_rgb": null
+          "brightness_pct": {
+            "description": "Number indicating the percentage of full brightness, where 0 turns the light off, 1 is the minimum brightness, and 100 is the maximum brightness.",
+            "filter": {
+              "attribute": {
+                "supported_color_modes": [
+                  "brightness",
+                  "color_temp",
+                  "hs",
+                  "xy",
+                  "rgb",
+                  "rgbw",
+                  "rgbww"
+                ]
+              }
+            },
+            "name": "Brightness",
+            "selector": {
+              "number": {
+                "max": 100,
+                "min": 0,
+                "unit_of_measurement": "%!"
+                (MISSING)
+              }
+            }
           },
-          "example": "[255, 100, 100, 50]",
-          "name": "Color",
-          "description": "The color in RGB format. A list of three integers between 0 and 255 representing the values of red, green, and blue."
+          "color_name": {
+            "advanced": true,
+            "description": "A human-readable color name.",
+            "filter": {
+              "attribute": {
+                "supported_color_modes": [
+                  "hs",
+                  "xy",
+                  "rgb",
+                  "rgbw",
+                  "rgbww"
+                ]
+              }
+            },
+            "name": "Color name",
+            "selector": {
+              "select": {
+                "options": [
+                  "homeassistant",
+                  "aliceblue",
+                  "antiquewhite",
+                  "aqua",
+                  "aquamarine",
+                  "azure",
+                  "beige",
+                  "bisque",
+                  "blanchedalmond",
+                  "blue",
+                  "blueviolet",
+                  "brown",
+                  "burlywood",
+                  "cadetblue",
+                  "chartreuse",
+                  "chocolate",
+                  "coral",
+                  "cornflowerblue",
+                  "cornsilk",
+                  "crimson",
+                  "cyan",
+                  "darkblue",
+                  "darkcyan",
+                  "darkgoldenrod",
+                  "darkgray",
+                  "darkgreen",
+                  "darkgrey",
+                  "darkkhaki",
+                  "darkmagenta",
+                  "darkolivegreen",
+                  "darkorange",
+                  "darkorchid",
+                  "darkred",
+                  "darksalmon",
+                  "darkseagreen",
+                  "darkslateblue",
+                  "darkslategray",
+                  "darkslategrey",
+                  "darkturquoise",
+                  "darkviolet",
+                  "deeppink",
+                  "deepskyblue",
+                  "dimgray",
+                  "dimgrey",
+                  "dodgerblue",
+                  "firebrick",
+                  "floralwhite",
+                  "forestgreen",
+                  "fuchsia",
+                  "gainsboro",
+                  "ghostwhite",
+                  "gold",
+                  "goldenrod",
+                  "gray",
+                  "green",
+                  "greenyellow",
+                  "grey",
+                  "honeydew",
+                  "hotpink",
+                  "indianred",
+                  "indigo",
+                  "ivory",
+                  "khaki",
+                  "lavender",
+                  "lavenderblush",
+                  "lawngreen",
+                  "lemonchiffon",
+                  "lightblue",
+                  "lightcoral",
+                  "lightcyan",
+                  "lightgoldenrodyellow",
+                  "lightgray",
+                  "lightgreen",
+                  "lightgrey",
+                  "lightpink",
+                  "lightsalmon",
+                  "lightseagreen",
+                  "lightskyblue",
+                  "lightslategray",
+                  "lightslategrey",
+                  "lightsteelblue",
+                  "lightyellow",
+                  "lime",
+                  "limegreen",
+                  "linen",
+                  "magenta",
+                  "maroon",
+                  "mediumaquamarine",
+                  "mediumblue",
+                  "mediumorchid",
+                  "mediumpurple",
+                  "mediumseagreen",
+                  "mediumslateblue",
+                  "mediumspringgreen",
+                  "mediumturquoise",
+                  "mediumvioletred",
+                  "midnightblue",
+                  "mintcream",
+                  "mistyrose",
+                  "moccasin",
+                  "navajowhite",
+                  "navy",
+                  "navyblue",
+                  "oldlace",
+                  "olive",
+                  "olivedrab",
+                  "orange",
+                  "orangered",
+                  "orchid",
+                  "palegoldenrod",
+                  "palegreen",
+                  "paleturquoise",
+                  "palevioletred",
+                  "papayawhip",
+                  "peachpuff",
+                  "peru",
+                  "pink",
+                  "plum",
+                  "powderblue",
+                  "purple",
+                  "red",
+                  "rosybrown",
+                  "royalblue",
+                  "saddlebrown",
+                  "salmon",
+                  "sandybrown",
+                  "seagreen",
+                  "seashell",
+                  "sienna",
+                  "silver",
+                  "skyblue",
+                  "slateblue",
+                  "slategray",
+                  "slategrey",
+                  "snow",
+                  "springgreen",
+                  "steelblue",
+                  "tan",
+                  "teal",
+                  "thistle",
+                  "tomato",
+                  "turquoise",
+                  "violet",
+                  "wheat",
+                  "white",
+                  "whitesmoke",
+                  "yellow",
+                  "yellowgreen"
+                ],
+                "translation_key": "color_name"
+              }
+            }
+          },
+          "color_temp": {
+            "advanced": true,
+            "description": "Color temperature in mireds.",
+            "filter": {
+              "attribute": {
+                "supported_color_modes": [
+                  "color_temp",
+                  "hs",
+                  "xy",
+                  "rgb",
+                  "rgbw",
+                  "rgbww"
+                ]
+              }
+            },
+            "name": "Color temperature",
+            "selector": {
+              "color_temp": null
+            }
+          },
+          "effect": {
+            "description": "Light effect.",
+            "filter": {
+              "supported_features": [
+                4
+              ]
+            },
+            "name": "Effect",
+            "selector": {
+              "text": null
+            }
+          },
+          "flash": {
+            "advanced": true,
+            "description": "Tell light to flash, can be either value short or long.",
+            "filter": {
+              "supported_features": [
+                8
+              ]
+            },
+            "name": "Flash",
+            "selector": {
+              "select": {
+                "options": [
+                  {
+                    "label": "Long",
+                    "value": "long"
+                  },
+                  {
+                    "label": "Short",
+                    "value": "short"
+                  }
+                ]
+              }
+            }
+          },
+          "hs_color": {
+            "advanced": true,
+            "description": "Color in hue/sat format. A list of two integers. Hue is 0-360 and Sat is 0-100.",
+            "example": "[300, 70]",
+            "filter": {
+              "attribute": {
+                "supported_color_modes": [
+                  "hs",
+                  "xy",
+                  "rgb",
+                  "rgbw",
+                  "rgbww"
+                ]
+              }
+            },
+            "name": "Hue/Sat color",
+            "selector": {
+              "object": null
+            }
+          },
+          "kelvin": {
+            "advanced": true,
+            "description": "Color temperature in Kelvin.",
+            "filter": {
+              "attribute": {
+                "supported_color_modes": [
+                  "color_temp",
+                  "hs",
+                  "xy",
+                  "rgb",
+                  "rgbw",
+                  "rgbww"
+                ]
+              }
+            },
+            "name": "Color temperature",
+            "selector": {
+              "color_temp": {
+                "max": 6500,
+                "min": 2000,
+                "unit": "kelvin"
+              }
+            }
+          },
+          "profile": {
+            "advanced": true,
+            "description": "Name of a light profile to use.",
+            "example": "relax",
+            "name": "Profile",
+            "selector": {
+              "text": null
+            }
+          },
+          "rgb_color": {
+            "advanced": true,
+            "description": "The color in RGB format. A list of three integers between 0 and 255 representing the values of red, green, and blue.",
+            "example": "[255, 100, 100]",
+            "filter": {
+              "attribute": {
+                "supported_color_modes": [
+                  "hs",
+                  "xy",
+                  "rgb",
+                  "rgbw",
+                  "rgbww"
+                ]
+              }
+            },
+            "name": "Color",
+            "selector": {
+              "color_rgb": null
+            }
+          },
+          "transition": {
+            "description": "Duration it takes to get to next state.",
+            "filter": {
+              "supported_features": [
+                32
+              ]
+            },
+            "name": "Transition",
+            "selector": {
+              "number": {
+                "max": 300,
+                "min": 0,
+                "unit_of_measurement": "seconds"
+              }
+            }
+          },
+          "white": {
+            "advanced": true,
+            "description": "Set the light to white mode.",
+            "filter": {
+              "attribute": {
+                "supported_color_modes": [
+                  "white"
+                ]
+              }
+            },
+            "name": "White",
+            "selector": {
+              "constant": {
+                "label": "Enabled",
+                "value": true
+              }
+            }
+          },
+          "xy_color": {
+            "advanced": true,
+            "description": "Color in XY-format. A list of two decimal numbers between 0 and 1.",
+            "example": "[0.52, 0.43]",
+            "filter": {
+              "attribute": {
+                "supported_color_modes": [
+                  "hs",
+                  "xy",
+                  "rgb",
+                  "rgbw",
+                  "rgbww"
+                ]
+              }
+            },
+            "name": "XY-color",
+            "selector": {
+              "object": null
+            }
+          }
+        },
+        "name": "Toggle",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "light"
+              ]
+            }
+          ]
+        }
+      },
+      "turn_off": {
+        "description": "Turn off one or more lights.",
+        "fields": {
+          "flash": {
+            "advanced": true,
+            "description": "Tell light to flash, can be either value short or long.",
+            "filter": {
+              "supported_features": [
+                8
+              ]
+            },
+            "name": "Flash",
+            "selector": {
+              "select": {
+                "options": [
+                  {
+                    "label": "Long",
+                    "value": "long"
+                  },
+                  {
+                    "label": "Short",
+                    "value": "short"
+                  }
+                ]
+              }
+            }
+          },
+          "transition": {
+            "description": "Duration it takes to get to next state.",
+            "filter": {
+              "supported_features": [
+                32
+              ]
+            },
+            "name": "Transition",
+            "selector": {
+              "number": {
+                "max": 300,
+                "min": 0,
+                "unit_of_measurement": "seconds"
+              }
+            }
+          }
+        },
+        "name": "Turn off",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "light"
+              ]
+            }
+          ]
+        }
+      },
+      "turn_on": {
+        "description": "Turn on one or more lights and adjust properties of the light, even when they are turned on already.",
+        "fields": {
+          "brightness": {
+            "advanced": true,
+            "description": "Number indicating brightness, where 0 turns the light off, 1 is the minimum brightness, and 255 is the maximum brightness.",
+            "filter": {
+              "attribute": {
+                "supported_color_modes": [
+                  "brightness",
+                  "color_temp",
+                  "hs",
+                  "xy",
+                  "rgb",
+                  "rgbw",
+                  "rgbww"
+                ]
+              }
+            },
+            "name": "Brightness value",
+            "selector": {
+              "number": {
+                "max": 255,
+                "min": 0
+              }
+            }
+          },
+          "brightness_pct": {
+            "description": "Number indicating the percentage of full brightness, where 0 turns the light off, 1 is the minimum brightness, and 100 is the maximum brightness.",
+            "filter": {
+              "attribute": {
+                "supported_color_modes": [
+                  "brightness",
+                  "color_temp",
+                  "hs",
+                  "xy",
+                  "rgb",
+                  "rgbw",
+                  "rgbww"
+                ]
+              }
+            },
+            "name": "Brightness",
+            "selector": {
+              "number": {
+                "max": 100,
+                "min": 0,
+                "unit_of_measurement": "%!"
+                (MISSING)
+              }
+            }
+          },
+          "brightness_step": {
+            "advanced": true,
+            "description": "Change brightness by an amount.",
+            "filter": {
+              "attribute": {
+                "supported_color_modes": [
+                  "brightness",
+                  "color_temp",
+                  "hs",
+                  "xy",
+                  "rgb",
+                  "rgbw",
+                  "rgbww"
+                ]
+              }
+            },
+            "name": "Brightness step value",
+            "selector": {
+              "number": {
+                "max": 255,
+                "min": -225
+              }
+            }
+          },
+          "brightness_step_pct": {
+            "description": "Change brightness by a percentage.",
+            "filter": {
+              "attribute": {
+                "supported_color_modes": [
+                  "brightness",
+                  "color_temp",
+                  "hs",
+                  "xy",
+                  "rgb",
+                  "rgbw",
+                  "rgbww"
+                ]
+              }
+            },
+            "name": "Brightness step",
+            "selector": {
+              "number": {
+                "max": 100,
+                "min": -100,
+                "unit_of_measurement": "%!"
+                (MISSING)
+              }
+            }
+          },
+          "color_name": {
+            "advanced": true,
+            "description": "A human-readable color name.",
+            "filter": {
+              "attribute": {
+                "supported_color_modes": [
+                  "hs",
+                  "xy",
+                  "rgb",
+                  "rgbw",
+                  "rgbww"
+                ]
+              }
+            },
+            "name": "Color name",
+            "selector": {
+              "select": {
+                "options": [
+                  "homeassistant",
+                  "aliceblue",
+                  "antiquewhite",
+                  "aqua",
+                  "aquamarine",
+                  "azure",
+                  "beige",
+                  "bisque",
+                  "blanchedalmond",
+                  "blue",
+                  "blueviolet",
+                  "brown",
+                  "burlywood",
+                  "cadetblue",
+                  "chartreuse",
+                  "chocolate",
+                  "coral",
+                  "cornflowerblue",
+                  "cornsilk",
+                  "crimson",
+                  "cyan",
+                  "darkblue",
+                  "darkcyan",
+                  "darkgoldenrod",
+                  "darkgray",
+                  "darkgreen",
+                  "darkgrey",
+                  "darkkhaki",
+                  "darkmagenta",
+                  "darkolivegreen",
+                  "darkorange",
+                  "darkorchid",
+                  "darkred",
+                  "darksalmon",
+                  "darkseagreen",
+                  "darkslateblue",
+                  "darkslategray",
+                  "darkslategrey",
+                  "darkturquoise",
+                  "darkviolet",
+                  "deeppink",
+                  "deepskyblue",
+                  "dimgray",
+                  "dimgrey",
+                  "dodgerblue",
+                  "firebrick",
+                  "floralwhite",
+                  "forestgreen",
+                  "fuchsia",
+                  "gainsboro",
+                  "ghostwhite",
+                  "gold",
+                  "goldenrod",
+                  "gray",
+                  "green",
+                  "greenyellow",
+                  "grey",
+                  "honeydew",
+                  "hotpink",
+                  "indianred",
+                  "indigo",
+                  "ivory",
+                  "khaki",
+                  "lavender",
+                  "lavenderblush",
+                  "lawngreen",
+                  "lemonchiffon",
+                  "lightblue",
+                  "lightcoral",
+                  "lightcyan",
+                  "lightgoldenrodyellow",
+                  "lightgray",
+                  "lightgreen",
+                  "lightgrey",
+                  "lightpink",
+                  "lightsalmon",
+                  "lightseagreen",
+                  "lightskyblue",
+                  "lightslategray",
+                  "lightslategrey",
+                  "lightsteelblue",
+                  "lightyellow",
+                  "lime",
+                  "limegreen",
+                  "linen",
+                  "magenta",
+                  "maroon",
+                  "mediumaquamarine",
+                  "mediumblue",
+                  "mediumorchid",
+                  "mediumpurple",
+                  "mediumseagreen",
+                  "mediumslateblue",
+                  "mediumspringgreen",
+                  "mediumturquoise",
+                  "mediumvioletred",
+                  "midnightblue",
+                  "mintcream",
+                  "mistyrose",
+                  "moccasin",
+                  "navajowhite",
+                  "navy",
+                  "navyblue",
+                  "oldlace",
+                  "olive",
+                  "olivedrab",
+                  "orange",
+                  "orangered",
+                  "orchid",
+                  "palegoldenrod",
+                  "palegreen",
+                  "paleturquoise",
+                  "palevioletred",
+                  "papayawhip",
+                  "peachpuff",
+                  "peru",
+                  "pink",
+                  "plum",
+                  "powderblue",
+                  "purple",
+                  "red",
+                  "rosybrown",
+                  "royalblue",
+                  "saddlebrown",
+                  "salmon",
+                  "sandybrown",
+                  "seagreen",
+                  "seashell",
+                  "sienna",
+                  "silver",
+                  "skyblue",
+                  "slateblue",
+                  "slategray",
+                  "slategrey",
+                  "snow",
+                  "springgreen",
+                  "steelblue",
+                  "tan",
+                  "teal",
+                  "thistle",
+                  "tomato",
+                  "turquoise",
+                  "violet",
+                  "wheat",
+                  "white",
+                  "whitesmoke",
+                  "yellow",
+                  "yellowgreen"
+                ],
+                "translation_key": "color_name"
+              }
+            }
+          },
+          "color_temp": {
+            "description": "Color temperature in mireds.",
+            "filter": {
+              "attribute": {
+                "supported_color_modes": [
+                  "color_temp",
+                  "hs",
+                  "xy",
+                  "rgb",
+                  "rgbw",
+                  "rgbww"
+                ]
+              }
+            },
+            "name": "Color temperature",
+            "selector": {
+              "color_temp": {
+                "max": 500,
+                "min": 153,
+                "unit": "mired"
+              }
+            }
+          },
+          "effect": {
+            "description": "Light effect.",
+            "filter": {
+              "supported_features": [
+                4
+              ]
+            },
+            "name": "Effect",
+            "selector": {
+              "text": null
+            }
+          },
+          "flash": {
+            "advanced": true,
+            "description": "Tell light to flash, can be either value short or long.",
+            "filter": {
+              "supported_features": [
+                8
+              ]
+            },
+            "name": "Flash",
+            "selector": {
+              "select": {
+                "options": [
+                  {
+                    "label": "Long",
+                    "value": "long"
+                  },
+                  {
+                    "label": "Short",
+                    "value": "short"
+                  }
+                ]
+              }
+            }
+          },
+          "hs_color": {
+            "advanced": true,
+            "description": "Color in hue/sat format. A list of two integers. Hue is 0-360 and Sat is 0-100.",
+            "example": "[300, 70]",
+            "filter": {
+              "attribute": {
+                "supported_color_modes": [
+                  "hs",
+                  "xy",
+                  "rgb",
+                  "rgbw",
+                  "rgbww"
+                ]
+              }
+            },
+            "name": "Hue/Sat color",
+            "selector": {
+              "object": null
+            }
+          },
+          "kelvin": {
+            "advanced": true,
+            "description": "Color temperature in Kelvin.",
+            "filter": {
+              "attribute": {
+                "supported_color_modes": [
+                  "color_temp",
+                  "hs",
+                  "xy",
+                  "rgb",
+                  "rgbw",
+                  "rgbww"
+                ]
+              }
+            },
+            "name": "Color temperature",
+            "selector": {
+              "color_temp": {
+                "max": 6500,
+                "min": 2000,
+                "unit": "kelvin"
+              }
+            }
+          },
+          "profile": {
+            "advanced": true,
+            "description": "Name of a light profile to use.",
+            "example": "relax",
+            "name": "Profile",
+            "selector": {
+              "text": null
+            }
+          },
+          "rgb_color": {
+            "description": "The color in RGB format. A list of three integers between 0 and 255 representing the values of red, green, and blue.",
+            "filter": {
+              "attribute": {
+                "supported_color_modes": [
+                  "hs",
+                  "xy",
+                  "rgb",
+                  "rgbw",
+                  "rgbww"
+                ]
+              }
+            },
+            "name": "Color",
+            "selector": {
+              "color_rgb": null
+            }
+          },
+          "rgbw_color": {
+            "advanced": true,
+            "description": "The color in RGBW format. A list of four integers between 0 and 255 representing the values of red, green, blue, and white.",
+            "example": "[255, 100, 100, 50]",
+            "filter": {
+              "attribute": {
+                "supported_color_modes": [
+                  "hs",
+                  "xy",
+                  "rgb",
+                  "rgbw",
+                  "rgbww"
+                ]
+              }
+            },
+            "name": "RGBW-color",
+            "selector": {
+              "object": null
+            }
+          },
+          "rgbww_color": {
+            "advanced": true,
+            "description": "The color in RGBWW format. A list of five integers between 0 and 255 representing the values of red, green, blue, cold white, and warm white.",
+            "example": "[255, 100, 100, 50, 70]",
+            "filter": {
+              "attribute": {
+                "supported_color_modes": [
+                  "hs",
+                  "xy",
+                  "rgb",
+                  "rgbw",
+                  "rgbww"
+                ]
+              }
+            },
+            "name": "RGBWW-color",
+            "selector": {
+              "object": null
+            }
+          },
+          "transition": {
+            "description": "Duration it takes to get to next state.",
+            "filter": {
+              "supported_features": [
+                32
+              ]
+            },
+            "name": "Transition",
+            "selector": {
+              "number": {
+                "max": 300,
+                "min": 0,
+                "unit_of_measurement": "seconds"
+              }
+            }
+          },
+          "white": {
+            "advanced": true,
+            "description": "Set the light to white mode.",
+            "filter": {
+              "attribute": {
+                "supported_color_modes": [
+                  "white"
+                ]
+              }
+            },
+            "name": "White",
+            "selector": {
+              "constant": {
+                "label": "Enabled",
+                "value": true
+              }
+            }
+          },
+          "xy_color": {
+            "advanced": true,
+            "description": "Color in XY-format. A list of two decimal numbers between 0 and 1.",
+            "example": "[0.52, 0.43]",
+            "filter": {
+              "attribute": {
+                "supported_color_modes": [
+                  "hs",
+                  "xy",
+                  "rgb",
+                  "rgbw",
+                  "rgbww"
+                ]
+              }
+            },
+            "name": "XY-color",
+            "selector": {
+              "object": null
+            }
+          }
+        },
+        "name": "Turn on",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "light"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "domain": "fan",
+    "services": {
+      "decrease_speed": {
+        "description": "Decreases the speed of the fan.",
+        "fields": {
+          "percentage_step": {
+            "advanced": true,
+            "description": "Decreases the speed by a percentage step.",
+            "name": "Decrement",
+            "required": false,
+            "selector": {
+              "number": {
+                "max": 100,
+                "min": 0,
+                "unit_of_measurement": "%!"
+                (MISSING)
+              }
+            }
+          }
+        },
+        "name": "Decrease speed",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "fan"
+              ],
+              "supported_features": [
+                1
+              ]
+            }
+          ]
+        }
+      },
+      "increase_speed": {
+        "description": "Increases the speed of the fan.",
+        "fields": {
+          "percentage_step": {
+            "advanced": true,
+            "description": "Increases the speed by a percentage step.",
+            "name": "Increment",
+            "required": false,
+            "selector": {
+              "number": {
+                "max": 100,
+                "min": 0,
+                "unit_of_measurement": "%!"
+                (MISSING)
+              }
+            }
+          }
+        },
+        "name": "Increase speed",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "fan"
+              ],
+              "supported_features": [
+                1
+              ]
+            }
+          ]
+        }
+      },
+      "oscillate": {
+        "description": "Controls oscillatation of the fan.",
+        "fields": {
+          "oscillating": {
+            "description": "Turn on/off oscillation.",
+            "name": "Oscillating",
+            "required": true,
+            "selector": {
+              "boolean": null
+            }
+          }
+        },
+        "name": "Oscillate",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "fan"
+              ],
+              "supported_features": [
+                2
+              ]
+            }
+          ]
+        }
+      },
+      "set_direction": {
+        "description": "Sets the fan rotation direction.",
+        "fields": {
+          "direction": {
+            "description": "Direction to rotate.",
+            "name": "Direction",
+            "required": true,
+            "selector": {
+              "select": {
+                "options": [
+                  "forward",
+                  "reverse"
+                ],
+                "translation_key": "direction"
+              }
+            }
+          }
+        },
+        "name": "Set direction",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "fan"
+              ],
+              "supported_features": [
+                4
+              ]
+            }
+          ]
+        }
+      },
+      "set_percentage": {
+        "description": "Sets the fan speed.",
+        "fields": {
+          "percentage": {
+            "description": "Speed of the fan.",
+            "name": "Percentage",
+            "required": true,
+            "selector": {
+              "number": {
+                "max": 100,
+                "min": 0,
+                "unit_of_measurement": "%!"
+                (MISSING)
+              }
+            }
+          }
+        },
+        "name": "Set speed",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "fan"
+              ],
+              "supported_features": [
+                1
+              ]
+            }
+          ]
+        }
+      },
+      "set_preset_mode": {
+        "description": "Sets preset mode.",
+        "fields": {
+          "preset_mode": {
+            "description": "Preset mode.",
+            "example": "auto",
+            "name": "Preset mode",
+            "required": true,
+            "selector": {
+              "text": null
+            }
+          }
+        },
+        "name": "Set preset mode",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "fan"
+              ],
+              "supported_features": [
+                8
+              ]
+            }
+          ]
+        }
+      },
+      "toggle": {
+        "description": "Toggles the fan on/off.",
+        "fields": {},
+        "name": "Toggle",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "fan"
+              ]
+            }
+          ]
+        }
+      },
+      "turn_off": {
+        "description": "Turns fan off.",
+        "fields": {},
+        "name": "Turn off",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "fan"
+              ]
+            }
+          ]
+        }
+      },
+      "turn_on": {
+        "description": "Turns fan on.",
+        "fields": {
+          "percentage": {
+            "description": "Speed of the fan.",
+            "filter": {
+              "supported_features": [
+                1
+              ]
+            },
+            "name": "Percentage",
+            "selector": {
+              "number": {
+                "max": 100,
+                "min": 0,
+                "unit_of_measurement": "%!"
+                (MISSING)
+              }
+            }
+          },
+          "preset_mode": {
+            "description": "Preset mode.",
+            "example": "auto",
+            "filter": {
+              "supported_features": [
+                8
+              ]
+            },
+            "name": "Preset mode",
+            "selector": {
+              "text": null
+            }
+          }
+        },
+        "name": "Turn on",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "fan"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "domain": "cover",
+    "services": {
+      "close_cover": {
+        "description": "Closes a cover.",
+        "fields": {},
+        "name": "Close",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "cover"
+              ],
+              "supported_features": [
+                2
+              ]
+            }
+          ]
+        }
+      },
+      "close_cover_tilt": {
+        "description": "Tilts a cover to close.",
+        "fields": {},
+        "name": "Close tilt",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "cover"
+              ],
+              "supported_features": [
+                32
+              ]
+            }
+          ]
+        }
+      },
+      "open_cover": {
+        "description": "Opens a cover.",
+        "fields": {},
+        "name": "Open",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "cover"
+              ],
+              "supported_features": [
+                1
+              ]
+            }
+          ]
+        }
+      },
+      "open_cover_tilt": {
+        "description": "Tilts a cover open.",
+        "fields": {},
+        "name": "Open tilt",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "cover"
+              ],
+              "supported_features": [
+                16
+              ]
+            }
+          ]
+        }
+      },
+      "set_cover_position": {
+        "description": "Moves a cover to a specific position.",
+        "fields": {
+          "position": {
+            "description": "Target position.",
+            "name": "Position",
+            "required": true,
+            "selector": {
+              "number": {
+                "max": 100,
+                "min": 0,
+                "unit_of_measurement": "%!"
+                (MISSING)
+              }
+            }
+          }
+        },
+        "name": "Set position",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "cover"
+              ],
+              "supported_features": [
+                4
+              ]
+            }
+          ]
+        }
+      },
+      "set_cover_tilt_position": {
+        "description": "Moves a cover tilt to a specific position.",
+        "fields": {
+          "tilt_position": {
+            "description": "Target tilt positition.",
+            "name": "Tilt position",
+            "required": true,
+            "selector": {
+              "number": {
+                "max": 100,
+                "min": 0,
+                "unit_of_measurement": "%!"
+                (MISSING)
+              }
+            }
+          }
+        },
+        "name": "Set tilt position",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "cover"
+              ],
+              "supported_features": [
+                128
+              ]
+            }
+          ]
+        }
+      },
+      "stop_cover": {
+        "description": "Stops the cover movement.",
+        "fields": {},
+        "name": "Stop",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "cover"
+              ],
+              "supported_features": [
+                8
+              ]
+            }
+          ]
+        }
+      },
+      "stop_cover_tilt": {
+        "description": "Stops a tilting cover movement.",
+        "fields": {},
+        "name": "Stop tilt",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "cover"
+              ],
+              "supported_features": [
+                64
+              ]
+            }
+          ]
+        }
+      },
+      "toggle": {
+        "description": "Toggles a cover open/closed.",
+        "fields": {},
+        "name": "Toggle",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "cover"
+              ],
+              "supported_features": [
+                3
+              ]
+            }
+          ]
+        }
+      },
+      "toggle_cover_tilt": {
+        "description": "Toggles a cover tilt open/closed.",
+        "fields": {},
+        "name": "Toggle tilt",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "cover"
+              ],
+              "supported_features": [
+                48
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "domain": "humidifier",
+    "services": {
+      "set_humidity": {
+        "description": "Sets the target humidity.",
+        "fields": {
+          "humidity": {
+            "description": "Target humidity.",
+            "name": "Humidity",
+            "required": true,
+            "selector": {
+              "number": {
+                "max": 100,
+                "min": 0,
+                "unit_of_measurement": "%!"
+                (MISSING)
+              }
+            }
+          }
+        },
+        "name": "Set humidity",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "humidifier"
+              ]
+            }
+          ]
+        }
+      },
+      "set_mode": {
+        "description": "Sets the humidifier operation mode.",
+        "fields": {
+          "mode": {
+            "description": "Operation mode. For example, _normal_, _eco_, or _away_. For a list of possible values, refer to the integration documentation.",
+            "example": "away",
+            "name": "Mode",
+            "required": true,
+            "selector": {
+              "text": null
+            }
+          }
+        },
+        "name": "Set mode",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "humidifier"
+              ],
+              "supported_features": [
+                1
+              ]
+            }
+          ]
+        }
+      },
+      "toggle": {
+        "description": "Toggles the humidifier on/off.",
+        "fields": {},
+        "name": "Toggle",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "humidifier"
+              ]
+            }
+          ]
+        }
+      },
+      "turn_off": {
+        "description": "Turns the humidifier off.",
+        "fields": {},
+        "name": "Turn off",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "humidifier"
+              ]
+            }
+          ]
+        }
+      },
+      "turn_on": {
+        "description": "Turns the humidifier on.",
+        "fields": {},
+        "name": "Turn on",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "humidifier"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "domain": "media_player",
+    "services": {
+      "clear_playlist": {
+        "description": "Clears the playlist.",
+        "fields": {},
+        "name": "Clear playlist",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "media_player"
+              ],
+              "supported_features": [
+                8192
+              ]
+            }
+          ]
+        }
+      },
+      "join": {
+        "description": "Groups media players together for synchronous playback. Only works on supported multiroom audio systems.",
+        "fields": {
+          "group_members": {
+            "description": "The players which will be synced with the playback specified in `target`.",
+            "example": "- media_player.multiroom_player2\n- media_player.multiroom_player3\n",
+            "name": "Group members",
+            "required": true,
+            "selector": {
+              "entity": {
+                "domain": "media_player",
+                "multiple": true
+              }
+            }
+          }
+        },
+        "name": "Join",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "media_player"
+              ],
+              "supported_features": [
+                524288
+              ]
+            }
+          ]
+        }
+      },
+      "media_next_track": {
+        "description": "Selects the next track.",
+        "fields": {},
+        "name": "Next",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "media_player"
+              ],
+              "supported_features": [
+                32
+              ]
+            }
+          ]
+        }
+      },
+      "media_pause": {
+        "description": "Pauses.",
+        "fields": {},
+        "name": "Pause",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "media_player"
+              ],
+              "supported_features": [
+                1
+              ]
+            }
+          ]
+        }
+      },
+      "media_play": {
+        "description": "Starts playing.",
+        "fields": {},
+        "name": "Play",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "media_player"
+              ],
+              "supported_features": [
+                16384
+              ]
+            }
+          ]
+        }
+      },
+      "media_play_pause": {
+        "description": "Toggles play/pause.",
+        "fields": {},
+        "name": "Play/Pause",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "media_player"
+              ],
+              "supported_features": [
+                16385
+              ]
+            }
+          ]
+        }
+      },
+      "media_previous_track": {
+        "description": "Selects the previous track.",
+        "fields": {},
+        "name": "Previous",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "media_player"
+              ],
+              "supported_features": [
+                16
+              ]
+            }
+          ]
+        }
+      },
+      "media_seek": {
+        "description": "Allows you to go to a different part of the media that is currently playing.",
+        "fields": {
+          "seek_position": {
+            "description": "Target position in the currently playing media. The format is platform dependent.",
+            "name": "Position",
+            "required": true,
+            "selector": {
+              "number": {
+                "max": 9223372036854776000,
+                "min": 0,
+                "mode": "box",
+                "step": 0.01
+              }
+            }
+          }
+        },
+        "name": "Seek",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "media_player"
+              ],
+              "supported_features": [
+                2
+              ]
+            }
+          ]
+        }
+      },
+      "media_stop": {
+        "description": "Stops playing.",
+        "fields": {},
+        "name": "Stop",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "media_player"
+              ],
+              "supported_features": [
+                4096
+              ]
+            }
+          ]
+        }
+      },
+      "play_media": {
+        "description": "Starts playing specified media.",
+        "fields": {
+          "announce": {
+            "description": "If the media should be played as an announcement.",
+            "example": "true",
+            "filter": {
+              "supported_features": [
+                1048576
+              ]
+            },
+            "name": "Announce",
+            "required": false,
+            "selector": {
+              "boolean": null
+            }
+          },
+          "enqueue": {
+            "description": "If the content should be played now or be added to the queue.",
+            "filter": {
+              "supported_features": [
+                2097152
+              ]
+            },
+            "name": "Enqueue",
+            "required": false,
+            "selector": {
+              "select": {
+                "options": [
+                  "play",
+                  "next",
+                  "add",
+                  "replace"
+                ],
+                "translation_key": "enqueue"
+              }
+            }
+          },
+          "media_content_id": {
+            "description": "The ID of the content to play. Platform dependent.",
+            "example": "https://home-assistant.io/images/cast/splash.png",
+            "name": "Content ID",
+            "required": true,
+            "selector": {
+              "text": null
+            }
+          },
+          "media_content_type": {
+            "description": "The type of the content to play. Such as image, music, tv show, video, episode, channel, or playlist.",
+            "example": "music",
+            "name": "Content type",
+            "required": true,
+            "selector": {
+              "text": null
+            }
+          }
+        },
+        "name": "Play media",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "media_player"
+              ],
+              "supported_features": [
+                512
+              ]
+            }
+          ]
+        }
+      },
+      "repeat_set": {
+        "description": "Playback mode that plays the media in a loop.",
+        "fields": {
+          "repeat": {
+            "description": "Repeat mode to set.",
+            "name": "Repeat mode",
+            "required": true,
+            "selector": {
+              "select": {
+                "options": [
+                  "off",
+                  "all",
+                  "one"
+                ],
+                "translation_key": "repeat"
+              }
+            }
+          }
+        },
+        "name": "Repeat",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "media_player"
+              ],
+              "supported_features": [
+                262144
+              ]
+            }
+          ]
+        }
+      },
+      "select_sound_mode": {
+        "description": "Selects a specific sound mode.",
+        "fields": {
+          "sound_mode": {
+            "description": "Name of the sound mode to switch to.",
+            "example": "Music",
+            "name": "Sound mode",
+            "selector": {
+              "text": null
+            }
+          }
+        },
+        "name": "Select sound mode",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "media_player"
+              ],
+              "supported_features": [
+                65536
+              ]
+            }
+          ]
+        }
+      },
+      "select_source": {
+        "description": "Sends the media player the command to change input source.",
+        "fields": {
+          "source": {
+            "description": "Name of the source to switch to. Platform dependent.",
+            "example": "video1",
+            "name": "Source",
+            "required": true,
+            "selector": {
+              "text": null
+            }
+          }
+        },
+        "name": "Select source",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "media_player"
+              ],
+              "supported_features": [
+                2048
+              ]
+            }
+          ]
+        }
+      },
+      "shuffle_set": {
+        "description": "Playback mode that selects the media in randomized order.",
+        "fields": {
+          "shuffle": {
+            "description": "Whether or not shuffle mode is enabled.",
+            "name": "Shuffle",
+            "required": true,
+            "selector": {
+              "boolean": null
+            }
+          }
+        },
+        "name": "Shuffle",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "media_player"
+              ],
+              "supported_features": [
+                32768
+              ]
+            }
+          ]
+        }
+      },
+      "toggle": {
+        "description": "Toggles a media player on/off.",
+        "fields": {},
+        "name": "Toggle",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "media_player"
+              ],
+              "supported_features": [
+                384
+              ]
+            }
+          ]
+        }
+      },
+      "turn_off": {
+        "description": "Turns off the power of the media player.",
+        "fields": {},
+        "name": "Turn off",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "media_player"
+              ],
+              "supported_features": [
+                256
+              ]
+            }
+          ]
+        }
+      },
+      "turn_on": {
+        "description": "Turns on the power of the media player.",
+        "fields": {},
+        "name": "Turn on",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "media_player"
+              ],
+              "supported_features": [
+                128
+              ]
+            }
+          ]
+        }
+      },
+      "unjoin": {
+        "description": "Removes the player from a group. Only works on platforms which support player groups.",
+        "fields": {},
+        "name": "Unjoin",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "media_player"
+              ],
+              "supported_features": [
+                524288
+              ]
+            }
+          ]
+        }
+      },
+      "volume_down": {
+        "description": "Turns down the volume.",
+        "fields": {},
+        "name": "Turn down volume",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "media_player"
+              ],
+              "supported_features": [
+                4,
+                1024
+              ]
+            }
+          ]
+        }
+      },
+      "volume_mute": {
+        "description": "Mutes or unmutes the media player.",
+        "fields": {
+          "is_volume_muted": {
+            "description": "Defines whether or not it is muted.",
+            "name": "Muted",
+            "required": true,
+            "selector": {
+              "boolean": null
+            }
+          }
+        },
+        "name": "Mute/unmute volume",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "media_player"
+              ],
+              "supported_features": [
+                8
+              ]
+            }
+          ]
+        }
+      },
+      "volume_set": {
+        "description": "Sets the volume level.",
+        "fields": {
+          "volume_level": {
+            "description": "The volume. 0 is inaudible, 1 is the maximum volume.",
+            "name": "Level",
+            "required": true,
+            "selector": {
+              "number": {
+                "max": 1,
+                "min": 0,
+                "step": 0.01
+              }
+            }
+          }
+        },
+        "name": "Set volume",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "media_player"
+              ],
+              "supported_features": [
+                4
+              ]
+            }
+          ]
+        }
+      },
+      "volume_up": {
+        "description": "Turns up the volume.",
+        "fields": {},
+        "name": "Turn up volume",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "media_player"
+              ],
+              "supported_features": [
+                4,
+                1024
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "domain": "camera",
+    "services": {
+      "disable_motion_detection": {
+        "description": "Disables the motion detection.",
+        "fields": {},
+        "name": "Disable motion detection",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "camera"
+              ]
+            }
+          ]
+        }
+      },
+      "enable_motion_detection": {
+        "description": "Enables the motion detection.",
+        "fields": {},
+        "name": "Enable motion detection",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "camera"
+              ]
+            }
+          ]
+        }
+      },
+      "play_stream": {
+        "description": "Plays the camera stream on a supported media player.",
+        "fields": {
+          "format": {
+            "default": "hls",
+            "description": "Stream format supported by the media player.",
+            "name": "Format",
+            "selector": {
+              "select": {
+                "options": [
+                  "hls"
+                ]
+              }
+            }
+          },
+          "media_player": {
+            "description": "Media players to stream to.",
+            "name": "Media player",
+            "required": true,
+            "selector": {
+              "entity": {
+                "domain": "media_player"
+              }
+            }
+          }
+        },
+        "name": "Play stream",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "camera"
+              ]
+            }
+          ]
+        }
+      },
+      "record": {
+        "description": "Creates a recording of a live camera feed.",
+        "fields": {
+          "duration": {
+            "default": 30,
+            "description": "Planned duration of the recording. The actual duration may vary.",
+            "name": "Duration",
+            "selector": {
+              "number": {
+                "max": 3600,
+                "min": 1,
+                "unit_of_measurement": "seconds"
+              }
+            }
+          },
+          "filename": {
+            "description": "Template of a filename. Variable available is `entity_id`. Must be mp4.",
+            "example": "/tmp/snapshot_{{ entity_id.name }}.mp4",
+            "name": "Filename",
+            "required": true,
+            "selector": {
+              "text": null
+            }
+          },
+          "lookback": {
+            "default": 0,
+            "description": "Planned lookback period to include in the recording (in addition to the duration). Only available if there is currently an active HLS stream. The actual length of the lookback period may vary.",
+            "name": "Lookback",
+            "selector": {
+              "number": {
+                "max": 300,
+                "min": 0,
+                "unit_of_measurement": "seconds"
+              }
+            }
+          }
+        },
+        "name": "Record",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "camera"
+              ]
+            }
+          ]
+        }
+      },
+      "snapshot": {
+        "description": "Takes a snapshot from a camera.",
+        "fields": {
+          "filename": {
+            "description": "Template of a filename. Variable available is `entity_id`.",
+            "example": "/tmp/snapshot_{{ entity_id.name }}.jpg",
+            "name": "Filename",
+            "required": true,
+            "selector": {
+              "text": null
+            }
+          }
+        },
+        "name": "Take snapshot",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "camera"
+              ]
+            }
+          ]
+        }
+      },
+      "turn_off": {
+        "description": "Turns off the camera.",
+        "fields": {},
+        "name": "Turn off",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "camera"
+              ]
+            }
+          ]
+        }
+      },
+      "turn_on": {
+        "description": "Turns on the camera.",
+        "fields": {},
+        "name": "Turn on",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "camera"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "domain": "vacuum",
+    "services": {
+      "clean_spot": {
+        "description": "Tells the vacuum cleaner to do a spot clean-up.",
+        "fields": {},
+        "name": "Clean spot",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "vacuum"
+              ]
+            }
+          ]
+        }
+      },
+      "locate": {
+        "description": "Locates the vacuum cleaner robot.",
+        "fields": {},
+        "name": "Locate",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "vacuum"
+              ],
+              "supported_features": [
+                512
+              ]
+            }
+          ]
+        }
+      },
+      "pause": {
+        "description": "Pauses the cleaning task.",
+        "fields": {},
+        "name": "Pause",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "vacuum"
+              ],
+              "supported_features": [
+                4
+              ]
+            }
+          ]
+        }
+      },
+      "return_to_base": {
+        "description": "Tells the vacuum cleaner to return to its dock.",
+        "fields": {},
+        "name": "Return to dock",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "vacuum"
+              ],
+              "supported_features": [
+                16
+              ]
+            }
+          ]
+        }
+      },
+      "send_command": {
+        "description": "Sends a command to the vacuum cleaner.",
+        "fields": {
+          "command": {
+            "description": "Command to execute. The commands are integration-specific.",
+            "example": "set_dnd_timer",
+            "name": "Command",
+            "required": true,
+            "selector": {
+              "text": null
+            }
+          },
+          "params": {
+            "description": "Parameters for the command. The parameters are integration-specific.",
+            "example": "{ \"key\": \"value\" }",
+            "name": "Parameters",
+            "selector": {
+              "object": null
+            }
+          }
+        },
+        "name": "Send command",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "vacuum"
+              ]
+            }
+          ]
+        }
+      },
+      "set_fan_speed": {
+        "description": "Sets the fan speed of the vacuum cleaner.",
+        "fields": {
+          "fan_speed": {
+            "description": "Fan speed. The value depends on the integration. Some integrations have speed steps, like 'medium'. Some use a percentage, between 0 and 100.",
+            "example": "low",
+            "name": "Fan speed",
+            "required": true,
+            "selector": {
+              "text": null
+            }
+          }
+        },
+        "name": "Set fan speed",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "vacuum"
+              ]
+            }
+          ]
+        }
+      },
+      "start": {
+        "description": "Starts or resumes the cleaning task.",
+        "fields": {},
+        "name": "Start",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "vacuum"
+              ],
+              "supported_features": [
+                8192
+              ]
+            }
+          ]
+        }
+      },
+      "stop": {
+        "description": "Stops the current cleaning task.",
+        "fields": {},
+        "name": "Stop",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "vacuum"
+              ],
+              "supported_features": [
+                8
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "domain": "water_heater",
+    "services": {
+      "set_away_mode": {
+        "description": "Turns away mode on/off.",
+        "fields": {
+          "away_mode": {
+            "description": "New value of away mode.",
+            "name": "Away mode",
+            "required": true,
+            "selector": {
+              "boolean": null
+            }
+          }
+        },
+        "name": "Set away mode",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "water_heater"
+              ]
+            }
+          ]
+        }
+      },
+      "set_operation_mode": {
+        "description": "Sets the operation mode.",
+        "fields": {
+          "operation_mode": {
+            "description": "New value of the operation mode. For a list of possible modes, refer to the integration documentation.",
+            "example": "eco",
+            "name": "Operation mode",
+            "required": true,
+            "selector": {
+              "text": null
+            }
+          }
+        },
+        "name": "Set operation mode",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "water_heater"
+              ]
+            }
+          ]
+        }
+      },
+      "set_temperature": {
+        "description": "Sets the target temperature.",
+        "fields": {
+          "operation_mode": {
+            "description": "New value of the operation mode. For a list of possible modes, refer to the integration documentation.",
+            "example": "eco",
+            "name": "Operation mode",
+            "selector": {
+              "text": null
+            }
+          },
+          "temperature": {
+            "description": "New target temperature for the water heater.",
+            "name": "Temperature",
+            "required": true,
+            "selector": {
+              "number": {
+                "max": 100,
+                "min": 0,
+                "step": 0.5,
+                "unit_of_measurement": "°"
+              }
+            }
+          }
+        },
+        "name": "Set temperature",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "water_heater"
+              ]
+            }
+          ]
+        }
+      },
+      "turn_off": {
+        "description": "Turns water heater off.",
+        "fields": {},
+        "name": "Turn off",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "water_heater"
+              ]
+            }
+          ]
+        }
+      },
+      "turn_on": {
+        "description": "Turns water heater on.",
+        "fields": {},
+        "name": "Turn on",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "water_heater"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "domain": "alarm_control_panel",
+    "services": {
+      "alarm_arm_away": {
+        "description": "Sets the alarm to: _armed, no one home_.",
+        "fields": {
+          "code": {
+            "description": "Code to arm the alarm.",
+            "example": "1234",
+            "name": "Code",
+            "selector": {
+              "text": null
+            }
+          }
+        },
+        "name": "Arm away",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "alarm_control_panel"
+              ],
+              "supported_features": [
+                2
+              ]
+            }
+          ]
+        }
+      },
+      "alarm_arm_custom_bypass": {
+        "description": "Arms the alarm while allowing to bypass a custom area.",
+        "fields": {
+          "code": {
+            "description": "Code to arm the alarm.",
+            "example": "1234",
+            "name": "Code",
+            "selector": {
+              "text": null
+            }
+          }
+        },
+        "name": "Arm with custom bypass",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "alarm_control_panel"
+              ],
+              "supported_features": [
+                16
+              ]
+            }
+          ]
+        }
+      },
+      "alarm_arm_home": {
+        "description": "Sets the alarm to: _armed, but someone is home_.",
+        "fields": {
+          "code": {
+            "description": "Code to arm the alarm.",
+            "example": "1234",
+            "name": "Code",
+            "selector": {
+              "text": null
+            }
+          }
+        },
+        "name": "Arm home",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "alarm_control_panel"
+              ],
+              "supported_features": [
+                1
+              ]
+            }
+          ]
+        }
+      },
+      "alarm_arm_night": {
+        "description": "Sets the alarm to: _armed for the night_.",
+        "fields": {
+          "code": {
+            "description": "Code to arm the alarm.",
+            "example": "1234",
+            "name": "Code",
+            "selector": {
+              "text": null
+            }
+          }
+        },
+        "name": "Arm night",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "alarm_control_panel"
+              ],
+              "supported_features": [
+                4
+              ]
+            }
+          ]
+        }
+      },
+      "alarm_arm_vacation": {
+        "description": "Sets the alarm to: _armed for vacation_.",
+        "fields": {
+          "code": {
+            "description": "Code to arm the alarm.",
+            "example": "1234",
+            "name": "Code",
+            "selector": {
+              "text": null
+            }
+          }
+        },
+        "name": "Arm vacation",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "alarm_control_panel"
+              ],
+              "supported_features": [
+                32
+              ]
+            }
+          ]
+        }
+      },
+      "alarm_disarm": {
+        "description": "Disarms the alarm.",
+        "fields": {
+          "code": {
+            "description": "Code to disarm the alarm.",
+            "example": "1234",
+            "name": "Code",
+            "selector": {
+              "text": null
+            }
+          }
+        },
+        "name": "Disarm",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "alarm_control_panel"
+              ]
+            }
+          ]
+        }
+      },
+      "alarm_trigger": {
+        "description": "Enables an external alarm trigger.",
+        "fields": {
+          "code": {
+            "description": "Code to arm the alarm.",
+            "example": "1234",
+            "name": "Code",
+            "selector": {
+              "text": null
+            }
+          }
+        },
+        "name": "Trigger",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "alarm_control_panel"
+              ],
+              "supported_features": [
+                8
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "domain": "select",
+    "services": {
+      "select_first": {
+        "description": "Selects the first option.",
+        "fields": {},
+        "name": "First",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "select"
+              ]
+            }
+          ]
+        }
+      },
+      "select_last": {
+        "description": "Selects the last option.",
+        "fields": {},
+        "name": "Last",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "select"
+              ]
+            }
+          ]
+        }
+      },
+      "select_next": {
+        "description": "Selects the next option.",
+        "fields": {
+          "cycle": {
+            "default": true,
+            "description": "If the option should cycle from the last to the first.",
+            "name": "Cycle",
+            "selector": {
+              "boolean": null
+            }
+          }
+        },
+        "name": "Next",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "select"
+              ]
+            }
+          ]
+        }
+      },
+      "select_option": {
+        "description": "Selects an option.",
+        "fields": {
+          "option": {
+            "description": "Option to be selected.",
+            "example": "\"Item A\"",
+            "name": "Option",
+            "required": true,
+            "selector": {
+              "text": null
+            }
+          }
+        },
+        "name": "Select",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "select"
+              ]
+            }
+          ]
+        }
+      },
+      "select_previous": {
+        "description": "Selects the previous option.",
+        "fields": {
+          "cycle": {
+            "default": true,
+            "description": "If the option should cycle from the first to the last.",
+            "name": "Cycle",
+            "selector": {
+              "boolean": null
+            }
+          }
+        },
+        "name": "Previous",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "select"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "domain": "button",
+    "services": {
+      "press": {
+        "description": "Press the button entity.",
+        "fields": {},
+        "name": "Press",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "button"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "domain": "siren",
+    "services": {
+      "toggle": {
+        "description": "Toggles the siren on/off.",
+        "fields": {},
+        "name": "Toggle",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "siren"
+              ],
+              "supported_features": [
+                3
+              ]
+            }
+          ]
+        }
+      },
+      "turn_off": {
+        "description": "Turns the siren off.",
+        "fields": {},
+        "name": "Turn off",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "siren"
+              ],
+              "supported_features": [
+                2
+              ]
+            }
+          ]
+        }
+      },
+      "turn_on": {
+        "description": "Turns the siren on.",
+        "fields": {
+          "duration": {
+            "description": "Number of seconds the sound is played. Must be supported by the integration.",
+            "example": 15,
+            "filter": {
+              "supported_features": [
+                16
+              ]
+            },
+            "name": "Duration",
+            "required": false,
+            "selector": {
+              "text": null
+            }
+          },
+          "tone": {
+            "description": "The tone to emit. When `available_tones` property is a map, either the key or the value can be used. Must be supported by the integration.",
+            "example": "fire",
+            "filter": {
+              "supported_features": [
+                4
+              ]
+            },
+            "name": "Tone",
+            "required": false,
+            "selector": {
+              "text": null
+            }
+          },
+          "volume_level": {
+            "description": "The volume. 0 is inaudible, 1 is the maximum volume. Must be supported by the integration.",
+            "example": 0.5,
+            "filter": {
+              "supported_features": [
+                8
+              ]
+            },
+            "name": "Volume",
+            "required": false,
+            "selector": {
+              "number": {
+                "max": 1,
+                "min": 0,
+                "step": 0.05
+              }
+            }
+          }
+        },
+        "name": "Turn on",
+        "target": {
+          "entity": [
+            {
+              "domain": [
+                "siren"
+              ],
+              "supported_features": [
+                1
+              ]
+            }
+          ]
         }
       }
     }
   }
-}
+]
