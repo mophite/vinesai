@@ -1,25 +1,1213 @@
 [
   {
+    "entity_id": "person.vines",
+    "state": "家",
+    "attributes": {
+      "editable": true,
+      "id": "vines",
+      "device_trackers": [
+        "device_tracker.iphone",
+        "device_tracker.ban_xue_de_iphone"
+      ],
+      "latitude": 22.713150024414062,
+      "longitude": 114.38948378449469,
+      "gps_accuracy": 35,
+      "source": "device_tracker.ban_xue_de_iphone",
+      "user_id": "94b4baac240646069282442afdb582d0",
+      "friendly_name": "vines"
+    },
+    "last_changed": "2024-06-02T11:04:27.260989+00:00",
+    "last_reported": "2024-06-02T17:36:17.069086+00:00",
+    "last_updated": "2024-06-02T17:36:17.069086+00:00",
+    "context": {
+      "id": "01HZD0BZNDA513P3VR0SYQB2S2",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "person.jinbanglin",
+    "state": "unknown",
+    "attributes": {
+      "editable": true,
+      "id": "jinbanglin",
+      "device_trackers": [],
+      "user_id": "45e40729344e43019e2c116a8c07db01",
+      "friendly_name": "jinbanglin"
+    },
+    "last_changed": "2024-06-01T05:25:47.839327+00:00",
+    "last_reported": "2024-06-01T05:25:51.206015+00:00",
+    "last_updated": "2024-06-01T05:25:51.206015+00:00",
+    "context": {
+      "id": "01HZ945SZ64MJ68MZK54E7XB20",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "zone.jia",
+    "state": "1",
+    "attributes": {
+      "latitude": 22.713139950550932,
+      "longitude": 114.38953534804845,
+      "radius": 100.0,
+      "passive": false,
+      "persons": [
+        "person.vines"
+      ],
+      "editable": true,
+      "icon": "mdi:map-marker",
+      "friendly_name": "家"
+    },
+    "last_changed": "2024-06-02T11:04:27.261041+00:00",
+    "last_reported": "2024-06-02T11:04:27.261041+00:00",
+    "last_updated": "2024-06-02T11:04:27.261041+00:00",
+    "context": {
+      "id": "01HZC9YGVXE65Y76H2DZGVA7XY",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "zone.home",
+    "state": "0",
+    "attributes": {
+      "latitude": 26.646999,
+      "longitude": 106.629997,
+      "radius": 100,
+      "passive": false,
+      "persons": [],
+      "editable": true,
+      "icon": "mdi:home",
+      "friendly_name": "Home"
+    },
+    "last_changed": "2024-06-01T05:25:48.401759+00:00",
+    "last_reported": "2024-06-01T05:25:48.401759+00:00",
+    "last_updated": "2024-06-01T05:25:48.401759+00:00",
+    "context": {
+      "id": "01HZ945Q7HRJGB43VE7X2F0NNF",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "conversation.home_assistant",
+    "state": "2024-05-26T14:36:45.347008+00:00",
     "attributes": {
       "friendly_name": "Home Assistant"
     },
+    "last_changed": "2024-06-01T05:25:48.447419+00:00",
+    "last_reported": "2024-06-01T05:25:48.447419+00:00",
+    "last_updated": "2024-06-01T05:25:48.447419+00:00",
     "context": {
-      "id": "01HYTNA7D2TQQMYQVNV1GRXRPF",
+      "id": "01HZ945Q8Z5QHGN1AANA5P25PS",
       "parent_id": null,
-      "user_id": "94b4baac240646069282442afdb582d0"
-    },
-    "entity_id": "conversation.home_assistant",
-    "last_changed": "2024-05-26T14:36:45.347044+00:00",
-    "last_reported": "2024-05-26T14:36:45.347044+00:00",
-    "last_updated": "2024-05-26T14:36:45.347044+00:00",
-    "state": "2024-05-26T14:36:45.347008+00:00"
+      "user_id": null
+    }
   },
   {
+    "entity_id": "sun.sun",
+    "state": "above_horizon",
     "attributes": {
-      "content": "小米智能多模网关2",
-      "ctime": 1716380026,
-      "device_id": "551752065",
+      "next_dawn": "2024-06-03T21:33:30.398400+00:00",
+      "next_dusk": "2024-06-03T12:09:55.809810+00:00",
+      "next_midnight": "2024-06-03T16:51:52+00:00",
+      "next_noon": "2024-06-04T04:51:49+00:00",
+      "next_rising": "2024-06-03T22:00:01.467861+00:00",
+      "next_setting": "2024-06-03T11:43:24.769877+00:00",
+      "elevation": 58.89,
+      "azimuth": 269.61,
+      "rising": false,
+      "friendly_name": "Sun"
+    },
+    "last_changed": "2024-06-02T22:00:08.613574+00:00",
+    "last_reported": "2024-06-03T07:07:39.029593+00:00",
+    "last_updated": "2024-06-03T07:07:39.029593+00:00",
+    "context": {
+      "id": "01HZEESMMNK5WASZKNVS6V1K39",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.sun_next_dawn",
+    "state": "2024-06-03T21:33:30+00:00",
+    "attributes": {
+      "device_class": "timestamp",
+      "friendly_name": "Sun 下个清晨"
+    },
+    "last_changed": "2024-06-02T21:33:39.543849+00:00",
+    "last_reported": "2024-06-02T21:33:39.543849+00:00",
+    "last_updated": "2024-06-02T21:33:39.543849+00:00",
+    "context": {
+      "id": "01HZDDYMAQ92DTEGW5HK62H0HJ",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.sun_next_dusk",
+    "state": "2024-06-03T12:09:55+00:00",
+    "attributes": {
+      "device_class": "timestamp",
+      "friendly_name": "Sun 下个黄昏"
+    },
+    "last_changed": "2024-06-02T12:09:26.122881+00:00",
+    "last_reported": "2024-06-02T12:09:26.122881+00:00",
+    "last_updated": "2024-06-02T12:09:26.122881+00:00",
+    "context": {
+      "id": "01HZCDNGBA47T1XDSZAGV6H6SR",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.sun_next_midnight",
+    "state": "2024-06-03T16:51:52+00:00",
+    "attributes": {
+      "device_class": "timestamp",
+      "friendly_name": "Sun 下个午夜"
+    },
+    "last_changed": "2024-06-02T16:51:42.003722+00:00",
+    "last_reported": "2024-06-02T16:51:42.003722+00:00",
+    "last_updated": "2024-06-02T16:51:42.003722+00:00",
+    "context": {
+      "id": "01HZCXTB9KXTCQAGF68ZXQPK7P",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.sun_next_noon",
+    "state": "2024-06-04T04:51:49+00:00",
+    "attributes": {
+      "device_class": "timestamp",
+      "friendly_name": "Sun 下个正午"
+    },
+    "last_changed": "2024-06-03T04:51:39.002758+00:00",
+    "last_reported": "2024-06-03T04:51:39.002758+00:00",
+    "last_updated": "2024-06-03T04:51:39.002758+00:00",
+    "context": {
+      "id": "01HZE70KVTHAXKCRXFBWT31V1F",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.sun_next_rising",
+    "state": "2024-06-03T22:00:01+00:00",
+    "attributes": {
+      "device_class": "timestamp",
+      "friendly_name": "Sun 下次日出"
+    },
+    "last_changed": "2024-06-02T22:00:08.613894+00:00",
+    "last_reported": "2024-06-02T22:00:08.613894+00:00",
+    "last_updated": "2024-06-02T22:00:08.613894+00:00",
+    "context": {
+      "id": "01HZDFF455611X55ETMHFRZT17",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.sun_next_setting",
+    "state": "2024-06-03T11:43:24+00:00",
+    "attributes": {
+      "device_class": "timestamp",
+      "friendly_name": "Sun 下次日落"
+    },
+    "last_changed": "2024-06-02T11:42:57.080937+00:00",
+    "last_reported": "2024-06-02T11:42:57.080937+00:00",
+    "last_updated": "2024-06-02T11:42:57.080937+00:00",
+    "context": {
+      "id": "01HZCC50HRZ4EENDAA2HC6REJM",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "device_tracker.iphone",
+    "state": "not_home",
+    "attributes": {
+      "source_type": "gps",
+      "battery_level": 55,
+      "latitude": 26.6474609375,
+      "longitude": 107.53239065388823,
+      "gps_accuracy": 35,
+      "altitude": 870.515905380249,
+      "vertical_accuracy": 13.583287239074707,
+      "friendly_name": "iPhone"
+    },
+    "last_changed": "2024-06-01T05:25:49.842437+00:00",
+    "last_reported": "2024-06-01T05:25:49.842437+00:00",
+    "last_updated": "2024-06-01T05:25:49.842437+00:00",
+    "context": {
+      "id": "01HZ945RMJACH6Q03KPH7XDP68",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.iphone_storage",
+    "state": "77.47",
+    "attributes": {
+      "Available": "98.18 GB",
+      "Available (Important)": "101.81 GB",
+      "Available (Opportunistic)": "99.06 GB",
+      "Total": "127.86 GB",
+      "unit_of_measurement": "%!a(MISSING)vailable",
+      "icon": "mdi:database",
+      "friendly_name": "iPhone Storage"
+    },
+    "last_changed": "2024-06-01T05:25:49.843158+00:00",
+    "last_reported": "2024-06-01T05:25:49.843158+00:00",
+    "last_updated": "2024-06-01T05:25:49.843158+00:00",
+    "context": {
+      "id": "01HZ945RMK5PENMMM349A9WYZ9",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.iphone_battery_state",
+    "state": "Not Charging",
+    "attributes": {
+      "Low Power Mode": false,
+      "icon": "mdi:battery-10",
+      "friendly_name": "iPhone Battery State"
+    },
+    "last_changed": "2024-06-01T05:25:49.843359+00:00",
+    "last_reported": "2024-06-01T05:25:49.843359+00:00",
+    "last_updated": "2024-06-01T05:25:49.843359+00:00",
+    "context": {
+      "id": "01HZ945RMKD3CRFPCTK4Z5TCSA",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.iphone_bssid",
+    "state": "Not Connected",
+    "attributes": {
+      "icon": "mdi:wifi-off",
+      "friendly_name": "iPhone BSSID"
+    },
+    "last_changed": "2024-06-01T05:25:49.843509+00:00",
+    "last_reported": "2024-06-01T05:25:49.843509+00:00",
+    "last_updated": "2024-06-01T05:25:49.843509+00:00",
+    "context": {
+      "id": "01HZ945RMK5T18F5QB00QPM3KT",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.iphone_connection_type",
+    "state": "Wi-Fi",
+    "attributes": {
+      "icon": "mdi:wifi",
+      "friendly_name": "iPhone Connection Type"
+    },
+    "last_changed": "2024-06-01T05:25:49.843651+00:00",
+    "last_reported": "2024-06-01T05:25:49.843651+00:00",
+    "last_updated": "2024-06-01T05:25:49.843651+00:00",
+    "context": {
+      "id": "01HZ945RMKA28PW4QPJZGF2M41",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.iphone_sim_1",
+    "state": "--",
+    "attributes": {
+      "Allows VoIP": true,
+      "Carrier ID": "0000000100000001",
+      "Carrier Name": "--",
+      "ISO Country Code": "--",
+      "Mobile Country Code": "65535",
+      "Mobile Network Code": "65535",
+      "icon": "mdi:sim",
+      "friendly_name": "iPhone SIM 1"
+    },
+    "last_changed": "2024-06-01T05:25:49.843791+00:00",
+    "last_reported": "2024-06-01T05:25:49.843791+00:00",
+    "last_updated": "2024-06-01T05:25:49.843791+00:00",
+    "context": {
+      "id": "01HZ945RMKQVZDN3AAABNS15GG",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.iphone_sim_2",
+    "state": "--",
+    "attributes": {
+      "Allows VoIP": true,
+      "Carrier ID": "0000000100000002",
+      "Carrier Name": "--",
+      "ISO Country Code": "--",
+      "Mobile Country Code": "65535",
+      "Mobile Network Code": "65535",
+      "icon": "mdi:sim",
+      "friendly_name": "iPhone SIM 2"
+    },
+    "last_changed": "2024-06-01T05:25:49.843931+00:00",
+    "last_reported": "2024-06-01T05:25:49.843931+00:00",
+    "last_updated": "2024-06-01T05:25:49.843931+00:00",
+    "context": {
+      "id": "01HZ945RMK8NRTNPQEYYHTV92B",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.iphone_geocoded_location",
+    "state": "中国\n贵州省\n黔南布依族苗族自治州 福泉市",
+    "attributes": {
+      "Administrative Area": "贵州省",
+      "Areas Of Interest": "N/A",
+      "Country": "中国",
+      "Inland Water": "N/A",
+      "ISO Country Code": "CN",
+      "Locality": "黔南布依族苗族自治州",
+      "Location": [
+        26.643875758968065,
+        107.53654810923184
+      ],
+      "Name": "马场坪街道",
+      "Ocean": "N/A",
+      "Postal Code": "N/A",
+      "Sub Administrative Area": "N/A",
+      "Sub Locality": "福泉市",
+      "Sub Thoroughfare": "N/A",
+      "Thoroughfare": "N/A",
+      "Time Zone": "Asia/Shanghai",
+      "Zones": [],
+      "icon": "mdi:map",
+      "friendly_name": "iPhone Geocoded Location"
+    },
+    "last_changed": "2024-06-01T05:25:49.844119+00:00",
+    "last_reported": "2024-06-01T05:25:49.844119+00:00",
+    "last_updated": "2024-06-01T05:25:49.844119+00:00",
+    "context": {
+      "id": "01HZ945RMMX5QMJGCF7JHSCSMH",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.iphone_ssid",
+    "state": "Not Connected",
+    "attributes": {
+      "icon": "mdi:wifi-off",
+      "friendly_name": "iPhone SSID"
+    },
+    "last_changed": "2024-06-01T05:25:49.844299+00:00",
+    "last_reported": "2024-06-01T05:25:49.844299+00:00",
+    "last_updated": "2024-06-01T05:25:49.844299+00:00",
+    "context": {
+      "id": "01HZ945RMME567CNME6C82XAKZ",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.iphone_battery_level",
+    "state": "15",
+    "attributes": {
+      "unit_of_measurement": "%!"
+      (MISSING),
+      "device_class": "battery",
+      "icon": "mdi:battery-10",
+      "friendly_name": "iPhone Battery Level"
+    },
+    "last_changed": "2024-06-01T05:25:49.844468+00:00",
+    "last_reported": "2024-06-01T05:25:49.844468+00:00",
+    "last_updated": "2024-06-01T05:25:49.844468+00:00",
+    "context": {
+      "id": "01HZ945RMM16BJH48GWZMS3VMJ",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.iphone_last_update_trigger",
+    "state": "Launch",
+    "attributes": {
+      "icon": "mdi:cellphone-wireless",
+      "friendly_name": "iPhone Last Update Trigger"
+    },
+    "last_changed": "2024-06-01T05:25:49.844620+00:00",
+    "last_reported": "2024-06-01T05:25:49.844620+00:00",
+    "last_updated": "2024-06-01T05:25:49.844620+00:00",
+    "context": {
+      "id": "01HZ945RMM47QZHR4B9ZNC23ZX",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.iphone_floors_ascended",
+    "state": "0",
+    "attributes": {
+      "unit_of_measurement": "floors",
+      "icon": "mdi:stairs-up",
+      "friendly_name": "iPhone Floors Ascended"
+    },
+    "last_changed": "2024-06-01T05:25:49.844773+00:00",
+    "last_reported": "2024-06-01T05:25:49.844773+00:00",
+    "last_updated": "2024-06-01T05:25:49.844773+00:00",
+    "context": {
+      "id": "01HZ945RMM1AFV802T2VHA01CN",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.iphone_distance",
+    "state": "27",
+    "attributes": {
+      "unit_of_measurement": "m",
+      "icon": "mdi:hiking",
+      "friendly_name": "iPhone Distance"
+    },
+    "last_changed": "2024-06-01T05:25:49.844917+00:00",
+    "last_reported": "2024-06-01T05:25:49.844917+00:00",
+    "last_updated": "2024-06-01T05:25:49.844917+00:00",
+    "context": {
+      "id": "01HZ945RMMV0TMCB9WV066RRKZ",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.iphone_activity",
+    "state": "Unknown",
+    "attributes": {
+      "Confidence": "High",
+      "Types": [
+        "Unknown"
+      ],
+      "icon": "mdi:help-circle",
+      "friendly_name": "iPhone Activity"
+    },
+    "last_changed": "2024-06-01T05:25:49.845094+00:00",
+    "last_reported": "2024-06-01T05:25:49.845094+00:00",
+    "last_updated": "2024-06-01T05:25:49.845094+00:00",
+    "context": {
+      "id": "01HZ945RMN4ZZ5PYYGTX3YVF5A",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.iphone_floors_descended",
+    "state": "1",
+    "attributes": {
+      "unit_of_measurement": "floors",
+      "icon": "mdi:stairs-down",
+      "friendly_name": "iPhone Floors Descended"
+    },
+    "last_changed": "2024-06-01T05:25:49.845283+00:00",
+    "last_reported": "2024-06-01T05:25:49.845283+00:00",
+    "last_updated": "2024-06-01T05:25:49.845283+00:00",
+    "context": {
+      "id": "01HZ945RMN8F5J0JC3GYJ7Y4GV",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.iphone_steps",
+    "state": "36",
+    "attributes": {
+      "unit_of_measurement": "steps",
+      "icon": "mdi:walk",
+      "friendly_name": "iPhone Steps"
+    },
+    "last_changed": "2024-06-01T05:25:49.845440+00:00",
+    "last_reported": "2024-06-01T05:25:49.845440+00:00",
+    "last_updated": "2024-06-01T05:25:49.845440+00:00",
+    "context": {
+      "id": "01HZ945RMNESB8KXA0TR5NJ841",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.iphone_average_active_pace",
+    "state": "1",
+    "attributes": {
+      "unit_of_measurement": "m/s",
+      "icon": "mdi:speedometer",
+      "friendly_name": "iPhone Average Active Pace"
+    },
+    "last_changed": "2024-06-01T05:25:49.845583+00:00",
+    "last_reported": "2024-06-01T05:25:49.845583+00:00",
+    "last_updated": "2024-06-01T05:25:49.845583+00:00",
+    "context": {
+      "id": "01HZ945RMNMFCV619NT5B66ZT4",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "binary_sensor.ban_xue_de_iphone_focus",
+    "state": "off",
+    "attributes": {
+      "icon": "mdi:moon-waning-crescent",
+      "friendly_name": "半雪的iPhone Focus"
+    },
+    "last_changed": "2024-06-01T05:25:49.846267+00:00",
+    "last_reported": "2024-06-01T05:25:49.846267+00:00",
+    "last_updated": "2024-06-01T05:25:49.846267+00:00",
+    "context": {
+      "id": "01HZ945RMPFCSZW6GPKD4WXC54",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "device_tracker.ban_xue_de_iphone",
+    "state": "家",
+    "attributes": {
+      "source_type": "gps",
+      "battery_level": 60,
+      "latitude": 22.713150024414062,
+      "longitude": 114.38948378449469,
+      "gps_accuracy": 35,
+      "altitude": 0,
+      "friendly_name": "半雪的iPhone"
+    },
+    "last_changed": "2024-06-02T17:36:17.068989+00:00",
+    "last_reported": "2024-06-02T17:36:17.068989+00:00",
+    "last_updated": "2024-06-02T17:36:17.068989+00:00",
+    "context": {
+      "id": "01HZD0BZNCZA6EN8PZBQ9WEKEF",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.ban_xue_de_iphone_battery_level",
+    "state": "40",
+    "attributes": {
+      "unit_of_measurement": "%!"
+      (MISSING),
+      "device_class": "battery",
+      "icon": "mdi:battery-40",
+      "friendly_name": "半雪的iPhone Battery Level"
+    },
+    "last_changed": "2024-06-02T18:45:48.033164+00:00",
+    "last_reported": "2024-06-02T18:45:48.033164+00:00",
+    "last_updated": "2024-06-02T18:45:48.033164+00:00",
+    "context": {
+      "id": "01HZD4B8W1DG7QGZAK13JY6QKW",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.ban_xue_de_iphone_battery_state",
+    "state": "Not Charging",
+    "attributes": {
+      "Low Power Mode": false,
+      "icon": "mdi:battery-40",
+      "friendly_name": "半雪的iPhone Battery State"
+    },
+    "last_changed": "2024-06-01T14:45:38.243363+00:00",
+    "last_reported": "2024-06-02T18:45:48.033314+00:00",
+    "last_updated": "2024-06-02T18:45:48.033314+00:00",
+    "context": {
+      "id": "01HZD4B8W10AB8425PVW46J80F",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.ban_xue_de_iphone_ssid",
+    "state": "abm",
+    "attributes": {
+      "icon": "mdi:wifi",
+      "friendly_name": "半雪的iPhone SSID"
+    },
+    "last_changed": "2024-06-02T14:42:55.682780+00:00",
+    "last_reported": "2024-06-02T14:42:55.682780+00:00",
+    "last_updated": "2024-06-02T14:42:55.682780+00:00",
+    "context": {
+      "id": "01HZCPEJ228MMG0RGK3K5JP2MB",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.ban_xue_de_iphone_bssid",
+    "state": "78:60:5b:85:3a:9a",
+    "attributes": {
+      "icon": "mdi:wifi-star",
+      "friendly_name": "半雪的iPhone BSSID"
+    },
+    "last_changed": "2024-06-02T14:42:55.683256+00:00",
+    "last_reported": "2024-06-02T14:42:55.683256+00:00",
+    "last_updated": "2024-06-02T14:42:55.683256+00:00",
+    "context": {
+      "id": "01HZCPEJ23GTYZAT7KDNG1D64C",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.ban_xue_de_iphone_storage",
+    "state": "49.85",
+    "attributes": {
+      "Available": "119.45 GB",
+      "Available (Important)": "135.85 GB",
+      "Available (Opportunistic)": "127.56 GB",
+      "Total": "255.87 GB",
+      "unit_of_measurement": "%!a(MISSING)vailable",
+      "icon": "mdi:database",
+      "friendly_name": "半雪的iPhone Storage"
+    },
+    "last_changed": "2024-06-02T18:45:48.033536+00:00",
+    "last_reported": "2024-06-02T18:45:48.033536+00:00",
+    "last_updated": "2024-06-02T18:45:48.033536+00:00",
+    "context": {
+      "id": "01HZD4B8W143E872KXYPWKA3M1",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.ban_xue_de_iphone_sim_1",
+    "state": "--",
+    "attributes": {
+      "Allows VoIP": true,
+      "Carrier ID": "0000000100000001",
+      "Carrier Name": "--",
+      "ISO Country Code": "--",
+      "Mobile Country Code": "65535",
+      "Mobile Network Code": "65535",
+      "icon": "mdi:sim",
+      "friendly_name": "半雪的iPhone SIM 1"
+    },
+    "last_changed": "2024-06-01T05:25:49.849752+00:00",
+    "last_reported": "2024-06-02T14:42:55.683559+00:00",
+    "last_updated": "2024-06-02T14:42:55.683559+00:00",
+    "context": {
+      "id": "01HZCPEJ23HE4RKJPJ7EVPDYAJ",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.ban_xue_de_iphone_sim_2",
+    "state": "--",
+    "attributes": {
+      "Allows VoIP": true,
+      "Carrier ID": "0000000100000002",
+      "Carrier Name": "--",
+      "ISO Country Code": "--",
+      "Mobile Country Code": "65535",
+      "Mobile Network Code": "65535",
+      "icon": "mdi:sim",
+      "friendly_name": "半雪的iPhone SIM 2"
+    },
+    "last_changed": "2024-06-01T05:25:49.849893+00:00",
+    "last_reported": "2024-06-01T05:25:49.849893+00:00",
+    "last_updated": "2024-06-01T05:25:49.849893+00:00",
+    "context": {
+      "id": "01HZ945RMS1ABBZNCY1AB5NTW0",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.ban_xue_de_iphone_connection_type",
+    "state": "Wi-Fi",
+    "attributes": {
+      "icon": "mdi:wifi",
+      "friendly_name": "半雪的iPhone Connection Type"
+    },
+    "last_changed": "2024-06-02T14:42:55.683380+00:00",
+    "last_reported": "2024-06-02T14:42:55.683380+00:00",
+    "last_updated": "2024-06-02T14:42:55.683380+00:00",
+    "context": {
+      "id": "01HZCPEJ230CBW8Y9JDBWW4APF",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.ban_xue_de_iphone_last_update_trigger",
+    "state": "Launch",
+    "attributes": {
+      "icon": "mdi:cellphone-wireless",
+      "friendly_name": "半雪的iPhone Last Update Trigger"
+    },
+    "last_changed": "2024-06-02T17:43:10.229395+00:00",
+    "last_reported": "2024-06-02T17:43:10.229395+00:00",
+    "last_updated": "2024-06-02T17:43:10.229395+00:00",
+    "context": {
+      "id": "01HZD0RK4NVKDK9NDENNRC8489",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.ban_xue_de_iphone_geocoded_location",
+    "state": "中国\n广东省\n深圳市 坪山区\n龙田街道竹坑社区金牛东路62号",
+    "attributes": {
+      "Administrative Area": "广东省",
+      "Areas Of Interest": [
+        "乐彩产业园"
+      ],
+      "Country": "中国",
+      "Inland Water": "N/A",
+      "ISO Country Code": "CN",
+      "Locality": "深圳市",
+      "Location": [
+        22.71049913471881,
+        114.39443766111339
+      ],
+      "Name": "捷佳伟创",
+      "Ocean": "N/A",
+      "Postal Code": "N/A",
+      "Sub Administrative Area": "N/A",
+      "Sub Locality": "坪山区",
+      "Sub Thoroughfare": "N/A",
+      "Thoroughfare": "龙田街道竹坑社区金牛东路62号",
+      "Time Zone": "Asia/Shanghai",
+      "Zones": [
+        "家"
+      ],
+      "icon": "mdi:map",
+      "friendly_name": "半雪的iPhone Geocoded Location"
+    },
+    "last_changed": "2024-06-02T17:36:17.402898+00:00",
+    "last_reported": "2024-06-02T17:36:17.402898+00:00",
+    "last_updated": "2024-06-02T17:36:17.402898+00:00",
+    "context": {
+      "id": "01HZD0BZZTJ2TGZG2495DWP2ZE",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.ban_xue_de_iphone_activity",
+    "state": "Unknown",
+    "attributes": {
+      "Confidence": "High",
+      "Types": [
+        "Unknown"
+      ],
+      "icon": "mdi:help-circle",
+      "friendly_name": "半雪的iPhone Activity"
+    },
+    "last_changed": "2024-06-02T17:43:10.227777+00:00",
+    "last_reported": "2024-06-02T17:43:10.227777+00:00",
+    "last_updated": "2024-06-02T17:43:10.227777+00:00",
+    "context": {
+      "id": "01HZD0RK4KQM0MR0SQ51W3D67R",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.ban_xue_de_iphone_distance",
+    "state": "44",
+    "attributes": {
+      "unit_of_measurement": "m",
+      "icon": "mdi:hiking",
+      "friendly_name": "半雪的iPhone Distance"
+    },
+    "last_changed": "2024-06-02T18:45:48.032500+00:00",
+    "last_reported": "2024-06-02T18:45:48.032500+00:00",
+    "last_updated": "2024-06-02T18:45:48.032500+00:00",
+    "context": {
+      "id": "01HZD4B8W0GEZRPA5QA3HPW0EE",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.ban_xue_de_iphone_average_active_pace",
+    "state": "3",
+    "attributes": {
+      "unit_of_measurement": "m/s",
+      "icon": "mdi:speedometer",
+      "friendly_name": "半雪的iPhone Average Active Pace"
+    },
+    "last_changed": "2024-06-02T18:45:48.033028+00:00",
+    "last_reported": "2024-06-02T18:45:48.033028+00:00",
+    "last_updated": "2024-06-02T18:45:48.033028+00:00",
+    "context": {
+      "id": "01HZD4B8W1KZF34AEK2CJJQZ99",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.ban_xue_de_iphone_floors_descended",
+    "state": "0",
+    "attributes": {
+      "unit_of_measurement": "floors",
+      "icon": "mdi:stairs-down",
+      "friendly_name": "半雪的iPhone Floors Descended"
+    },
+    "last_changed": "2024-06-01T05:25:49.850920+00:00",
+    "last_reported": "2024-06-01T05:25:49.850920+00:00",
+    "last_updated": "2024-06-01T05:25:49.850920+00:00",
+    "context": {
+      "id": "01HZ945RMT9TR72MGYSTRKXH8M",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.ban_xue_de_iphone_floors_ascended",
+    "state": "0",
+    "attributes": {
+      "unit_of_measurement": "floors",
+      "icon": "mdi:stairs-up",
+      "friendly_name": "半雪的iPhone Floors Ascended"
+    },
+    "last_changed": "2024-06-01T05:25:49.851098+00:00",
+    "last_reported": "2024-06-01T05:25:49.851098+00:00",
+    "last_updated": "2024-06-01T05:25:49.851098+00:00",
+    "context": {
+      "id": "01HZ945RMV35RJHF1FHC2JYCFA",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.ban_xue_de_iphone_steps",
+    "state": "60",
+    "attributes": {
+      "unit_of_measurement": "steps",
+      "icon": "mdi:walk",
+      "friendly_name": "半雪的iPhone Steps"
+    },
+    "last_changed": "2024-06-02T18:45:48.032863+00:00",
+    "last_reported": "2024-06-02T18:45:48.032863+00:00",
+    "last_updated": "2024-06-02T18:45:48.032863+00:00",
+    "context": {
+      "id": "01HZD4B8W001CC3EGH9M0Q55ZN",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "binary_sensor.iphone_focus",
+    "state": "off",
+    "attributes": {
+      "icon": "mdi:moon-waning-crescent",
+      "friendly_name": "iPhone Focus"
+    },
+    "last_changed": "2024-06-01T05:25:49.851583+00:00",
+    "last_reported": "2024-06-01T05:25:49.851583+00:00",
+    "last_updated": "2024-06-01T05:25:49.851583+00:00",
+    "context": {
+      "id": "01HZ945RMVK9GFRT6DHMPKTKGH",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "update.xiaomi_miot_auto_update",
+    "state": "off",
+    "attributes": {
+      "auto_update": false,
+      "installed_version": "v0.7.18",
+      "in_progress": false,
+      "latest_version": "v0.7.18",
+      "release_summary": null,
+      "release_url": "https://github.com/al-one/hass-xiaomi-miot/releases/v0.7.18",
+      "skipped_version": null,
+      "title": null,
+      "entity_picture": "https://brands.home-assistant.io/_/xiaomi_miot/icon.png",
+      "friendly_name": "Xiaomi Miot Auto update",
+      "supported_features": 23
+    },
+    "last_changed": "2024-06-01T05:25:49.868463+00:00",
+    "last_reported": "2024-06-01T05:25:49.868463+00:00",
+    "last_updated": "2024-06-01T05:25:49.868463+00:00",
+    "context": {
+      "id": "01HZ945RNCZJRVTTCKH0F07K18",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "update.node_red_companion_update",
+    "state": "off",
+    "attributes": {
+      "auto_update": false,
+      "installed_version": "v4.0.0",
+      "in_progress": false,
+      "latest_version": "v4.0.0",
+      "release_summary": null,
+      "release_url": "https://github.com/zachowj/hass-node-red/releases/v4.0.0",
+      "skipped_version": null,
+      "title": null,
+      "entity_picture": "https://brands.home-assistant.io/_/nodered/icon.png",
+      "friendly_name": "Node-Red",
+      "supported_features": 23
+    },
+    "last_changed": "2024-06-01T05:25:49.869038+00:00",
+    "last_reported": "2024-06-01T05:44:25.515751+00:00",
+    "last_updated": "2024-06-01T05:44:25.515751+00:00",
+    "context": {
+      "id": "01HZ957T5BA36PK8JNS6HENDXQ",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "update.hacs_update",
+    "state": "off",
+    "attributes": {
+      "auto_update": false,
+      "installed_version": "1.34.0",
+      "in_progress": false,
+      "latest_version": "1.34.0",
+      "release_summary": null,
+      "release_url": "https://github.com/hacs/integration/releases/1.34.0",
+      "skipped_version": null,
+      "title": null,
+      "entity_picture": "https://brands.home-assistant.io/_/hacs/icon.png",
+      "friendly_name": "HACS update",
+      "supported_features": 23
+    },
+    "last_changed": "2024-06-01T05:25:49.869216+00:00",
+    "last_reported": "2024-06-01T05:25:49.869216+00:00",
+    "last_updated": "2024-06-01T05:25:49.869216+00:00",
+    "context": {
+      "id": "01HZ945RND7EQQY2H5BN27Y4SH",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.miaomiaoce_t9_f730_temperature_humidity_sensor",
+    "state": "27.8",
+    "attributes": {
+      "state_class": "measurement",
+      "model": "miaomiaoce.sensor_ht.t9",
+      "lan_ip": "",
+      "mac_address": "A4:C1:38:AD:F7:30",
+      "entity_class": "MiotSensorEntity",
+      "home_room": "2174298090 客厅",
+      "miot_type": "urn:miot-spec-v2:device:temperature-humidity-sensor:0000A00A:miaomiaoce-t9:1",
+      "state_property": "temperature-3-1001",
+      "temperature-3-1001": 27.8,
+      "relative_humidity-3-1002": 74,
+      "battery_level": 100,
+      "state_updater": "cloud",
+      "sub_entities": [
+        "battery-2.battery_level-1003",
+        "temperature_humidity_sensor-3.relative_humidity-1002"
+      ],
+      "unit_of_measurement": "°C",
+      "device_class": "temperature",
+      "friendly_name": "客厅温湿度传感器",
+      "supported_features": 0
+    },
+    "last_changed": "2024-06-03T06:47:26.513535+00:00",
+    "last_reported": "2024-06-03T06:47:26.513535+00:00",
+    "last_updated": "2024-06-03T06:47:26.513535+00:00",
+    "context": {
+      "id": "01HZEDMMHH23SE1F0EJDMA35XY",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "climate.miir_ir02_8801_ir_aircondition_control",
+    "state": "cool",
+    "attributes": {
+      "hvac_modes": [
+        "off",
+        "auto",
+        "cool",
+        "heat",
+        "dry",
+        "fan_only"
+      ],
+      "min_temp": 16.0,
+      "max_temp": 30,
+      "target_temp_step": 1,
+      "fan_modes": [
+        "Fan Speed Down",
+        "Fan Speed Up"
+      ],
+      "current_temperature": null,
+      "temperature": 29.0,
+      "fan_mode": null,
+      "hvac_action": "cooling",
+      "model": "miir.aircondition.ir02",
+      "lan_ip": "",
+      "mac_address": "ir.1796017787920588801",
+      "entity_class": "MiirClimateEntity",
+      "home_room": "2174298090 客厅",
+      "miot_type": "urn:miot-spec-v2:device:air-conditioner:0000A004:miir-ir02:1",
+      "miot_action_result": {
+        "did": "ir.1796017787920588801",
+        "miid": 0,
+        "siid": 2,
+        "aiid": 5,
+        "code": 0,
+        "exe_time": 0,
+        "withLatency": 0
+      },
+      "ir_aircondition_control.ir_mode": 1,
+      "temperature_for_ir-2-2": 29.0,
+      "friendly_name": "空调 IR Aircondition Control",
+      "supported_features": 393
+    },
+    "last_changed": "2024-06-02T18:45:51.402956+00:00",
+    "last_reported": "2024-06-02T18:45:53.865113+00:00",
+    "last_updated": "2024-06-02T18:45:53.865113+00:00",
+    "context": {
+      "id": "01HZD4BE7DDV3BWXEH6AVPRAR7",
+      "parent_id": null,
+      "user_id": "94b4baac240646069282442afdb582d0"
+    }
+  },
+  {
+    "entity_id": "select.miir_ir02_8801_ir_aircondition_control",
+    "state": "unknown",
+    "attributes": {
+      "options": [
+        "Fan Speed Down",
+        "Fan Speed Up",
+        "Temperature Down",
+        "Temperature Up",
+        "Turn Off",
+        "Turn On"
+      ],
+      "model": "miir.aircondition.ir02",
+      "lan_ip": "",
+      "mac_address": "ir.1796017787920588801",
+      "entity_class": "MiotActionsEntity",
+      "home_room": "2174298090 客厅",
+      "miot_type": "urn:miot-spec-v2:device:air-conditioner:0000A004:miir-ir02:1",
+      "state_updater": "none",
+      "ir_aircondition_control.ir_mode": null,
+      "temperature_for_ir-2-2": null,
+      "sub_entities": [
+        "ir_aircondition_control-2.ir_mode-1",
+        "ir_aircondition_control-2.ir_temperature-2"
+      ],
+      "friendly_name": "空调 IR Aircondition Control",
+      "supported_features": 0
+    },
+    "last_changed": "2024-06-01T05:25:50.011189+00:00",
+    "last_reported": "2024-06-01T09:58:50.421406+00:00",
+    "last_updated": "2024-06-01T05:26:20.012211+00:00",
+    "context": {
+      "id": "01HZ946P3C4PHR95BA9NDG9JVX",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "automation.ce_shi",
+    "state": "on",
+    "attributes": {
+      "id": "1717129740663",
+      "last_triggered": "2024-06-01T05:26:20.592905+00:00",
+      "mode": "queued",
+      "current": 0,
+      "max": 10,
+      "friendly_name": "测试"
+    },
+    "last_changed": "2024-06-01T05:25:50.012495+00:00",
+    "last_reported": "2024-06-01T05:26:21.803588+00:00",
+    "last_updated": "2024-06-01T05:26:21.803588+00:00",
+    "context": {
+      "id": "01HZ946PNGM8045GWSNH1218H6",
+      "parent_id": "01HZ946PNGVYTSXGPYRZX677C2",
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "select.miir_ir02_8801_mode_for_ir",
+    "state": "unknown",
+    "attributes": {
+      "options": [
+        "Auto",
+        "Cool",
+        "Dry",
+        "Heat",
+        "Fan"
+      ],
+      "entity_class": "MiotSelectSubEntity",
+      "parent_entity_id": "select.miir_ir02_8801_ir_aircondition_control",
+      "service_description": "IR Aircondition Control",
+      "property_description": "Mode for IR",
+      "ir_aircondition_control.ir_mode": null,
+      "friendly_name": "空调 IR Aircondition Control Mode for",
+      "supported_features": 0
+    },
+    "last_changed": "2024-06-01T05:25:50.014305+00:00",
+    "last_reported": "2024-06-01T09:58:50.422067+00:00",
+    "last_updated": "2024-06-01T05:25:50.014305+00:00",
+    "context": {
+      "id": "01HZ945RSY93TNH9G2KCNEGRGD",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "number.miir_ir02_8801_temperature_for_ir",
+    "state": "unknown",
+    "attributes": {
+      "min": 16,
+      "max": 30,
+      "step": 1,
+      "mode": "auto",
+      "entity_class": "MiotNumberSubEntity",
+      "parent_entity_id": "select.miir_ir02_8801_ir_aircondition_control",
+      "service_description": "IR Aircondition Control",
+      "property_description": "Temperature for IR",
+      "temperature_for_ir-2-2": null,
+      "unit_of_measurement": "°C",
+      "device_class": "temperature",
+      "friendly_name": "空调 IR Aircondition Control Temperature for",
+      "supported_features": 0
+    },
+    "last_changed": "2024-06-01T05:25:50.014657+00:00",
+    "last_reported": "2024-06-01T05:25:50.014657+00:00",
+    "last_updated": "2024-06-01T05:25:50.014657+00:00",
+    "context": {
+      "id": "01HZ945RSY8G2VTW61TFX1KE5P",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.mi_2174298090_message",
+    "state": "小米智能多模网关2: 已切换到2.4GHz Wi-Fi连接",
+    "attributes": {
       "entity_class": "MihomeMessageSensor",
+      "filter_homes": [],
+      "exclude_types": [
+        13
+      ],
+      "msg_id": 1797474503585050626,
+      "is_new": 1,
+      "type": 6,
+      "title": "已切换到2.4GHz Wi-Fi连接",
+      "content": "小米智能多模网关2",
+      "user_id": 2174298090,
+      "ctime": 1717386291,
+      "timestamp": "2024-06-03T11:44:51+08:00",
+      "model": "lumi.gateway.mcn001",
+      "device_id": "551752065",
+      "home_name": "2174298090",
+      "room_name": "客厅",
       "event": "2.1",
       "event_data": [
         {
@@ -36,62 +1224,127 @@
         },
         {
           "piid": 4,
-          "value": "1716380026"
+          "value": "1717386291"
         }
       ],
-      "exclude_types": [
-        13
-      ],
-      "filter_homes": [],
-      "friendly_name": "小米网关-客厅",
-      "home_name": "2174298090",
+      "prev_message": "小米智能多模网关2: 已切换到2.4GHz Wi-Fi连接",
       "icon": "mdi:message",
-      "is_new": 1,
-      "model": "lumi.gateway.mcn001",
-      "msg_id": 1793253921398079500,
-      "room_name": "",
-      "timestamp": "2024-05-22T20:13:46+08:00",
-      "title": "已切换到2.4GHz Wi-Fi连接",
-      "type": 6,
-      "user_id": 2174298090
+      "friendly_name": "小米网关-客厅"
     },
+    "last_changed": "2024-06-01T05:25:50.129630+00:00",
+    "last_reported": "2024-06-03T03:45:00.838726+00:00",
+    "last_updated": "2024-06-03T03:45:00.838726+00:00",
     "context": {
-      "id": "01HYV59K24Z8023SNDHY8ZQ01A",
+      "id": "01HZE36KD6DE1C2CF2YDQYMVFJ",
       "parent_id": null,
       "user_id": null
-    },
-    "entity_id": "sensor.mi_2174298090_message",
-    "last_changed": "2024-05-25T19:11:44.186347+00:00",
-    "last_reported": "2024-05-26T19:26:45.093832+00:00",
-    "last_updated": "2024-05-26T19:16:01.732118+00:00",
-    "state": "小米智能多模网关2: 已切换到2.4GHz Wi-Fi连接"
+    }
   },
   {
+    "entity_id": "media_player.xiaomi_l05c_7e78_play_control",
+    "state": "playing",
     "attributes": {
-      "count_down_time-4-1": 300,
-      "device_class": "outlet",
-      "electric_current-3-4": 76,
-      "electric_power-3-2": 10.575,
-      "enable_count_down-4-3": false,
+      "volume_level": 0.2,
+      "is_volume_muted": true,
+      "media_content_id": "1674541433751609120",
+      "media_content_type": "music",
+      "media_duration": 192,
+      "media_position": 122,
+      "media_position_updated_at": "2024-06-01T12:40:21.956242+00:00",
+      "media_title": "羞花",
+      "media_artist": "王梓钰;音阙诗听",
+      "media_album_name": "羞花",
+      "repeat": "all",
+      "model": "xiaomi.wifispeaker.l05c",
+      "lan_ip": "192.168.0.101",
+      "mac_address": "CC:D8:43:2E:7E:78",
+      "entity_class": "MiotMediaPlayerEntity",
+      "home_room": "2174298090 客厅",
+      "miot_type": "urn:miot-spec-v2:device:speaker:0000A015:xiaomi-l05c:1",
+      "attribution": "Support TTS through service",
+      "play_control.play_loop_mode.error": "-704220008 Invalid IID (PID, SID, AID, etc.)",
+      "clock.on.error": "-704220008 Invalid IID (PID, SID, AID, etc.)",
+      "clock.status.error": "-704220008 Invalid IID (PID, SID, AID, etc.)",
+      "clock.fault.error": "-704220008 Invalid IID (PID, SID, AID, etc.)",
+      "clock.ringtone.error": "-704220008 Invalid IID (PID, SID, AID, etc.)",
+      "microphone.mute": false,
+      "speaker.volume": 20,
+      "speaker.mute": true,
+      "state_updater": "cloud",
+      "sub_entities": [
+        "intelligent_speaker-5.wake_up-1",
+        "intelligent_speaker-5.play_music-5",
+        "clock-6.stop_alarm-1",
+        "intelligent_speaker-5.play_text-3",
+        "intelligent_speaker-5.execute_text_directive-4",
+        "conversation"
+      ],
+      "xiaoai_id": "97e92d61-bc57-43fb-9853-b242619ab785",
+      "miot_action_result": {
+        "did": "772797263",
+        "miid": 0,
+        "siid": 5,
+        "aiid": 3,
+        "code": 0,
+        "exe_time": 33,
+        "net_cost": 35,
+        "ot_cost": 18,
+        "otlocalts": 1717398145642330,
+        "_oa_rpc_cost": 88,
+        "withLatency": 0
+      },
+      "play_control.playing_state": 1,
+      "play_control.playing_state.error": "-704220043 Property value error",
+      "device_class": "speaker",
+      "entity_picture": "/api/media_player_proxy/media_player.xiaomi_l05c_7e78_play_control?token=ef87d79cfd9667a6677b7fd257bbbb71efaa01598863c2058109ff41da1add0c&cache=22bbc9d8868951fa",
+      "friendly_name": "Mi AI Speaker Play Plus Play Control",
+      "supported_features": 22077
+    },
+    "last_changed": "2024-06-01T09:22:21.604505+00:00",
+    "last_reported": "2024-06-03T07:02:26.309059+00:00",
+    "last_updated": "2024-06-03T07:02:26.309059+00:00",
+    "context": {
+      "id": "01HZEEG385GPYGG3TJGVV35SJB",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "switch.qmi_psv3_4067_switch",
+    "state": "off",
+    "attributes": {
+      "model": "qmi.plug.psv3",
+      "lan_ip": "111.122.133.248",
+      "mac_address": "84:46:93:35:40:67",
       "entity_class": "MiotSwitchEntity",
+      "home_room": "2174298090 客厅",
       "exclude_miot_services": [
         "simulation"
       ],
-      "friendly_name": "客厅插座",
-      "home_room": "2174298090 卧室",
-      "lan_ip": "",
-      "mac_address": "84:46:93:35:40:67",
       "miot_type": "urn:miot-spec-v2:device:outlet:0000A002:qmi-psv3:1:0000C816",
-      "model": "qmi.plug.psv3",
-      "power_consumption": 0.48,
-      "power_consumption.voltage": 239080,
-      "power_cost_month": 0.683,
-      "power_cost_today": 0.16,
-      "relay_count_down.remain_time": 0,
+      "switch.on": false,
+      "switch.mode": 1,
+      "switch.temperature": 25.6,
+      "switch.working_time": 1,
+      "test_simulation.temperature": 0,
+      "test_simulation.current": 0,
+      "system.enable_led": true,
+      "system.enable_buzzer": true,
+      "system.keep_relay": true,
+      "system.update_power": false,
+      "relay_loop_task.open_time": 0,
       "relay_loop_task.close_time": 0,
       "relay_loop_task.enable": false,
-      "relay_loop_task.open_time": 0,
+      "count_down_time-4-1": 300,
+      "relay_count_down.remain_time": 0,
+      "enable_count_down-4-3": false,
+      "power_consumption": 0.36,
+      "electric_power-3-2": 0,
+      "power_consumption.voltage": 0,
+      "electric_current-3-4": 0,
       "state_updater": "cloud",
+      "power_cost_today": 0.0,
+      "power_cost_month": 0.0,
       "sub_entities": [
         "power_cost_today",
         "power_cost_month",
@@ -100,206 +1353,474 @@
         "power_consumption-3.voltage-3",
         "power_consumption-3.electric_current-4"
       ],
-      "supported_features": 0,
-      "switch.mode": 1,
-      "switch.on": true,
-      "switch.temperature": 38.6,
-      "switch.working_time": 10,
-      "system.enable_buzzer": true,
-      "system.enable_led": true,
-      "system.keep_relay": true,
-      "system.update_power": false,
-      "test_simulation.current": 0,
-      "test_simulation.temperature": 0
+      "device_class": "outlet",
+      "friendly_name": "客厅插座",
+      "supported_features": 0
     },
+    "last_changed": "2024-06-01T09:00:14.906427+00:00",
+    "last_reported": "2024-06-02T15:22:24.660966+00:00",
+    "last_updated": "2024-06-02T15:22:24.660966+00:00",
     "context": {
-      "id": "01HYX3JBS0NDM7GZZRM0H4AXRF",
+      "id": "01HZCRPVGMD7HC1WZWCJ5Z2GRB",
       "parent_id": null,
       "user_id": null
-    },
-    "entity_id": "switch.qmi_psv3_4067_switch",
-    "last_changed": "2024-05-27T10:07:04.119001+00:00",
-    "last_reported": "2024-05-27T13:24:20.896787+00:00",
-    "last_updated": "2024-05-27T13:24:20.896787+00:00",
-    "state": "on"
+    }
   },
   {
+    "entity_id": "binary_sensor.xiaomi_pir1_f5c4_motion_sensor",
+    "state": "off",
     "attributes": {
-      "brightness": 255,
-      "color_mode": "hs",
-      "friendly_name": "卧室led",
-      "hs_color": [
-        240,
-        100
+      "model": "xiaomi.motion.pir1",
+      "lan_ip": "",
+      "mac_address": "D4:48:67:DA:F5:C4",
+      "entity_class": "BleBinarySensorEntity",
+      "home_room": "2174298090 客厅",
+      "miot_type": "urn:miot-spec-v2:device:motion-sensor:0000A014:xiaomi-pir1:2",
+      "motion_sensor.illumination": 20,
+      "battery_level": 100,
+      "state_updater": "cloud",
+      "state_property": "no_motion_duration-2-1024",
+      "sub_entities": [
+        "battery-3.battery_level-1003",
+        "motion_sensor-2.illumination-1005"
       ],
-      "rgb_color": [
-        0,
-        0,
-        255
+      "no_motion_duration-2-1024": 300,
+      "custom_no_motion_time-2-1053": 10,
+      "custom_no_motion_time-2-1053.error": "-704220043 Property value error",
+      "no_motion_duration-2-1024.error": "-704220043 Property value error",
+      "device_class": "motion",
+      "friendly_name": "客厅人体传感器",
+      "supported_features": 0
+    },
+    "last_changed": "2024-06-03T06:41:56.786397+00:00",
+    "last_reported": "2024-06-03T07:03:56.833846+00:00",
+    "last_updated": "2024-06-03T07:03:56.833846+00:00",
+    "context": {
+      "id": "01HZEEJVN1G4V9VR7KXWG4JH0N",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "remote.xiaomi_l05c_7e78_wifispeaker",
+    "state": "on",
+    "attributes": {
+      "model": "xiaomi.wifispeaker.l05c",
+      "lan_ip": "192.168.0.101",
+      "mac_address": "CC:D8:43:2E:7E:78",
+      "entity_class": "MiotRemoteEntity",
+      "home_room": "2174298090 客厅",
+      "state_updater": "none",
+      "ir_devices": [
+        {
+          "did": "ir.1796017787920588801",
+          "name": "空调",
+          "keys": []
+        }
       ],
+      "friendly_name": "客厅小爱音响",
+      "supported_features": 0
+    },
+    "last_changed": "2024-06-01T05:25:50.439696+00:00",
+    "last_reported": "2024-06-01T05:25:50.439696+00:00",
+    "last_updated": "2024-06-01T05:25:50.439696+00:00",
+    "context": {
+      "id": "01HZ945S771MMEGQ3E2E81J0J8",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "light.smart_led_strip",
+    "state": "off",
+    "attributes": {
       "supported_color_modes": [
         "hs"
       ],
-      "supported_features": 0,
-      "xy_color": [
-        0.136,
-        0.04
-      ]
+      "color_mode": null,
+      "brightness": null,
+      "hs_color": null,
+      "rgb_color": null,
+      "xy_color": null,
+      "friendly_name": "卧室led",
+      "supported_features": 0
     },
+    "last_changed": "2024-06-02T14:04:43.284760+00:00",
+    "last_reported": "2024-06-02T14:04:43.284760+00:00",
+    "last_updated": "2024-06-02T14:04:43.284760+00:00",
     "context": {
-      "id": "01HYWTHGTZQDN8RN09W49NTBWE",
+      "id": "01HZCM8KCMBWFCMHW52J7632GX",
       "parent_id": null,
-      "user_id": "94b4baac240646069282442afdb582d0"
-    },
-    "entity_id": "light.smart_led_strip",
-    "last_changed": "2024-05-27T08:57:20.754022+00:00",
-    "last_reported": "2024-05-27T10:46:36.644570+00:00",
-    "last_updated": "2024-05-27T10:46:36.643137+00:00",
-    "state": "on"
+      "user_id": null
+    }
   },
   {
+    "entity_id": "light.smart_led_strip_2",
+    "state": "unavailable",
     "attributes": {
-      "friendly_name": "客厅的智能插座 上电行为",
+      "supported_color_modes": [
+        "hs"
+      ],
+      "friendly_name": "客厅led",
+      "supported_features": 0
+    },
+    "last_changed": "2024-06-01T09:03:14.165142+00:00",
+    "last_reported": "2024-06-01T09:03:14.165142+00:00",
+    "last_updated": "2024-06-01T09:03:14.165142+00:00",
+    "context": {
+      "id": "01HZ9GKV7NCMPBN8TN0ZXDBAN4",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "select.smart_plug_power_on_behavior",
+    "state": "unavailable",
+    "attributes": {
       "options": [
         "power_off",
         "power_on",
         "last"
-      ]
+      ],
+      "friendly_name": "客厅的智能插座 上电行为"
     },
+    "last_changed": "2024-06-01T05:25:51.076529+00:00",
+    "last_reported": "2024-06-01T05:25:51.076529+00:00",
+    "last_updated": "2024-06-01T05:25:51.076529+00:00",
     "context": {
-      "id": "01HYWDNQV5SSJP9S3TDPWNC309",
+      "id": "01HZ945SV4WHSHQWW1X0X5D426",
       "parent_id": null,
       "user_id": null
-    },
-    "entity_id": "select.smart_plug_power_on_behavior",
-    "last_changed": "2024-05-27T07:01:42.885693+00:00",
-    "last_reported": "2024-05-27T07:01:42.887446+00:00",
-    "last_updated": "2024-05-27T07:01:42.885693+00:00",
-    "state": "unavailable"
+    }
   },
   {
+    "entity_id": "select.smart_plug_indicator_light_mode",
+    "state": "unavailable",
     "attributes": {
-      "friendly_name": "客厅的智能插座 指示灯模式",
       "options": [
         "relay",
         "pos",
         "none"
-      ]
+      ],
+      "friendly_name": "客厅的智能插座 指示灯模式"
     },
+    "last_changed": "2024-06-01T05:25:51.076736+00:00",
+    "last_reported": "2024-06-01T05:25:51.076736+00:00",
+    "last_updated": "2024-06-01T05:25:51.076736+00:00",
     "context": {
-      "id": "01HYWDNQV5H4KZBMR5D7B9VW0G",
+      "id": "01HZ945SV44XWHKP2AJZQRR817",
       "parent_id": null,
       "user_id": null
-    },
-    "entity_id": "select.smart_plug_indicator_light_mode",
-    "last_changed": "2024-05-27T07:01:42.885762+00:00",
-    "last_reported": "2024-05-27T07:01:42.887469+00:00",
-    "last_updated": "2024-05-27T07:01:42.885762+00:00",
-    "state": "unavailable"
+    }
   },
   {
+    "entity_id": "switch.smart_plug_child_lock",
+    "state": "unavailable",
     "attributes": {
       "friendly_name": "客厅的智能插座 儿童锁"
     },
+    "last_changed": "2024-06-01T05:25:51.080051+00:00",
+    "last_reported": "2024-06-01T05:25:51.080051+00:00",
+    "last_updated": "2024-06-01T05:25:51.080051+00:00",
     "context": {
-      "id": "01HYWDNQV5TK2QMB35M2W3WEMX",
+      "id": "01HZ945SV88QQJTA70KTW4JG39",
       "parent_id": null,
       "user_id": null
-    },
-    "entity_id": "switch.smart_plug_child_lock",
-    "last_changed": "2024-05-27T07:01:42.885787+00:00",
-    "last_reported": "2024-05-27T07:01:42.887483+00:00",
-    "last_updated": "2024-05-27T07:01:42.885787+00:00",
-    "state": "unavailable"
+    }
   },
   {
-    "attributes": {
-      "device_class": "outlet",
-      "friendly_name": "卧室插座"
-    },
-    "context": {
-      "id": "01HYWHNBQARTQD53SAZ1N72QS4",
-      "parent_id": null,
-      "user_id": null
-    },
-    "entity_id": "switch.smart_plug_socket_1",
-    "last_changed": "2024-05-27T07:01:42.885807+00:00",
-    "last_reported": "2024-05-27T08:11:24.778392+00:00",
-    "last_updated": "2024-05-27T08:11:24.778392+00:00",
-    "state": "unavailable"
-  },
-  {
-    "attributes": {
-      "device_class": "power",
-      "electric_power-3-2": 10.575,
-      "entity_class": "MiotSensorSubEntity",
-      "friendly_name": "Xiaomi Smart Power Strip 2 (5 Outlet) Power Consumption Electric",
-      "parent_entity_id": "switch.qmi_psv3_4067_switch",
-      "property_description": "Electric Power",
-      "service_description": "Power Consumption",
-      "state_class": "measurement",
-      "supported_features": 0,
-      "unit_of_measurement": "W",
-      "updated_time": "2024-05-27T18:09:20.238965+08:00"
-    },
-    "context": {
-      "id": "01HYWRD9BFC37V0TT5HNQTVWTG",
-      "parent_id": null,
-      "user_id": null
-    },
     "entity_id": "sensor.qmi_psv3_4067_electric_power",
-    "last_changed": "2024-05-27T10:09:20.239512+00:00",
-    "last_reported": "2024-05-27T10:11:20.273020+00:00",
-    "last_updated": "2024-05-27T10:09:20.239512+00:00",
-    "state": "10.575"
+    "state": "0",
+    "attributes": {
+      "state_class": "measurement",
+      "entity_class": "MiotSensorSubEntity",
+      "parent_entity_id": "switch.qmi_psv3_4067_switch",
+      "service_description": "Power Consumption",
+      "property_description": "Electric Power",
+      "updated_time": "2024-06-01T13:26:20.574805+08:00",
+      "electric_power-3-2": 0,
+      "unit_of_measurement": "W",
+      "device_class": "power",
+      "friendly_name": "Xiaomi Smart Power Strip 2 (5 Outlet) Power Consumption Electric",
+      "supported_features": 0
+    },
+    "last_changed": "2024-06-01T05:26:20.578012+00:00",
+    "last_reported": "2024-06-01T09:58:50.990783+00:00",
+    "last_updated": "2024-06-01T05:26:20.578012+00:00",
+    "context": {
+      "id": "01HZ946PN23ENQW67X0TD4Q1TY",
+      "parent_id": null,
+      "user_id": null
+    }
   },
   {
+    "entity_id": "sensor.miaomiaoce_t9_f730_battery_level",
+    "state": "100",
     "attributes": {
-      "brightness": 255,
-      "color_mode": "hs",
-      "friendly_name": "客厅led",
-      "hs_color": [
-        60,
-        100
-      ],
-      "rgb_color": [
-        255,
-        255,
-        0
-      ],
-      "supported_color_modes": [
-        "hs"
-      ],
-      "supported_features": 0,
-      "xy_color": [
-        0.444,
-        0.517
-      ]
+      "state_class": "measurement",
+      "entity_class": "MiotSensorSubEntity",
+      "parent_entity_id": "sensor.miaomiaoce_t9_f730_temperature_humidity_sensor",
+      "service_description": "Battery",
+      "property_description": "Battery Level",
+      "updated_time": "2024-06-01T13:26:20.090337+08:00",
+      "battery_level": 100,
+      "unit_of_measurement": "%!"
+      (MISSING),
+      "device_class": "battery",
+      "friendly_name": "Mijia Smart Temperature and Humidity Monitor 3 Battery Level",
+      "supported_features": 0
     },
+    "last_changed": "2024-06-01T05:26:20.091857+00:00",
+    "last_reported": "2024-06-01T09:58:50.538051+00:00",
+    "last_updated": "2024-06-01T05:26:20.091857+00:00",
     "context": {
-      "id": "01HYWTDB4JDSR49XMD4DH2K8F5",
+      "id": "01HZ946P5VAKXDJRX7VD11D6NS",
       "parent_id": null,
-      "user_id": "94b4baac240646069282442afdb582d0"
-    },
-    "entity_id": "light.smart_led_strip_2",
-    "last_changed": "2024-05-27T10:44:19.732629+00:00",
-    "last_reported": "2024-05-27T10:44:19.733608+00:00",
-    "last_updated": "2024-05-27T10:44:19.732629+00:00",
-    "state": "on"
+      "user_id": null
+    }
   },
   {
+    "entity_id": "sensor.miaomiaoce_t9_f730_relative_humidity",
+    "state": "74.0",
     "attributes": {
-      "friendly_name": "OpenAI Conversation"
+      "state_class": "measurement",
+      "entity_class": "MiotSensorSubEntity",
+      "parent_entity_id": "sensor.miaomiaoce_t9_f730_temperature_humidity_sensor",
+      "service_description": "Temperature Humidity Sensor",
+      "property_description": "Relative Humidity",
+      "updated_time": "2024-06-03T14:17:26.421354+08:00",
+      "relative_humidity-3-1002": 74,
+      "battery_level": 100,
+      "unit_of_measurement": "%!"
+      (MISSING),
+      "device_class": "humidity",
+      "friendly_name": "Mijia Smart Temperature and Humidity Monitor 3 Temperature Humidity Sensor Relative",
+      "supported_features": 0
     },
+    "last_changed": "2024-06-03T06:17:26.422180+00:00",
+    "last_reported": "2024-06-03T06:17:26.422180+00:00",
+    "last_updated": "2024-06-03T06:17:26.422180+00:00",
     "context": {
-      "id": "01HYTMXWKDB8VXDQN6K2P7AR7C",
+      "id": "01HZEBXPMPG8V38DP0TR1NEBVG",
       "parent_id": null,
-      "user_id": "94b4baac240646069282442afdb582d0"
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "button.xiaomi_l05c_7e78_wake_up",
+    "state": "2024-05-31T09:11:22.902626+00:00",
+    "attributes": {
+      "entity_class": "MiotButtonActionSubEntity",
+      "parent_entity_id": "media_player.xiaomi_l05c_7e78_play_control",
+      "service_description": "Intelligent Speaker",
+      "action_description": "Wake Up",
+      "friendly_name": "Mi AI Speaker Play Plus Wake Up",
+      "supported_features": 0
     },
-    "entity_id": "conversation.openai_conversation",
-    "last_changed": "2024-05-26T14:30:01.069627+00:00",
-    "last_reported": "2024-05-26T14:30:01.069627+00:00",
-    "last_updated": "2024-05-26T14:30:01.069627+00:00",
-    "state": "2024-05-26T14:30:01.069590+00:00"
+    "last_changed": "2024-06-01T05:26:20.592664+00:00",
+    "last_reported": "2024-06-01T05:40:50.601490+00:00",
+    "last_updated": "2024-06-01T05:26:20.592664+00:00",
+    "context": {
+      "id": "01HZ946PNGVYTSXGPYRZX677C2",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "button.xiaomi_l05c_7e78_play_music",
+    "state": "unknown",
+    "attributes": {
+      "entity_class": "MiotButtonActionSubEntity",
+      "parent_entity_id": "media_player.xiaomi_l05c_7e78_play_control",
+      "service_description": "Intelligent Speaker",
+      "action_description": "Play Music",
+      "friendly_name": "Mi AI Speaker Play Plus Play Music",
+      "supported_features": 0
+    },
+    "last_changed": "2024-06-01T05:26:20.594239+00:00",
+    "last_reported": "2024-06-01T05:40:50.601521+00:00",
+    "last_updated": "2024-06-01T05:26:20.594239+00:00",
+    "context": {
+      "id": "01HZ946PNJXXWT7SD724637D50",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "button.xiaomi_l05c_7e78_stop_alarm",
+    "state": "2024-05-30T17:44:56.023788+00:00",
+    "attributes": {
+      "entity_class": "MiotButtonActionSubEntity",
+      "parent_entity_id": "media_player.xiaomi_l05c_7e78_play_control",
+      "service_description": "Clock",
+      "action_description": "Stop Alarm",
+      "friendly_name": "Mi AI Speaker Play Plus Stop Alarm",
+      "supported_features": 0
+    },
+    "last_changed": "2024-06-01T05:26:20.594585+00:00",
+    "last_reported": "2024-06-01T05:40:50.601537+00:00",
+    "last_updated": "2024-06-01T05:26:20.594585+00:00",
+    "context": {
+      "id": "01HZ946PNJ7KGSX3RY5T84MT4Y",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "text.xiaomi_l05c_7e78_play_text",
+    "state": "",
+    "attributes": {
+      "mode": "text",
+      "min": 0,
+      "max": 255,
+      "pattern": null,
+      "entity_class": "MiotTextActionSubEntity",
+      "parent_entity_id": "media_player.xiaomi_l05c_7e78_play_control",
+      "service_description": "Intelligent Speaker",
+      "action_description": "Play Text",
+      "friendly_name": "Mi AI Speaker Play Plus Play Text",
+      "supported_features": 0
+    },
+    "last_changed": "2024-06-01T05:26:21.803382+00:00",
+    "last_reported": "2024-06-01T09:58:51.075759+00:00",
+    "last_updated": "2024-06-01T05:26:21.803382+00:00",
+    "context": {
+      "id": "01HZ946PNGM8045GWSNH1218H6",
+      "parent_id": "01HZ946PNGVYTSXGPYRZX677C2",
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "text.xiaomi_l05c_7e78_execute_text_directive",
+    "state": "",
+    "attributes": {
+      "mode": "text",
+      "min": 0,
+      "max": 255,
+      "pattern": null,
+      "entity_class": "MiotTextActionSubEntity",
+      "parent_entity_id": "media_player.xiaomi_l05c_7e78_play_control",
+      "service_description": "Intelligent Speaker",
+      "action_description": "Execute Text Directive",
+      "friendly_name": "Mi AI Speaker Play Plus Execute Text Directive",
+      "supported_features": 0
+    },
+    "last_changed": "2024-06-01T05:26:20.595539+00:00",
+    "last_reported": "2024-06-01T09:58:51.076003+00:00",
+    "last_updated": "2024-06-01T05:26:20.595539+00:00",
+    "context": {
+      "id": "01HZ946PNKW93Z635JV87GSP4M",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.xiaomi_pir1_f5c4_battery_level",
+    "state": "100",
+    "attributes": {
+      "state_class": "measurement",
+      "entity_class": "MiotSensorSubEntity",
+      "parent_entity_id": "binary_sensor.xiaomi_pir1_f5c4_motion_sensor",
+      "service_description": "Battery",
+      "property_description": "Battery Level",
+      "updated_time": "2024-06-01T13:26:20.846147+08:00",
+      "battery_level": 100,
+      "unit_of_measurement": "%!"
+      (MISSING),
+      "device_class": "battery",
+      "friendly_name": "Xiaomi Motion Sensor 2S Battery Level",
+      "supported_features": 0
+    },
+    "last_changed": "2024-06-03T03:41:26.349500+00:00",
+    "last_reported": "2024-06-03T03:41:26.349500+00:00",
+    "last_updated": "2024-06-03T03:41:26.349500+00:00",
+    "context": {
+      "id": "01HZE301YDJA0GT48KAM0VMZ11",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.xiaomi_l05c_7e78_conversation",
+    "state": "关闭空调",
+    "attributes": {
+      "entity_class": "XiaoaiConversationSensor",
+      "parent_entity_id": "media_player.xiaomi_l05c_7e78_play_control",
+      "content": "关闭空调",
+      "answers": [
+        {
+          "type": "TTS",
+          "tts": {
+            "text": "正在为你关闭空调。"
+          }
+        }
+      ],
+      "history": [
+        "打开空调",
+        "关闭空调"
+      ],
+      "timestamp": "2024-06-03T15:02:16.424000+08:00",
+      "icon": "mdi:account-voice",
+      "friendly_name": "Mi AI Speaker Play Plus Play Control conversation",
+      "supported_features": 0
+    },
+    "last_changed": "2024-06-03T07:02:18.991037+00:00",
+    "last_reported": "2024-06-03T07:02:18.991037+00:00",
+    "last_updated": "2024-06-03T07:02:18.991037+00:00",
+    "context": {
+      "id": "01HZEEFW3F3X6C66N20HXHP1DK",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.xiaomi_pir1_f5c4_illumination_2",
+    "state": "20",
+    "attributes": {
+      "entity_class": "MiotSensorSubEntity",
+      "parent_entity_id": "binary_sensor.xiaomi_pir1_f5c4_motion_sensor",
+      "service_description": "Motion Sensor",
+      "property_description": "Illumination",
+      "updated_time": "2024-06-03T15:03:56.833643+08:00",
+      "motion_sensor.illumination": 20,
+      "battery_level": 100,
+      "unit_of_measurement": "lx",
+      "device_class": "illuminance",
+      "friendly_name": "Xiaomi Motion Sensor 2S Motion Sensor Illumination",
+      "supported_features": 0
+    },
+    "last_changed": "2024-06-03T07:03:56.834898+00:00",
+    "last_reported": "2024-06-03T07:03:56.834898+00:00",
+    "last_updated": "2024-06-03T07:03:56.834898+00:00",
+    "context": {
+      "id": "01HZEEJVN29Q0CX5NA685AWP3R",
+      "parent_id": null,
+      "user_id": null
+    }
+  },
+  {
+    "entity_id": "sensor.xiaomi_pir1_f5c4_illumination",
+    "state": "10",
+    "attributes": {
+      "entity_class": "MiotSensorSubEntity",
+      "parent_entity_id": "binary_sensor.xiaomi_pir1_f5c4_motion_sensor",
+      "service_description": "Motion Sensor",
+      "property_description": "Illumination",
+      "updated_time": "2024-06-01T13:26:20.845040+08:00",
+      "motion_sensor.illumination": 10,
+      "battery_level": 100,
+      "unit_of_measurement": "lx",
+      "device_class": "illuminance",
+      "friendly_name": "Xiaomi Motion Sensor 2S Motion Sensor Illumination",
+      "supported_features": 0
+    },
+    "last_changed": "2024-06-01T05:26:20.845450+00:00",
+    "last_reported": "2024-06-01T05:26:20.845450+00:00",
+    "last_updated": "2024-06-01T05:26:20.845450+00:00",
+    "context": {
+      "id": "01HZ946PXDAHGEWCAFPQW1XBDY",
+      "parent_id": null,
+      "user_id": null
+    }
   }
 ]

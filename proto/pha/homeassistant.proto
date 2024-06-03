@@ -44,6 +44,7 @@ message StatesRsp{
 
 service llm{
   rpc Call(CallReq)returns (CallRsp);
+  rpc CallWs(CallReq)returns (CallRsp);
   rpc Services(ServicesReq)returns(ServicesRsp);
   rpc States(StatesReq)returns(StatesRsp);
 }

@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/signal"
 	"strings"
+	"sync"
 	"time"
 	"vinesai/internel/ava"
 	"vinesai/internel/x"
@@ -17,7 +18,20 @@ import (
 )
 
 func init() {
-	go websocketHa("123")
+	newHub()
+
+	var wait = new(sync.WaitGroup)
+
+	for k, _ := range mapHome2Url {
+		wait.Add(1)
+		go websocketHa(wait, k)
+	}
+
+	wait.Wait()
+
+	for k, _ := range mapHome2Url {
+		go runXiaoMiSpeaker(k)
+	}
 }
 
 // 用户对应的url每个用户都有不同的端口号,后期配置成域名
@@ -55,7 +69,7 @@ var filterServiceDomain = map[string]bool{
 	"logbook":                 true,
 	"input_select":            true,
 	"input_button":            true,
-	"timer":                   true,
+	"entity":                  true,
 	"input_boolean":           true,
 	"script":                  true,
 	"zone":                    true,
@@ -87,7 +101,7 @@ func getServices(c *ava.Context, home string) (string, error) {
 
 	body, err := io.ReadAll(resp.Body)
 
-	//c.Info(x.BytesToString(body))
+	c.Info("--------------services", x.BytesToString(body))
 
 	var filter = make([]map[string]interface{}, 0, 100)
 	err = x.MustUnmarshal(body, &filter)
@@ -123,7 +137,14 @@ var filterState = map[string]bool{
 	"automation": true,
 }
 
-func getStates(c *ava.Context, home string) (string, error) {
+type shortStates struct {
+	EntityId   string `json:"entity_id"`
+	Attributes struct {
+		FriendlyName string `json:"friendly_name"`
+	} `json:"attributes"`
+}
+
+func getStates(c *ava.Context, home string) (string, []*shortStates, error) {
 	req, _ := http.NewRequest("GET", "http://"+mapHome2Url[home]+"/api/states", nil)
 	req.Header.Set("Authorization", mapUserToken[home])
 	req.Header.Set("Content-Type", "application/json")
@@ -131,21 +152,28 @@ func getStates(c *ava.Context, home string) (string, error) {
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		c.Error(err)
-		return "", err
+		return "", nil, err
 	}
 
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 
-	//c.Info(x.BytesToString(body))
+	c.Info("-----------------", x.BytesToString(body))
 
 	var filter = make([]map[string]interface{}, 0, 100)
 	err = x.MustUnmarshal(body, &filter)
 	if err != nil {
 		c.Error(err)
-		return "", err
+		return "", nil, err
 	}
+
+	var ss []*shortStates
+	err = x.MustUnmarshal(body, &ss)
+	if err != nil {
+		c.Error(err)
+	}
+	//fmt.Println("----------", x.MustMarshal2String(ss))
 
 	var result = make([]map[string]interface{}, 0, 50)
 
@@ -166,7 +194,7 @@ func getStates(c *ava.Context, home string) (string, error) {
 		}
 	}
 
-	return x.MustMarshal2String(result), nil
+	return x.MustMarshal2String(result), ss, nil
 
 }
 
@@ -192,8 +220,13 @@ func init() {
 	}
 }
 
-func callService(home, service string, data []byte) {
-	ava.Debugf("callService |url=%s |data=%s", "http://"+mapHome2Url[home]+"/api/services/"+service, string(data))
+func callServiceWs(home string, data interface{}) {
+	ava.Debugf("callServiceHttpWs |home=%s |data=%s", home, x.MustMarshal2String(data))
+	gHub.writeJson(home, data)
+}
+
+func callServiceHttp(home, service string, data []byte) {
+	ava.Debugf("callServiceHttp |url=%s |data=%s", "http://"+mapHome2Url[home]+"/api/services/"+service, string(data))
 	req, _ := http.NewRequest("POST", "http://"+mapHome2Url[home]+"/api/services/"+service, bytes.NewReader(data))
 	req.Header.Set("Authorization", mapUserToken[home])
 	req.Header.Set("Content-Type", "application/json")
@@ -212,7 +245,7 @@ func callService(home, service string, data []byte) {
 		return
 	}
 
-	ava.Infof("callService |body=%s", x.BytesToString(body))
+	ava.Infof("callServiceHttp |body=%s", x.BytesToString(body))
 }
 
 var aiTmp = `你是一个home-assistant智能家居管家，当我想要控制智能家居设备时，通过friendly_name去判断设备位置。
@@ -356,11 +389,11 @@ data:根据设备当前状态和指令要求,生成修改后的设备数据。
 message:以友好、俏皮的口吻告知操作结果。 
 例如:
 1.将【客厅led】改为黄色:
-{"command":[{"data":{"entity_id":"light.smart_led_strip_2","rgb_color":[255,255,0]},"service":"light/turn_on"}],"message":"好的主人，已将客厅led改为黄色"}
+{"serviceData":[{"data":{"entity_id":"light.smart_led_strip_2","rgb_color":[255,255,0]},"service":"light/turn_on"}],"message":"好的主人，已将客厅led改为黄色"}
 2.关闭【客厅led】:
-{"command":[{"data":{"entity_id":"light.smart_led_strip_2"},"service":"light/turn_off"}],"message":"客厅led已乖乖睡觉啦~"}
+{"serviceData":[{"data":{"entity_id":"light.smart_led_strip_2"},"service":"light/turn_off"}],"message":"客厅led已乖乖睡觉啦~"}
 3.打开【客厅插座】:
-{"command":[{"data":{"entity_id":"switch.qmi_psv3_4067_switch"},"service":"switch/turn_on"}],"message":"客厅插座已打开"}
+{"serviceData":[{"data":{"entity_id":"switch.qmi_psv3_4067_switch"},"service":"switch/turn_on"}],"message":"客厅插座已打开"}
 请直接给出 JSON 格式的指令结果,不要有其他文字。当前的指令清单和设备清单如下: 【指令清单】:%s 【设备清单】:%s`
 
 var aiTmp2 = `你是一个理解home-assistant REST API的智能家居助手，我将为您提供此任务的基础知识，请在之后使用它来完成任务。
@@ -377,28 +410,136 @@ var aiTmp2 = `你是一个理解home-assistant REST API的智能家居助手，�
 <notice>
 - 在<states>中，friendly_name(只能通过这个字段去识别设备名称和设备位置)，state(设备状态,on表示打开，off表示关闭，unavailable表示不可用,unavailable状态的设备你无法控制)
 - {"entity_id": "select.smart_plug_power_on_behavior","state":"unavailable"}表示设备不可用，这个时候直接告诉我设备发生故障即可
-"state": "unavailable",
 </notice>
 
-请根据用户意图，选择合适的设备和指令执行相应的操作,并以 JSON 格式返回指令结果。
+请根据我的意图，选择合适的设备和指令执行相应的操作,并以 JSON 格式返回指令结果。
 <example>
 1.将【客厅led】改为黄色:
-{"command":[{"data":{"entity_id":"light.smart_led_strip_2","rgb_color":[255,255,0]},"service":"light/turn_on"}],"message":"好的主人，已将客厅led改为黄色"}
+{"serviceData":[{"data":{"entity_id":"light.smart_led_strip_2","rgb_color":[255,255,0]},"domain":"light","service":"turn_on"}],"message":"好的主人，已将客厅led改为黄色"}
 2.关闭【客厅led】:
-{"command":[{"data":{"entity_id":"light.smart_led_strip_2"},"service":"light/turn_off"}],"message":"客厅led已乖乖睡觉啦~"}
+{"serviceData":[{"data":{"entity_id":"light.smart_led_strip_2"},"domain":"light","service":"turn_off"}],"message":"客厅led已乖乖睡觉啦~"}
 3.打开【客厅插座】:
-{"command":[{"data":{"entity_id":"switch.qmi_psv3_4067_switch"},"service":"switch/turn_on"}],"message":"客厅插座已打开"}
+{"serviceData":[{"data":{"entity_id":"switch.qmi_psv3_4067_switch"},"domain":"switch","service":"turn_on"}],"message":"客厅插座已打开"}
 4.不可用设备:
-{"command":[{"data":{"entity_id":"switch.smart_plug_socket_1","state":"unavailable"},"service":""}],"message":"卧室插座不可用"}
+{"serviceData":[{"data":{"entity_id":"switch.smart_plug_socket_1","state":"unavailable"},"domain":"","service":""}],"message":"卧室插座不可用"}
 
 - service:根据<services>中的domain和services 得到请求home-assistant的服务,如 "light/turn_on" 。
 - data:你要修改的设备状态数据，其中entity_id将要修改的设备实体标识 。
 - message:以友好、俏皮的口吻告知修改结果。
 </example>`
 
+var aiTmp2Ws = `
+<|im_start|>system
+你是一个理解home assistant REST API的智能家居助手，可以控制房子里的设备。按照指示完成以下任务或仅使用提供的信息回答以下问题。
+
+控制指令(/api/services/{{domain}}/{{services}}：%s
+
+设备列表(/api/states)：%s
+
+注意事项：
+1.在<states>中，friendly_name(只能通过这个字段去识别设备名称和设备位置)；
+2.{"entity_id": "select.smart_plug_power_on_behavior","state":"unavailable"}表示设备不可用，直接汇报设备故障。
+
+请根据我的意图，选择合适的设备和指令执行相应的操作,并以 JSON 格式返回指令结果。
+1.将【客厅led】改为黄色:
+{"serviceData":[{"type":"call_service","domain":"light","service":"turn_on","service_data":{"rgb_color":[255,255,0]},"target":{"entity_id":"light.smart_led_strip_2"}}],"message":"好的主人，已将客厅led改为黄色"}
+2.关闭【客厅led】:
+{"serviceData":[{"type":"call_service","domain":"light","service":"turn_off","service_data":{},"target":{"entity_id":"light.smart_led_strip_2"}}],"message":"客厅led已乖乖睡觉啦~"}
+3.打开【客厅插座】:
+{"serviceData":[{"type":"call_service","domain":"switch","service":"turn_on","service_data":{},"target":{"entity_id":"switch.qmi_psv3_4067_switch"}}],"message":"客厅插座已打开"}
+4.不可用设备:
+{"serviceData":[{"target":{"entity_id":"light.smart_led_strip_2"}}],"message":"卧室插座不可用"}
+
+- domain:要调用的指令服务,例如：light表示灯，switch表示开关。
+- service:服务指令的具体，例如：turn_on表示打开，turn_off表示关闭 。
+- service_data:你要修改的设备状态数据
+- target:目标，entity_id表示设备实体唯一标识 。
+- message:以友好、俏皮的口吻告知修改结果。
+<|im_end|>`
+
 //- 【设备清单】中如果是{ "entity_id": "switch.smart_plug_socket_1", "state": "unavailable"},则提示我“xxx不可用”,参考第4点。
 
-func websocketHa(home string) {
+type hub struct {
+	connLock *sync.RWMutex
+	conn     map[string]*websocket.Conn
+
+	//记录实体
+	entityLock *sync.RWMutex
+	entity     map[string]*entity
+}
+
+var gHub *hub
+
+func newHub() {
+	gHub = &hub{
+		connLock:   new(sync.RWMutex),
+		conn:       make(map[string]*websocket.Conn, 50),
+		entityLock: new(sync.RWMutex),
+		entity:     make(map[string]*entity, 50),
+	}
+}
+
+func (h *hub) getConn(home string) *websocket.Conn {
+	h.connLock.RLock()
+	defer h.connLock.RUnlock()
+	return h.conn[home]
+}
+
+func (h *hub) addConn(home string, conn *websocket.Conn) {
+	h.connLock.Lock()
+	h.conn[home] = conn
+	h.connLock.Unlock()
+}
+
+func (h *hub) removeConn(home string) {
+	h.connLock.Lock()
+	delete(h.conn, home)
+	h.connLock.Unlock()
+}
+
+func (h *hub) getEntity(home string) *entity {
+	h.entityLock.RLock()
+	defer h.entityLock.RUnlock()
+	return h.entity[home]
+}
+
+func (h *hub) addEntity(home string, entity *entity) {
+	h.entityLock.Lock()
+	h.entity[home] = entity
+	h.entityLock.Unlock()
+}
+
+func (h *hub) removeEntity(home string) {
+	h.entityLock.Lock()
+	delete(h.entity, home)
+	h.entityLock.Unlock()
+}
+
+func (h *hub) writeJson(home string, data interface{}) {
+	h.connLock.RLock()
+	defer h.connLock.RUnlock()
+	c, ok := h.conn[home]
+	if !ok {
+		return
+	}
+
+	c.WriteJSON(data)
+}
+
+type stateData struct {
+	Type  string `json:"type"`
+	Event struct {
+		EventType string `json:"event_type"`
+		Data      struct {
+			NewState struct {
+				EntityID string `json:"entity_id"`
+				State    string `json:"state"` //语音内容
+			} `json:"new_state"`
+		} `json:"data"`
+	} `json:"event"`
+}
+
+func websocketHa(wait *sync.WaitGroup, home string) {
 
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt)
@@ -408,16 +549,16 @@ func websocketHa(home string) {
 	accessToken = strings.TrimPrefix(accessToken, "Bearer ")
 
 	u := url.URL{Scheme: "ws", Host: host, Path: "/api/websocket"}
-	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
+	conn, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
 	if err != nil {
 		ava.Errorf("host=%s |token=%s |err=%v", host, accessToken, err)
 		return
 	}
 
-	defer c.Close()
+	defer conn.Close()
 
 	//过滤掉要求
-	c.ReadMessage()
+	conn.ReadMessage()
 
 	//鉴权
 	var authReq = struct {
@@ -425,13 +566,13 @@ func websocketHa(home string) {
 		AccessToken string `json:"access_token"`
 	}{Type: "auth", AccessToken: accessToken}
 
-	err = c.WriteJSON(&authReq)
+	err = conn.WriteJSON(&authReq)
 	if err != nil {
 		ava.Errorf("host=%s |token=%s |err=%v", host, accessToken, err)
 		return
 	}
 
-	_, message, err := c.ReadMessage()
+	_, message, err := conn.ReadMessage()
 	if err != nil {
 		ava.Errorf("host=%s |token=%s |err=%v", host, accessToken, err)
 		return
@@ -465,13 +606,13 @@ func websocketHa(home string) {
 		EventType string `json:"event_type"`
 	}{Id: ava.RandInt(1, 100000), Type: "subscribe_events", EventType: "state_changed"}
 
-	err = c.WriteJSON(&state)
+	err = conn.WriteJSON(&state)
 	if err != nil {
 		ava.Errorf("host=%s |token=%s |err=%v", host, accessToken, err)
 		return
 	}
 
-	_, stateMessage, err := c.ReadMessage()
+	_, stateMessage, err := conn.ReadMessage()
 	if err != nil {
 		ava.Errorf("host=%s |token=%s |err=%v", host, accessToken, err)
 		return
@@ -492,18 +633,38 @@ func websocketHa(home string) {
 		return
 	}
 
+	gHub.addConn(home, conn)
+
+	wait.Done()
+
+	defer gHub.removeConn(home)
+
 	done := make(chan struct{})
 
 	go func() {
 		defer close(done)
 		for {
-			_, message, err := c.ReadMessage()
+			_, message, err := conn.ReadMessage()
 			if err != nil {
 				ava.Error(err)
 				return
 			}
-			// todo 检测一些需要通知或主动改变状态，通知用户,例如煤气传感器
-			ava.Debug("------", string(message))
+
+			var fromState stateData
+			err = x.MustUnmarshal(message, &fromState)
+			if err != nil {
+				ava.Error(err)
+				continue
+			}
+
+			if isXiaoMiSpeaker(fromState.Event.Data.NewState.EntityID) {
+				err = recevieMessage(home, fromState.Event.Data.NewState.State)
+				if err != nil {
+					ava.Error(err)
+					continue
+				}
+			}
+
 		}
 	}()
 
@@ -513,7 +674,7 @@ func websocketHa(home string) {
 	////发送心跳包
 	//var quit = make(chan string)
 	//x.TimingwheelTicker(time.Second*5, func() {
-	//	err := c.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintf(`{ "id": %d, "type": "ping" }`, atomic.AddInt32(&idIncrease, 1))))
+	//	err := conn.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintf(`{ "id": %d, "type": "ping" }`, atomic.AddInt32(&idIncrease, 1))))
 	//	if err != nil {
 	//		ava.Error(err)
 	//	}
@@ -528,7 +689,7 @@ func websocketHa(home string) {
 		//
 		//	// Cleanly close the connection by sending a close message and then
 		//	// waiting (with timeout) for the server to close the connection.
-		//	err := c.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
+		//	err := conn.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
 		//	if err != nil {
 		//		ava.Error(err)
 		//		return
@@ -544,7 +705,7 @@ func websocketHa(home string) {
 
 			// Cleanly close the connection by sending a close message and then
 			// waiting (with timeout) for the server to close the connection.
-			err := c.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
+			err := conn.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
 			if err != nil {
 				ava.Error(err)
 				return

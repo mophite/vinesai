@@ -30,6 +30,6 @@ func TimingwheelAfter(t time.Duration, f func()) {
 	tw.AfterFunc(t, f)
 }
 
-func TimingwheelTicker(t time.Duration, f func()) {
-	tw.ScheduleFunc(&EveryScheduler{Interval: t}, f)
+func TimingwheelTicker(t time.Duration, f func()) *timingwheel.Timer {
+	return tw.ScheduleFunc(&EveryScheduler{Interval: t}, f)
 }
