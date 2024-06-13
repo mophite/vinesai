@@ -1,7 +1,6 @@
 package mqtt
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -156,7 +155,7 @@ func mqttReportSubscribeInfrared() {
 				Take(&d).
 				Error
 
-			if errors.Is(err, gorm.ErrRecordNotFound) {
+			if err != nil && err.Error() == gorm.ErrRecordNotFound.Error() {
 				//数据不存在,插入数据
 				device := db_hub.Device{
 					DeviceType: "2",
@@ -287,7 +286,7 @@ func mqttReportSubscribe() {
 				Take(&d).
 				Error
 
-			if errors.Is(err, gorm.ErrRecordNotFound) {
+			if err != nil && err.Error() == gorm.ErrRecordNotFound.Error() {
 				//数据不存在,插入数据
 				return tx.Table(db_hub.TableDeviceList).Create(&device).Error
 			}

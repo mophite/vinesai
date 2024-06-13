@@ -210,13 +210,34 @@ ETCDCTL_API=3 etcdctl put configava/v1.0.0/public/ava.mongo '{ "dsn":"mongodb://
 
 docker run -d \
 --restart always \
---name homeassistant  \
+--name homeassistant_1  \
 -v /data/homeassistant/config:/config \
 -e TZ=Asia/Shanghai   \
--p 8123:8123   \
+-p 8124:8124   \
 homeassistant/home-assistant:latest
 
-docker exec -it 54eca8404f2e /bin/bash
+docker run -d \
+--restart always \
+--name homeassistant_bluetooth \
+-v /data/homeassistant/config:/config \
+-e TZ=Asia/Shanghai \
+-p 8123:8123 \
+--privileged \
+--network=host \
+--device /dev/hci0 \
+homeassistant/home-assistant:latest
+
+docker exec -it d7f2a9b8fc26 /bin/bash
+docker exec -it 599afbb1d950 /bin/bash
+
+
+docker run -d \
+--restart always \
+--name homeassistant_2  \
+-v /data/homeassistant_2/config:/config \
+-e TZ=Asia/Shanghai   \
+-p 8124:8124   \
+homeassistant/home-assistant:latest
 
 
 涂鸦：

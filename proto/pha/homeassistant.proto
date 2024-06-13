@@ -6,11 +6,27 @@ package pha;
 message CallReq{
   string message = 1;
   string home = 2;
+
 }
 
 message CallRsp{
   int32 code = 1;
   string msg = 2;
+}
+
+message speakerData{
+  string Role = 1;
+  string content = 2;
+}
+
+message SpeakerReq{
+  repeated speakerData Messages = 1;
+}
+
+message SpeakerRsp{
+  int32 code = 1;
+  string msg = 2;
+  string result = 3;
 }
 
 //获取指令集
@@ -44,7 +60,7 @@ message StatesRsp{
 
 service llm{
   rpc Call(CallReq)returns (CallRsp);
-  rpc CallWs(CallReq)returns (CallRsp);
+  rpc Speaker(SpeakerReq)returns (SpeakerRsp);
   rpc Services(ServicesReq)returns(ServicesRsp);
   rpc States(StatesReq)returns(StatesRsp);
 }

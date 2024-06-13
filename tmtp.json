@@ -1,0 +1,18 @@
+{
+  "task_id": "f7e66550-362d-42e8-b873-35fe2d792daf",
+  "workflow_run_id": "a8c98269-6286-4fec-b90d-3b0113e757d7",
+  "data": {
+    "id": "a8c98269-6286-4fec-b90d-3b0113e757d7",
+    "workflow_id": "45418130-23dc-42c5-a1e4-3c881b8425ae",
+    "status": "succeeded",
+    "outputs": {
+      "text": "{\"commands\": [{\"service\": \"light.turn_off\", \"data\": {\"entity_id\": \"light.smart_led_strip_2\"}}], \"replay\":\"\u597d\u7684\u4e3b\u4eba\uff0c\u5df2\u5173\u95ed\u5ba2\u5385led\"}"
+    },
+    "error": null,
+    "elapsed_time": 4.764073199003178,
+    "total_tokens": 1913,
+    "total_steps": 7,
+    "created_at": 1718265985,
+    "finished_at": 1718265989
+  }
+}

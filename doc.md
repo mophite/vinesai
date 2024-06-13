@@ -198,4 +198,14 @@ http://43.139.244.233:8123/api/services/text/set_value
 curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkOTQyYzVlYWI1ZWI0OWVhOWQxNzM2MjhhMDg0YWNlMyIsImlhdCI6MTcxNjM5MzU0OCwiZXhwIjoyMDMxNzUzNTQ4fQ.qqpUAAALF4-DQOsPT6sTuEXaZX8REjJkGM5rQF2bghY" \
 -H "Content-Type: application/json" \
 -d '{"entity_id":"media_player.xiaomi_l05c_7e78"}' \
-http://43.139.244.233:8123/api/services/media_player/media_stop
+http://43.139.244.233:8123/api/intent/handle
+
+
+curl -X POST 'http://223.72.19.182:8000/v1/workflows/run' \
+--header 'Authorization: Bearer app-gmhMQjOwBtsyYMfvlcQDx0E0' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+"inputs": {"query":"your name?"},
+"response_mode": "blocking",
+"user": "abc-123"
+}'

@@ -2,7 +2,6 @@ package ava
 
 import (
 	ctx "context"
-	"errors"
 	"sync"
 	"time"
 
@@ -377,11 +376,6 @@ func setupRequestResponse(r *Router, remoteIp string, setup payload.SetupPayload
 
 			err = r.RR(c, req, rsp)
 
-			if errors.Is(err, errNotFoundHandler) {
-				c.Errorf("err=%v |path=%s", err, c.Metadata.Method())
-				return mono.JustOneshot(payload.New(r.Error().Error404(c), nil))
-			}
-
 			if err != nil && rsp.Len() > 0 {
 				c.Error(err)
 				return mono.JustOneshot(payload.New(rsp.Bytes(), nil))
@@ -418,13 +412,8 @@ func setupFireAndForget(r *Router, remoteIp string, setup payload.SetupPayload) 
 
 			err = r.FF(c, req)
 
-			if errors.Is(err, errNotFoundHandler) {
-				c.Errorf("err=%v |path=%s", err, c.Metadata.Method())
-				return
-			}
-
 			if err != nil {
-				c.Error(err)
+				c.Errorf("err=%v |path=%s", err, c.Metadata.Method())
 				return
 			}
 

@@ -128,6 +128,162 @@ func (m *CallRsp) GetMsg() string {
 	return ""
 }
 
+type SpeakerData struct {
+	Role    string `protobuf:"bytes,1,opt,name=Role,proto3" json:"Role,omitempty"`
+	Content string `protobuf:"bytes,2,opt,name=content,proto3" json:"content,omitempty"`
+}
+
+func (m *SpeakerData) Reset()         { *m = SpeakerData{} }
+func (m *SpeakerData) String() string { return proto.CompactTextString(m) }
+func (*SpeakerData) ProtoMessage()    {}
+func (*SpeakerData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_368ef0c455d86bef, []int{2}
+}
+func (m *SpeakerData) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SpeakerData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_SpeakerData.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *SpeakerData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SpeakerData.Merge(m, src)
+}
+func (m *SpeakerData) XXX_Size() int {
+	return m.Size()
+}
+func (m *SpeakerData) XXX_DiscardUnknown() {
+	xxx_messageInfo_SpeakerData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SpeakerData proto.InternalMessageInfo
+
+func (m *SpeakerData) GetRole() string {
+	if m != nil {
+		return m.Role
+	}
+	return ""
+}
+
+func (m *SpeakerData) GetContent() string {
+	if m != nil {
+		return m.Content
+	}
+	return ""
+}
+
+type SpeakerReq struct {
+	Messages []*SpeakerData `protobuf:"bytes,1,rep,name=Messages,proto3" json:"Messages,omitempty"`
+}
+
+func (m *SpeakerReq) Reset()         { *m = SpeakerReq{} }
+func (m *SpeakerReq) String() string { return proto.CompactTextString(m) }
+func (*SpeakerReq) ProtoMessage()    {}
+func (*SpeakerReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_368ef0c455d86bef, []int{3}
+}
+func (m *SpeakerReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SpeakerReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_SpeakerReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *SpeakerReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SpeakerReq.Merge(m, src)
+}
+func (m *SpeakerReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *SpeakerReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_SpeakerReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SpeakerReq proto.InternalMessageInfo
+
+func (m *SpeakerReq) GetMessages() []*SpeakerData {
+	if m != nil {
+		return m.Messages
+	}
+	return nil
+}
+
+type SpeakerRsp struct {
+	Code   int32  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	Msg    string `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg,omitempty"`
+	Result string `protobuf:"bytes,3,opt,name=result,proto3" json:"result,omitempty"`
+}
+
+func (m *SpeakerRsp) Reset()         { *m = SpeakerRsp{} }
+func (m *SpeakerRsp) String() string { return proto.CompactTextString(m) }
+func (*SpeakerRsp) ProtoMessage()    {}
+func (*SpeakerRsp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_368ef0c455d86bef, []int{4}
+}
+func (m *SpeakerRsp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SpeakerRsp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_SpeakerRsp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *SpeakerRsp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SpeakerRsp.Merge(m, src)
+}
+func (m *SpeakerRsp) XXX_Size() int {
+	return m.Size()
+}
+func (m *SpeakerRsp) XXX_DiscardUnknown() {
+	xxx_messageInfo_SpeakerRsp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SpeakerRsp proto.InternalMessageInfo
+
+func (m *SpeakerRsp) GetCode() int32 {
+	if m != nil {
+		return m.Code
+	}
+	return 0
+}
+
+func (m *SpeakerRsp) GetMsg() string {
+	if m != nil {
+		return m.Msg
+	}
+	return ""
+}
+
+func (m *SpeakerRsp) GetResult() string {
+	if m != nil {
+		return m.Result
+	}
+	return ""
+}
+
 // 获取指令集
 type ServicesReq struct {
 }
@@ -136,7 +292,7 @@ func (m *ServicesReq) Reset()         { *m = ServicesReq{} }
 func (m *ServicesReq) String() string { return proto.CompactTextString(m) }
 func (*ServicesReq) ProtoMessage()    {}
 func (*ServicesReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_368ef0c455d86bef, []int{2}
+	return fileDescriptor_368ef0c455d86bef, []int{5}
 }
 func (m *ServicesReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -173,7 +329,7 @@ func (m *ServicesData) Reset()         { *m = ServicesData{} }
 func (m *ServicesData) String() string { return proto.CompactTextString(m) }
 func (*ServicesData) ProtoMessage()    {}
 func (*ServicesData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_368ef0c455d86bef, []int{3}
+	return fileDescriptor_368ef0c455d86bef, []int{6}
 }
 func (m *ServicesData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -219,7 +375,7 @@ func (m *ServicesRsp) Reset()         { *m = ServicesRsp{} }
 func (m *ServicesRsp) String() string { return proto.CompactTextString(m) }
 func (*ServicesRsp) ProtoMessage()    {}
 func (*ServicesRsp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_368ef0c455d86bef, []int{4}
+	return fileDescriptor_368ef0c455d86bef, []int{7}
 }
 func (m *ServicesRsp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -277,7 +433,7 @@ func (m *StatesReq) Reset()         { *m = StatesReq{} }
 func (m *StatesReq) String() string { return proto.CompactTextString(m) }
 func (*StatesReq) ProtoMessage()    {}
 func (*StatesReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_368ef0c455d86bef, []int{5}
+	return fileDescriptor_368ef0c455d86bef, []int{8}
 }
 func (m *StatesReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -314,7 +470,7 @@ func (m *StatesData) Reset()         { *m = StatesData{} }
 func (m *StatesData) String() string { return proto.CompactTextString(m) }
 func (*StatesData) ProtoMessage()    {}
 func (*StatesData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_368ef0c455d86bef, []int{6}
+	return fileDescriptor_368ef0c455d86bef, []int{9}
 }
 func (m *StatesData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -360,7 +516,7 @@ func (m *StatesRsp) Reset()         { *m = StatesRsp{} }
 func (m *StatesRsp) String() string { return proto.CompactTextString(m) }
 func (*StatesRsp) ProtoMessage()    {}
 func (*StatesRsp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_368ef0c455d86bef, []int{7}
+	return fileDescriptor_368ef0c455d86bef, []int{10}
 }
 func (m *StatesRsp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -413,6 +569,9 @@ func (m *StatesRsp) GetData() *StatesData {
 func init() {
 	proto.RegisterType((*CallReq)(nil), "pha.CallReq")
 	proto.RegisterType((*CallRsp)(nil), "pha.CallRsp")
+	proto.RegisterType((*SpeakerData)(nil), "pha.speakerData")
+	proto.RegisterType((*SpeakerReq)(nil), "pha.SpeakerReq")
+	proto.RegisterType((*SpeakerRsp)(nil), "pha.SpeakerRsp")
 	proto.RegisterType((*ServicesReq)(nil), "pha.ServicesReq")
 	proto.RegisterType((*ServicesData)(nil), "pha.servicesData")
 	proto.RegisterType((*ServicesRsp)(nil), "pha.ServicesRsp")
@@ -424,29 +583,34 @@ func init() {
 func init() { proto.RegisterFile("proto/pha/homeassistant.proto", fileDescriptor_368ef0c455d86bef) }
 
 var fileDescriptor_368ef0c455d86bef = []byte{
-	// 338 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x92, 0x41, 0x4f, 0xea, 0x40,
-	0x10, 0x80, 0x59, 0xca, 0x2b, 0x30, 0xf0, 0xde, 0xe3, 0xcd, 0xe1, 0xa5, 0x69, 0x62, 0x43, 0x56,
-	0x4c, 0x88, 0x87, 0x92, 0xe0, 0xc1, 0xbb, 0xfa, 0x0b, 0x4a, 0xa2, 0x89, 0xb7, 0x15, 0x36, 0x94,
-	0xa4, 0xb5, 0x0b, 0xb3, 0xf1, 0x77, 0xf8, 0x37, 0xfc, 0x27, 0x1e, 0x39, 0x7a, 0x34, 0xf0, 0x47,
-	0x4c, 0x77, 0xb7, 0x58, 0x3d, 0x10, 0x6f, 0xf3, 0xcd, 0xec, 0x74, 0xbe, 0xce, 0x2e, 0x9c, 0xa8,
-	0x4d, 0xa1, 0x8b, 0x89, 0x4a, 0xc5, 0x24, 0x2d, 0x72, 0x29, 0x88, 0x56, 0xa4, 0xc5, 0xa3, 0x8e,
-	0x4d, 0x1e, 0x3d, 0x95, 0x0a, 0x7e, 0x09, 0xed, 0x6b, 0x91, 0x65, 0x89, 0x5c, 0x63, 0x00, 0xed,
-	0x5c, 0x12, 0x89, 0xa5, 0x0c, 0xd8, 0x90, 0x8d, 0xbb, 0x49, 0x85, 0x88, 0xd0, 0x2a, 0x3f, 0x10,
-	0x34, 0x4d, 0xda, 0xc4, 0x7c, 0xe2, 0x1a, 0x49, 0x95, 0xe5, 0x79, 0xb1, 0xb0, 0x5d, 0xbf, 0x12,
-	0x13, 0xe3, 0x00, 0xbc, 0x9c, 0x96, 0xae, 0xa3, 0x0c, 0xf9, 0x6f, 0xe8, 0xcd, 0xe4, 0xe6, 0x69,
-	0x35, 0x97, 0x94, 0xc8, 0x35, 0x3f, 0x87, 0x3e, 0x39, 0xbc, 0x11, 0x5a, 0x60, 0x08, 0x9d, 0x8a,
-	0xdd, 0xf8, 0x03, 0xf3, 0xfb, 0x5a, 0xeb, 0x4f, 0xe7, 0xe1, 0x19, 0xb4, 0x16, 0x42, 0x8b, 0xc0,
-	0x1b, 0xb2, 0x71, 0x6f, 0xfa, 0x2f, 0x56, 0xa9, 0x88, 0xeb, 0x13, 0x13, 0x53, 0xe6, 0x3d, 0xe8,
-	0xce, 0xb4, 0xd0, 0x56, 0x6a, 0x04, 0x40, 0x06, 0x8c, 0xd2, 0x7f, 0xf0, 0x2d, 0x39, 0x21, 0x47,
-	0xfc, 0xf6, 0xd0, 0x72, 0x5c, 0xc6, 0xfb, 0x94, 0x39, 0x75, 0x32, 0x4d, 0x23, 0xf3, 0xd7, 0xca,
-	0x1c, 0x26, 0x59, 0x95, 0xe9, 0x0b, 0x03, 0x2f, 0xcb, 0x72, 0xe4, 0xd0, 0x2a, 0x57, 0x8b, 0x7d,
-	0x73, 0xcc, 0x5d, 0x4f, 0x58, 0x23, 0x52, 0x38, 0x02, 0xbf, 0x0c, 0xef, 0xe8, 0xe8, 0xa9, 0x18,
-	0x3a, 0xd5, 0xe2, 0x70, 0x60, 0x2a, 0xb5, 0x2b, 0x08, 0xbf, 0x65, 0x48, 0xe1, 0x18, 0x7c, 0xfb,
-	0x67, 0xf8, 0xc7, 0xd6, 0xaa, 0xcd, 0x84, 0x5f, 0x98, 0xd4, 0x55, 0xf0, 0xba, 0x8b, 0xd8, 0x76,
-	0x17, 0xb1, 0xf7, 0x5d, 0xc4, 0x9e, 0xf7, 0x51, 0x63, 0xbb, 0x8f, 0x1a, 0x6f, 0xfb, 0xa8, 0xf1,
-	0xe0, 0x9b, 0xd7, 0x75, 0xf1, 0x11, 0x00, 0x00, 0xff, 0xff, 0x21, 0x7b, 0xf1, 0x16, 0x7e, 0x02,
-	0x00, 0x00,
+	// 417 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x93, 0xc1, 0x6e, 0xda, 0x40,
+	0x10, 0x86, 0x31, 0xa6, 0x06, 0xc6, 0xb4, 0xa5, 0x7b, 0x40, 0x96, 0xa5, 0x5a, 0x68, 0xdb, 0x4a,
+	0xa8, 0xad, 0x8c, 0x44, 0x0f, 0x95, 0x92, 0x5b, 0x92, 0x53, 0xa4, 0x5c, 0x8c, 0x94, 0x43, 0x6e,
+	0x1b, 0x58, 0x61, 0x14, 0x1b, 0x2f, 0x9e, 0x4d, 0x9e, 0x23, 0x8f, 0x92, 0xc7, 0xc8, 0x91, 0x63,
+	0x8e, 0x11, 0xbc, 0x48, 0xe4, 0xdd, 0xb5, 0x31, 0x39, 0x44, 0xdc, 0xe6, 0x9f, 0xf5, 0x3f, 0xf3,
+	0xcd, 0xce, 0x1a, 0xbe, 0x8b, 0x3c, 0x93, 0xd9, 0x58, 0xc4, 0x6c, 0x1c, 0x67, 0x29, 0x67, 0x88,
+	0x4b, 0x94, 0x6c, 0x25, 0x43, 0x95, 0x27, 0xb6, 0x88, 0x19, 0xfd, 0x0f, 0xed, 0x73, 0x96, 0x24,
+	0x11, 0x5f, 0x13, 0x0f, 0xda, 0x29, 0x47, 0x64, 0x0b, 0xee, 0x59, 0x43, 0x6b, 0xd4, 0x8d, 0x4a,
+	0x49, 0x08, 0xb4, 0x8a, 0x02, 0x5e, 0x53, 0xa5, 0x55, 0x4c, 0xc7, 0xc6, 0x88, 0xa2, 0x38, 0x9e,
+	0x65, 0x73, 0xed, 0xfa, 0x14, 0xa9, 0x98, 0xf4, 0xc1, 0x4e, 0x71, 0x61, 0x1c, 0x45, 0x48, 0x4f,
+	0xc1, 0x45, 0xc1, 0xd9, 0x1d, 0xcf, 0x2f, 0x98, 0x64, 0x85, 0x29, 0xca, 0x92, 0xb2, 0x95, 0x8a,
+	0x0b, 0x82, 0x59, 0xb6, 0x92, 0x7c, 0x25, 0x8d, 0xb1, 0x94, 0xf4, 0x04, 0x60, 0xaa, 0xcd, 0x05,
+	0xe9, 0x5f, 0xe8, 0x5c, 0x69, 0x34, 0xf4, 0xac, 0xa1, 0x3d, 0x72, 0x27, 0xfd, 0x50, 0xc4, 0x2c,
+	0xac, 0xd5, 0x8f, 0xaa, 0x2f, 0xe8, 0xe5, 0xde, 0x7b, 0x2c, 0x2c, 0x19, 0x80, 0x93, 0x73, 0xbc,
+	0x4f, 0xa4, 0x67, 0xab, 0xa4, 0x51, 0xf4, 0x33, 0xb8, 0x53, 0x9e, 0x3f, 0x2c, 0x67, 0x1c, 0x23,
+	0xbe, 0xa6, 0xbf, 0xa1, 0x87, 0x46, 0xaa, 0xa1, 0x7c, 0xe8, 0x94, 0xda, 0x0c, 0x56, 0x69, 0x7a,
+	0x53, 0xb3, 0x1e, 0xcd, 0xf1, 0x0b, 0x5a, 0x73, 0x26, 0x99, 0xa2, 0x70, 0x27, 0xdf, 0xf4, 0x94,
+	0xb5, 0x8e, 0x91, 0x3a, 0xa6, 0x2e, 0x74, 0xa7, 0x92, 0x49, 0x0d, 0xf5, 0x13, 0x00, 0x95, 0x50,
+	0x48, 0x03, 0x70, 0xb4, 0x32, 0x40, 0x46, 0xd1, 0xeb, 0xca, 0xf2, 0x31, 0x8c, 0xbd, 0x87, 0xf9,
+	0x61, 0x60, 0x9a, 0x0a, 0xe6, 0xab, 0x86, 0xa9, 0x3a, 0x69, 0x94, 0xc9, 0x93, 0x05, 0x76, 0x92,
+	0xa4, 0x84, 0x42, 0xab, 0x78, 0x1f, 0xa4, 0xa7, 0x3e, 0x33, 0x6f, 0xcc, 0xaf, 0x29, 0x14, 0xe4,
+	0x0f, 0xb4, 0xcd, 0x66, 0x88, 0xae, 0xb6, 0xdf, 0xb1, 0x7f, 0x98, 0x40, 0x41, 0x42, 0xe8, 0x94,
+	0xf7, 0x47, 0xf4, 0xba, 0x6b, 0x9b, 0xf0, 0xdf, 0x65, 0x50, 0x90, 0x11, 0x38, 0x7a, 0x40, 0xf2,
+	0x45, 0x9f, 0x95, 0x17, 0xe4, 0x1f, 0x68, 0x14, 0x67, 0xde, 0xf3, 0x36, 0xb0, 0x36, 0xdb, 0xc0,
+	0x7a, 0xdd, 0x06, 0xd6, 0xe3, 0x2e, 0x68, 0x6c, 0x76, 0x41, 0xe3, 0x65, 0x17, 0x34, 0x6e, 0x1d,
+	0xf5, 0xa7, 0xfc, 0x7b, 0x0b, 0x00, 0x00, 0xff, 0xff, 0xca, 0xc5, 0xbe, 0xe8, 0x4a, 0x03, 0x00,
+	0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -458,7 +622,7 @@ const _ = ava.SupportPackageIsVersion1
 
 type LlmClient interface {
 	Call(c *ava.Context, req *CallReq, opts ...ava.InvokeOptions) (*CallRsp, error)
-	CallWs(c *ava.Context, req *CallReq, opts ...ava.InvokeOptions) (*CallRsp, error)
+	Speaker(c *ava.Context, req *SpeakerReq, opts ...ava.InvokeOptions) (*SpeakerRsp, error)
 	Services(c *ava.Context, req *ServicesReq, opts ...ava.InvokeOptions) (*ServicesRsp, error)
 	States(c *ava.Context, req *StatesReq, opts ...ava.InvokeOptions) (*StatesRsp, error)
 }
@@ -477,9 +641,9 @@ func (cc *llmClient) Call(c *ava.Context, req *CallReq, opts ...ava.InvokeOption
 	return rsp, err
 }
 
-func (cc *llmClient) CallWs(c *ava.Context, req *CallReq, opts ...ava.InvokeOptions) (*CallRsp, error) {
-	rsp := &CallRsp{}
-	err := cc.c.InvokeRR(c, "/llm/callws", req, rsp, opts...)
+func (cc *llmClient) Speaker(c *ava.Context, req *SpeakerReq, opts ...ava.InvokeOptions) (*SpeakerRsp, error) {
+	rsp := &SpeakerRsp{}
+	err := cc.c.InvokeRR(c, "/llm/speaker", req, rsp, opts...)
 	return rsp, err
 }
 
@@ -498,7 +662,7 @@ func (cc *llmClient) States(c *ava.Context, req *StatesReq, opts ...ava.InvokeOp
 // LlmServer is the server API for Llm ava.
 type LlmServer interface {
 	Call(c *ava.Context, req *CallReq, rsp *CallRsp)
-	CallWs(c *ava.Context, req *CallReq, rsp *CallRsp)
+	Speaker(c *ava.Context, req *SpeakerReq, rsp *SpeakerRsp)
 	Services(c *ava.Context, req *ServicesReq, rsp *ServicesRsp)
 	States(c *ava.Context, req *StatesReq, rsp *StatesRsp)
 }
@@ -506,7 +670,7 @@ type LlmServer interface {
 func RegisterLlmServer(h LlmServer) {
 	var r = &llmHandler{h: h}
 	ava.AvaServer().RegisterHandler("/"+ava.AvaServer().Name()+"/llm/call", r.Call)
-	ava.AvaServer().RegisterHandler("/"+ava.AvaServer().Name()+"/llm/callws", r.CallWs)
+	ava.AvaServer().RegisterHandler("/"+ava.AvaServer().Name()+"/llm/speaker", r.Speaker)
 	ava.AvaServer().RegisterHandler("/"+ava.AvaServer().Name()+"/llm/services", r.Services)
 	ava.AvaServer().RegisterHandler("/"+ava.AvaServer().Name()+"/llm/states", r.States)
 }
@@ -534,20 +698,20 @@ func (r *llmHandler) Call(c *ava.Context, req *ava.Packet, interrupt ava.Interce
 	return interrupt(c, &in, f)
 }
 
-func (r *llmHandler) CallWs(c *ava.Context, req *ava.Packet, interrupt ava.Interceptor) (rsp proto.Message, err error) {
-	var in CallReq
+func (r *llmHandler) Speaker(c *ava.Context, req *ava.Packet, interrupt ava.Interceptor) (rsp proto.Message, err error) {
+	var in SpeakerReq
 	err = c.Codec().Decode(req.Bytes(), &in)
 	if err != nil {
 		c.Errorf("server decode packet err=%v |method=%s |data=%s", err, c.Metadata.Method(), req.String())
 		return nil, err
 	}
-	var out = CallRsp{}
+	var out = SpeakerRsp{}
 	if interrupt == nil {
-		r.h.CallWs(c, &in, &out)
+		r.h.Speaker(c, &in, &out)
 		return &out, err
 	}
 	f := func(c *ava.Context, req proto.Message) proto.Message {
-		r.h.CallWs(c, req.(*CallReq), &out)
+		r.h.Speaker(c, req.(*SpeakerReq), &out)
 		return &out
 	}
 	return interrupt(c, &in, f)
@@ -648,6 +812,122 @@ func (m *CallRsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.Msg) > 0 {
+		i -= len(m.Msg)
+		copy(dAtA[i:], m.Msg)
+		i = encodeVarintHomeassistant(dAtA, i, uint64(len(m.Msg)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Code != 0 {
+		i = encodeVarintHomeassistant(dAtA, i, uint64(m.Code))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SpeakerData) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SpeakerData) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SpeakerData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Content) > 0 {
+		i -= len(m.Content)
+		copy(dAtA[i:], m.Content)
+		i = encodeVarintHomeassistant(dAtA, i, uint64(len(m.Content)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Role) > 0 {
+		i -= len(m.Role)
+		copy(dAtA[i:], m.Role)
+		i = encodeVarintHomeassistant(dAtA, i, uint64(len(m.Role)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SpeakerReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SpeakerReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SpeakerReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Messages) > 0 {
+		for iNdEx := len(m.Messages) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Messages[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintHomeassistant(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SpeakerRsp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SpeakerRsp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SpeakerRsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Result) > 0 {
+		i -= len(m.Result)
+		copy(dAtA[i:], m.Result)
+		i = encodeVarintHomeassistant(dAtA, i, uint64(len(m.Result)))
+		i--
+		dAtA[i] = 0x1a
+	}
 	if len(m.Msg) > 0 {
 		i -= len(m.Msg)
 		copy(dAtA[i:], m.Msg)
@@ -901,6 +1181,58 @@ func (m *CallRsp) Size() (n int) {
 		n += 1 + sovHomeassistant(uint64(m.Code))
 	}
 	l = len(m.Msg)
+	if l > 0 {
+		n += 1 + l + sovHomeassistant(uint64(l))
+	}
+	return n
+}
+
+func (m *SpeakerData) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Role)
+	if l > 0 {
+		n += 1 + l + sovHomeassistant(uint64(l))
+	}
+	l = len(m.Content)
+	if l > 0 {
+		n += 1 + l + sovHomeassistant(uint64(l))
+	}
+	return n
+}
+
+func (m *SpeakerReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Messages) > 0 {
+		for _, e := range m.Messages {
+			l = e.Size()
+			n += 1 + l + sovHomeassistant(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *SpeakerRsp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Code != 0 {
+		n += 1 + sovHomeassistant(uint64(m.Code))
+	}
+	l = len(m.Msg)
+	if l > 0 {
+		n += 1 + l + sovHomeassistant(uint64(l))
+	}
+	l = len(m.Result)
 	if l > 0 {
 		n += 1 + l + sovHomeassistant(uint64(l))
 	}
@@ -1190,6 +1522,337 @@ func (m *CallRsp) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Msg = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipHomeassistant(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SpeakerData) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowHomeassistant
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: speakerData: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: speakerData: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Role", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowHomeassistant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Role = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Content", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowHomeassistant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Content = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipHomeassistant(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SpeakerReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowHomeassistant
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SpeakerReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SpeakerReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Messages", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowHomeassistant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Messages = append(m.Messages, &SpeakerData{})
+			if err := m.Messages[len(m.Messages)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipHomeassistant(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SpeakerRsp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowHomeassistant
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SpeakerRsp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SpeakerRsp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Code", wireType)
+			}
+			m.Code = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowHomeassistant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Code |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Msg", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowHomeassistant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Msg = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowHomeassistant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Result = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

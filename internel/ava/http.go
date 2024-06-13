@@ -69,7 +69,7 @@ func handlerServerHttp(c *Context, s *Server, w http.ResponseWriter, r *http.Req
 		var h *multipart.FileHeader
 		f, h, err = r.FormFile("file")
 		if err != nil {
-			Error(err)
+			c.Error(err)
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write(s.opts.Err.Error400(c))
 			return
@@ -88,7 +88,7 @@ func handlerServerHttp(c *Context, s *Server, w http.ResponseWriter, r *http.Req
 		var fb []byte
 		fb, err = c.Codec().Encode(fileReq)
 		if err != nil {
-			Error(err)
+			c.Error(err)
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write(s.opts.Err.Error400(c))
 			return
@@ -119,7 +119,7 @@ func handlerServerHttp(c *Context, s *Server, w http.ResponseWriter, r *http.Req
 		var fb []byte
 		fb, err = c.Codec().Encode(apiReq)
 		if err != nil {
-			Error(err)
+			c.Error(err)
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write(s.opts.Err.Error400(c))
 			return
@@ -145,15 +145,8 @@ func handlerServerHttp(c *Context, s *Server, w http.ResponseWriter, r *http.Req
 		}
 	}
 
-	if err == errNotFoundHandler {
-		c.Errorf("err=%v |path=%s", err, c.Metadata.Method())
-		w.WriteHeader(http.StatusNotFound)
-		w.Write(s.opts.Err.Error404(c))
-		return
-	}
-
 	if err != nil {
-		Error(err)
+		c.Error(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write(s.opts.Err.Error500(c))
 		return
