@@ -19,11 +19,12 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"github.com/coreos/etcd/clientv3"
-	"github.com/coreos/etcd/clientv3/concurrency"
 	"strings"
 	"sync"
 	"time"
+
+	"go.etcd.io/etcd/client/v3"
+	"go.etcd.io/etcd/client/v3/concurrency"
 )
 
 var defaultEtcd *etcd

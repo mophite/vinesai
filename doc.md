@@ -209,3 +209,8 @@ curl -X POST 'http://223.72.19.182:8000/v1/workflows/run' \
 "response_mode": "blocking",
 "user": "abc-123"
 }'
+
+["system":"你是一个智能家居管家"]
+["user":"你回复的数据格式是什么"]
+["assistant":{"text":{"reply":"这是一个正确的数据格式"}}]
+["user":"开始正式提问"]

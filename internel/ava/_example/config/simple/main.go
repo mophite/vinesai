@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/coreos/etcd/clientv3"
 	"vinesai/internel/ava"
+
+	"go.etcd.io/etcd/client/v3"
 )
 
 func main() {

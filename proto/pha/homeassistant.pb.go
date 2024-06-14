@@ -566,6 +566,170 @@ func (m *StatesRsp) GetData() *StatesData {
 	return nil
 }
 
+type AuthReq struct {
+	Phone string `protobuf:"bytes,1,opt,name=phone,proto3" json:"phone,omitempty"`
+	Code  string `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`
+}
+
+func (m *AuthReq) Reset()         { *m = AuthReq{} }
+func (m *AuthReq) String() string { return proto.CompactTextString(m) }
+func (*AuthReq) ProtoMessage()    {}
+func (*AuthReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_368ef0c455d86bef, []int{11}
+}
+func (m *AuthReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AuthReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AuthReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AuthReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AuthReq.Merge(m, src)
+}
+func (m *AuthReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *AuthReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_AuthReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AuthReq proto.InternalMessageInfo
+
+func (m *AuthReq) GetPhone() string {
+	if m != nil {
+		return m.Phone
+	}
+	return ""
+}
+
+func (m *AuthReq) GetCode() string {
+	if m != nil {
+		return m.Code
+	}
+	return ""
+}
+
+type AuthRspData struct {
+	RedirectUrl string `protobuf:"bytes,1,opt,name=redirect_url,json=redirectUrl,proto3" json:"redirect_url,omitempty"`
+	AccessToken string `protobuf:"bytes,3,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
+}
+
+func (m *AuthRspData) Reset()         { *m = AuthRspData{} }
+func (m *AuthRspData) String() string { return proto.CompactTextString(m) }
+func (*AuthRspData) ProtoMessage()    {}
+func (*AuthRspData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_368ef0c455d86bef, []int{12}
+}
+func (m *AuthRspData) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AuthRspData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AuthRspData.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AuthRspData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AuthRspData.Merge(m, src)
+}
+func (m *AuthRspData) XXX_Size() int {
+	return m.Size()
+}
+func (m *AuthRspData) XXX_DiscardUnknown() {
+	xxx_messageInfo_AuthRspData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AuthRspData proto.InternalMessageInfo
+
+func (m *AuthRspData) GetRedirectUrl() string {
+	if m != nil {
+		return m.RedirectUrl
+	}
+	return ""
+}
+
+func (m *AuthRspData) GetAccessToken() string {
+	if m != nil {
+		return m.AccessToken
+	}
+	return ""
+}
+
+type AuthRsp struct {
+	Code int32        `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	Msg  string       `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg,omitempty"`
+	Data *AuthRspData `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+}
+
+func (m *AuthRsp) Reset()         { *m = AuthRsp{} }
+func (m *AuthRsp) String() string { return proto.CompactTextString(m) }
+func (*AuthRsp) ProtoMessage()    {}
+func (*AuthRsp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_368ef0c455d86bef, []int{13}
+}
+func (m *AuthRsp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AuthRsp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AuthRsp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AuthRsp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AuthRsp.Merge(m, src)
+}
+func (m *AuthRsp) XXX_Size() int {
+	return m.Size()
+}
+func (m *AuthRsp) XXX_DiscardUnknown() {
+	xxx_messageInfo_AuthRsp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AuthRsp proto.InternalMessageInfo
+
+func (m *AuthRsp) GetCode() int32 {
+	if m != nil {
+		return m.Code
+	}
+	return 0
+}
+
+func (m *AuthRsp) GetMsg() string {
+	if m != nil {
+		return m.Msg
+	}
+	return ""
+}
+
+func (m *AuthRsp) GetData() *AuthRspData {
+	if m != nil {
+		return m.Data
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*CallReq)(nil), "pha.CallReq")
 	proto.RegisterType((*CallRsp)(nil), "pha.CallRsp")
@@ -578,39 +742,48 @@ func init() {
 	proto.RegisterType((*StatesReq)(nil), "pha.StatesReq")
 	proto.RegisterType((*StatesData)(nil), "pha.statesData")
 	proto.RegisterType((*StatesRsp)(nil), "pha.StatesRsp")
+	proto.RegisterType((*AuthReq)(nil), "pha.AuthReq")
+	proto.RegisterType((*AuthRspData)(nil), "pha.authRspData")
+	proto.RegisterType((*AuthRsp)(nil), "pha.AuthRsp")
 }
 
 func init() { proto.RegisterFile("proto/pha/homeassistant.proto", fileDescriptor_368ef0c455d86bef) }
 
 var fileDescriptor_368ef0c455d86bef = []byte{
-	// 417 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x93, 0xc1, 0x6e, 0xda, 0x40,
-	0x10, 0x86, 0x31, 0xa6, 0x06, 0xc6, 0xb4, 0xa5, 0x7b, 0x40, 0x96, 0xa5, 0x5a, 0x68, 0xdb, 0x4a,
-	0xa8, 0xad, 0x8c, 0x44, 0x0f, 0x95, 0x92, 0x5b, 0x92, 0x53, 0xa4, 0x5c, 0x8c, 0x94, 0x43, 0x6e,
-	0x1b, 0x58, 0x61, 0x14, 0x1b, 0x2f, 0x9e, 0x4d, 0x9e, 0x23, 0x8f, 0x92, 0xc7, 0xc8, 0x91, 0x63,
-	0x8e, 0x11, 0xbc, 0x48, 0xe4, 0xdd, 0xb5, 0x31, 0x39, 0x44, 0xdc, 0xe6, 0x9f, 0xf5, 0x3f, 0xf3,
-	0xcd, 0xce, 0x1a, 0xbe, 0x8b, 0x3c, 0x93, 0xd9, 0x58, 0xc4, 0x6c, 0x1c, 0x67, 0x29, 0x67, 0x88,
-	0x4b, 0x94, 0x6c, 0x25, 0x43, 0x95, 0x27, 0xb6, 0x88, 0x19, 0xfd, 0x0f, 0xed, 0x73, 0x96, 0x24,
-	0x11, 0x5f, 0x13, 0x0f, 0xda, 0x29, 0x47, 0x64, 0x0b, 0xee, 0x59, 0x43, 0x6b, 0xd4, 0x8d, 0x4a,
-	0x49, 0x08, 0xb4, 0x8a, 0x02, 0x5e, 0x53, 0xa5, 0x55, 0x4c, 0xc7, 0xc6, 0x88, 0xa2, 0x38, 0x9e,
-	0x65, 0x73, 0xed, 0xfa, 0x14, 0xa9, 0x98, 0xf4, 0xc1, 0x4e, 0x71, 0x61, 0x1c, 0x45, 0x48, 0x4f,
-	0xc1, 0x45, 0xc1, 0xd9, 0x1d, 0xcf, 0x2f, 0x98, 0x64, 0x85, 0x29, 0xca, 0x92, 0xb2, 0x95, 0x8a,
-	0x0b, 0x82, 0x59, 0xb6, 0x92, 0x7c, 0x25, 0x8d, 0xb1, 0x94, 0xf4, 0x04, 0x60, 0xaa, 0xcd, 0x05,
-	0xe9, 0x5f, 0xe8, 0x5c, 0x69, 0x34, 0xf4, 0xac, 0xa1, 0x3d, 0x72, 0x27, 0xfd, 0x50, 0xc4, 0x2c,
-	0xac, 0xd5, 0x8f, 0xaa, 0x2f, 0xe8, 0xe5, 0xde, 0x7b, 0x2c, 0x2c, 0x19, 0x80, 0x93, 0x73, 0xbc,
-	0x4f, 0xa4, 0x67, 0xab, 0xa4, 0x51, 0xf4, 0x33, 0xb8, 0x53, 0x9e, 0x3f, 0x2c, 0x67, 0x1c, 0x23,
-	0xbe, 0xa6, 0xbf, 0xa1, 0x87, 0x46, 0xaa, 0xa1, 0x7c, 0xe8, 0x94, 0xda, 0x0c, 0x56, 0x69, 0x7a,
-	0x53, 0xb3, 0x1e, 0xcd, 0xf1, 0x0b, 0x5a, 0x73, 0x26, 0x99, 0xa2, 0x70, 0x27, 0xdf, 0xf4, 0x94,
-	0xb5, 0x8e, 0x91, 0x3a, 0xa6, 0x2e, 0x74, 0xa7, 0x92, 0x49, 0x0d, 0xf5, 0x13, 0x00, 0x95, 0x50,
-	0x48, 0x03, 0x70, 0xb4, 0x32, 0x40, 0x46, 0xd1, 0xeb, 0xca, 0xf2, 0x31, 0x8c, 0xbd, 0x87, 0xf9,
-	0x61, 0x60, 0x9a, 0x0a, 0xe6, 0xab, 0x86, 0xa9, 0x3a, 0x69, 0x94, 0xc9, 0x93, 0x05, 0x76, 0x92,
-	0xa4, 0x84, 0x42, 0xab, 0x78, 0x1f, 0xa4, 0xa7, 0x3e, 0x33, 0x6f, 0xcc, 0xaf, 0x29, 0x14, 0xe4,
-	0x0f, 0xb4, 0xcd, 0x66, 0x88, 0xae, 0xb6, 0xdf, 0xb1, 0x7f, 0x98, 0x40, 0x41, 0x42, 0xe8, 0x94,
-	0xf7, 0x47, 0xf4, 0xba, 0x6b, 0x9b, 0xf0, 0xdf, 0x65, 0x50, 0x90, 0x11, 0x38, 0x7a, 0x40, 0xf2,
-	0x45, 0x9f, 0x95, 0x17, 0xe4, 0x1f, 0x68, 0x14, 0x67, 0xde, 0xf3, 0x36, 0xb0, 0x36, 0xdb, 0xc0,
-	0x7a, 0xdd, 0x06, 0xd6, 0xe3, 0x2e, 0x68, 0x6c, 0x76, 0x41, 0xe3, 0x65, 0x17, 0x34, 0x6e, 0x1d,
-	0xf5, 0xa7, 0xfc, 0x7b, 0x0b, 0x00, 0x00, 0xff, 0xff, 0xca, 0xc5, 0xbe, 0xe8, 0x4a, 0x03, 0x00,
-	0x00,
+	// 523 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x94, 0xcd, 0x6e, 0xd3, 0x40,
+	0x10, 0xc7, 0xe3, 0x3a, 0x5f, 0x1d, 0x07, 0x28, 0x2b, 0x54, 0x59, 0x96, 0xb0, 0xca, 0xd2, 0x4a,
+	0x11, 0x1f, 0x89, 0x94, 0x1e, 0x90, 0xe0, 0xc4, 0xc7, 0x09, 0xc1, 0xc5, 0xa1, 0x1c, 0xb8, 0x54,
+	0x8b, 0xb3, 0x8a, 0xa3, 0x3a, 0xf6, 0x76, 0x67, 0xc3, 0x73, 0xf0, 0x28, 0x3c, 0x06, 0xc7, 0x1c,
+	0x39, 0xa2, 0xe4, 0x45, 0xd0, 0x7e, 0xd8, 0x71, 0x38, 0x54, 0xb9, 0xcd, 0x7f, 0x76, 0xff, 0x9e,
+	0xdf, 0xee, 0xcc, 0x1a, 0x1e, 0x0b, 0x59, 0xaa, 0x72, 0x2c, 0x32, 0x36, 0xce, 0xca, 0x25, 0x67,
+	0x88, 0x0b, 0x54, 0xac, 0x50, 0x23, 0x93, 0x27, 0xbe, 0xc8, 0x18, 0x7d, 0x05, 0xbd, 0xf7, 0x2c,
+	0xcf, 0x13, 0x7e, 0x4b, 0x42, 0xe8, 0x2d, 0x39, 0x22, 0x9b, 0xf3, 0xd0, 0x3b, 0xf3, 0x86, 0xc7,
+	0x49, 0x25, 0x09, 0x81, 0xb6, 0xfe, 0x40, 0x78, 0x64, 0xd2, 0x26, 0xa6, 0x63, 0x67, 0x44, 0xa1,
+	0x97, 0xd3, 0x72, 0x66, 0x5d, 0x9d, 0xc4, 0xc4, 0xe4, 0x04, 0xfc, 0x25, 0xce, 0x9d, 0x43, 0x87,
+	0xf4, 0x0d, 0x04, 0x28, 0x38, 0xbb, 0xe1, 0xf2, 0x03, 0x53, 0x4c, 0x9b, 0x92, 0x32, 0xaf, 0x4a,
+	0x99, 0x58, 0x13, 0xa4, 0x65, 0xa1, 0x78, 0xa1, 0x9c, 0xb1, 0x92, 0xf4, 0x35, 0xc0, 0xd4, 0x9a,
+	0x35, 0xe9, 0x0b, 0xe8, 0x7f, 0xb6, 0x68, 0x18, 0x7a, 0x67, 0xfe, 0x30, 0x98, 0x9c, 0x8c, 0x44,
+	0xc6, 0x46, 0x8d, 0xef, 0x27, 0xf5, 0x0e, 0xfa, 0x71, 0xe7, 0x3d, 0x14, 0x96, 0x9c, 0x42, 0x57,
+	0x72, 0x5c, 0xe5, 0x2a, 0xf4, 0x4d, 0xd2, 0x29, 0x7a, 0x0f, 0x82, 0x29, 0x97, 0x3f, 0x16, 0x29,
+	0xc7, 0x84, 0xdf, 0xd2, 0x67, 0x30, 0x40, 0x27, 0xcd, 0xa1, 0x22, 0xe8, 0x57, 0xda, 0x1d, 0xac,
+	0xd6, 0xf4, 0x5b, 0xc3, 0x7a, 0x30, 0xc7, 0x05, 0xb4, 0x67, 0x4c, 0x31, 0x43, 0x11, 0x4c, 0x1e,
+	0xda, 0x53, 0x36, 0x2a, 0x26, 0x66, 0x99, 0x06, 0x70, 0x3c, 0x55, 0x4c, 0x59, 0xa8, 0x73, 0x00,
+	0x34, 0xc2, 0x20, 0x9d, 0x42, 0xd7, 0x2a, 0x07, 0xe4, 0x14, 0xfd, 0x5a, 0x5b, 0xee, 0x86, 0xf1,
+	0x77, 0x30, 0x4f, 0x1d, 0xcc, 0x91, 0x81, 0x79, 0x60, 0x61, 0xea, 0x4a, 0x0e, 0xe5, 0x12, 0x7a,
+	0x6f, 0x57, 0x2a, 0xd3, 0x6d, 0x7a, 0x04, 0x1d, 0x91, 0x95, 0x45, 0xd5, 0x63, 0x2b, 0xea, 0x5a,
+	0x6e, 0x98, 0x74, 0x4c, 0xa7, 0x10, 0x30, 0x6d, 0x42, 0x61, 0x98, 0x9f, 0xc0, 0x40, 0xf2, 0xd9,
+	0x42, 0xf2, 0x54, 0x5d, 0xaf, 0x64, 0xee, 0xfc, 0x41, 0x95, 0xbb, 0x92, 0xb9, 0xde, 0xc2, 0xd2,
+	0x94, 0x23, 0x5e, 0xab, 0xf2, 0x86, 0x17, 0x0e, 0x33, 0xb0, 0xb9, 0x2f, 0x3a, 0x45, 0xaf, 0x1c,
+	0xc9, 0xc1, 0x97, 0x7d, 0xbe, 0x77, 0xd9, 0x76, 0xa4, 0x1a, 0x58, 0xf6, 0x80, 0x93, 0x5f, 0x1e,
+	0xf8, 0x79, 0xbe, 0x24, 0x14, 0xda, 0xfa, 0x01, 0x90, 0x81, 0xd9, 0xe7, 0x1e, 0x51, 0xd4, 0x50,
+	0x28, 0xc8, 0x73, 0xe8, 0xb9, 0xd1, 0x23, 0xf6, 0xba, 0x76, 0x43, 0x1c, 0xed, 0x27, 0x50, 0x90,
+	0x11, 0xf4, 0xab, 0x01, 0x21, 0xb6, 0x78, 0x63, 0xd4, 0xa2, 0xff, 0x32, 0x28, 0xc8, 0x10, 0xba,
+	0xb6, 0x83, 0xe4, 0xbe, 0x5d, 0xab, 0x26, 0x20, 0xda, 0xd3, 0x28, 0x26, 0x2f, 0xa1, 0xbd, 0x42,
+	0x2e, 0xc9, 0x05, 0x74, 0x3e, 0x95, 0xf3, 0x45, 0xe1, 0x98, 0x5d, 0x9f, 0xa2, 0x86, 0x42, 0x41,
+	0x5b, 0xef, 0xc2, 0xdf, 0x9b, 0xd8, 0x5b, 0x6f, 0x62, 0xef, 0xef, 0x26, 0xf6, 0x7e, 0x6e, 0xe3,
+	0xd6, 0x7a, 0x1b, 0xb7, 0xfe, 0x6c, 0xe3, 0xd6, 0xf7, 0xae, 0xf9, 0x73, 0x5c, 0xfe, 0x0b, 0x00,
+	0x00, 0xff, 0xff, 0x61, 0x2c, 0x58, 0x26, 0x5a, 0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -750,6 +923,57 @@ func (r *llmHandler) States(c *ava.Context, req *ava.Packet, interrupt ava.Inter
 	}
 	f := func(c *ava.Context, req proto.Message) proto.Message {
 		r.h.States(c, req.(*StatesReq), &out)
+		return &out
+	}
+	return interrupt(c, &in, f)
+}
+
+type UserClient interface {
+	Login(c *ava.Context, req *AuthReq, opts ...ava.InvokeOptions) (*AuthRsp, error)
+}
+
+type userClient struct {
+	c *ava.Client
+}
+
+func NewUserClient() UserClient {
+	return &userClient{c: ava.AvaClient()}
+}
+
+func (cc *userClient) Login(c *ava.Context, req *AuthReq, opts ...ava.InvokeOptions) (*AuthRsp, error) {
+	rsp := &AuthRsp{}
+	err := cc.c.InvokeRR(c, "/user/login", req, rsp, opts...)
+	return rsp, err
+}
+
+// UserServer is the server API for User ava.
+type UserServer interface {
+	Login(c *ava.Context, req *AuthReq, rsp *AuthRsp)
+}
+
+func RegisterUserServer(h UserServer) {
+	var r = &userHandler{h: h}
+	ava.AvaServer().RegisterHandler("/"+ava.AvaServer().Name()+"/user/login", r.Login)
+}
+
+type userHandler struct {
+	h UserServer
+}
+
+func (r *userHandler) Login(c *ava.Context, req *ava.Packet, interrupt ava.Interceptor) (rsp proto.Message, err error) {
+	var in AuthReq
+	err = c.Codec().Decode(req.Bytes(), &in)
+	if err != nil {
+		c.Errorf("server decode packet err=%v |method=%s |data=%s", err, c.Metadata.Method(), req.String())
+		return nil, err
+	}
+	var out = AuthRsp{}
+	if interrupt == nil {
+		r.h.Login(c, &in, &out)
+		return &out, err
+	}
+	f := func(c *ava.Context, req proto.Message) proto.Message {
+		r.h.Login(c, req.(*AuthReq), &out)
 		return &out
 	}
 	return interrupt(c, &in, f)
@@ -1143,6 +1367,127 @@ func (m *StatesRsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *AuthReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AuthReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AuthReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Code) > 0 {
+		i -= len(m.Code)
+		copy(dAtA[i:], m.Code)
+		i = encodeVarintHomeassistant(dAtA, i, uint64(len(m.Code)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Phone) > 0 {
+		i -= len(m.Phone)
+		copy(dAtA[i:], m.Phone)
+		i = encodeVarintHomeassistant(dAtA, i, uint64(len(m.Phone)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AuthRspData) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AuthRspData) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AuthRspData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.AccessToken) > 0 {
+		i -= len(m.AccessToken)
+		copy(dAtA[i:], m.AccessToken)
+		i = encodeVarintHomeassistant(dAtA, i, uint64(len(m.AccessToken)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.RedirectUrl) > 0 {
+		i -= len(m.RedirectUrl)
+		copy(dAtA[i:], m.RedirectUrl)
+		i = encodeVarintHomeassistant(dAtA, i, uint64(len(m.RedirectUrl)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AuthRsp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AuthRsp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AuthRsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Data != nil {
+		{
+			size, err := m.Data.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintHomeassistant(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Msg) > 0 {
+		i -= len(m.Msg)
+		copy(dAtA[i:], m.Msg)
+		i = encodeVarintHomeassistant(dAtA, i, uint64(len(m.Msg)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Code != 0 {
+		i = encodeVarintHomeassistant(dAtA, i, uint64(m.Code))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintHomeassistant(dAtA []byte, offset int, v uint64) int {
 	offset -= sovHomeassistant(v)
 	base := offset
@@ -1318,6 +1663,60 @@ func (m *StatesRsp) Size() (n int) {
 	}
 	l = len(m.Msg)
 	if l > 0 {
+		n += 1 + l + sovHomeassistant(uint64(l))
+	}
+	return n
+}
+
+func (m *AuthReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Phone)
+	if l > 0 {
+		n += 1 + l + sovHomeassistant(uint64(l))
+	}
+	l = len(m.Code)
+	if l > 0 {
+		n += 1 + l + sovHomeassistant(uint64(l))
+	}
+	return n
+}
+
+func (m *AuthRspData) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.RedirectUrl)
+	if l > 0 {
+		n += 1 + l + sovHomeassistant(uint64(l))
+	}
+	l = len(m.AccessToken)
+	if l > 0 {
+		n += 1 + l + sovHomeassistant(uint64(l))
+	}
+	return n
+}
+
+func (m *AuthRsp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Code != 0 {
+		n += 1 + sovHomeassistant(uint64(m.Code))
+	}
+	l = len(m.Msg)
+	if l > 0 {
+		n += 1 + l + sovHomeassistant(uint64(l))
+	}
+	if m.Data != nil {
+		l = m.Data.Size()
 		n += 1 + l + sovHomeassistant(uint64(l))
 	}
 	return n
@@ -2391,6 +2790,371 @@ func (m *StatesRsp) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Msg = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipHomeassistant(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AuthReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowHomeassistant
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AuthReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AuthReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Phone", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowHomeassistant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Phone = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Code", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowHomeassistant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Code = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipHomeassistant(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AuthRspData) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowHomeassistant
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: authRspData: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: authRspData: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RedirectUrl", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowHomeassistant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RedirectUrl = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AccessToken", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowHomeassistant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AccessToken = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipHomeassistant(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AuthRsp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowHomeassistant
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AuthRsp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AuthRsp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Code", wireType)
+			}
+			m.Code = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowHomeassistant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Code |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Msg", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowHomeassistant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Msg = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowHomeassistant
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthHomeassistant
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Data == nil {
+				m.Data = &AuthRspData{}
+			}
+			if err := m.Data.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

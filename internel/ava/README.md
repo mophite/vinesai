@@ -23,7 +23,7 @@
 
 ### 🌱 Quick start
 
-- first you must install [proto](https://github.com/gogo/protobuf) and [etcd](https://github.com/etcd-io/etcd)
+- first you must install [proto](https://github.com/gogo/protobuf) and [etcd](https://github.com/coreos/etcd)
 
 - install protoc-gen-ava
 

@@ -64,3 +64,23 @@ service llm{
   rpc Services(ServicesReq)returns(ServicesRsp);
   rpc States(StatesReq)returns(StatesRsp);
 }
+
+message AuthReq{
+  string phone = 1;
+  string code = 2;
+}
+
+message authRspData{
+  string redirect_url = 1;
+  string access_token=3;
+}
+
+message AuthRsp{
+  int32 code = 1;
+  string msg = 2;
+  authRspData data = 3;
+}
+
+service user{
+  rpc Login(AuthReq)returns(AuthRsp){};
+}

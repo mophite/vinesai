@@ -27,9 +27,9 @@ import (
 
 	"vinesai/internel/ava/logger"
 
-	"github.com/coreos/etcd/clientv3"
 	"github.com/panjf2000/ants/v2"
 	"github.com/rs/cors"
+	"go.etcd.io/etcd/client/v3"
 )
 
 type Options func(option *Option)
@@ -123,7 +123,7 @@ func NewOpts(opts ...Options) Option {
 	}
 
 	// init e.DefaultEtcd
-	err := chaosEtcd(time.Second*5, 5, opt.EtcdConfig)
+	err := chaosEtcd(time.Second*5, 60, opt.EtcdConfig)
 	if err != nil {
 		panic("etcdConfig occur error: " + err.Error())
 	}

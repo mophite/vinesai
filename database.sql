@@ -68,7 +68,26 @@ ALTER TABLE `device`
     ADD COLUMN `delay_time` INT COMMENT '延时的时间，单位是秒' AFTER `delay`;
 
 
-ALTER TABLE `device` MODIFY device_type VARCHAR(30);
-ALTER TABLE `device` MODIFY control VARCHAR(30);
-ALTER TABLE `device` MODIFY delay_time VARCHAR(200);
-ALTER TABLE `device` DROP COLUMN delay;
+ALTER TABLE `device`
+    MODIFY device_type VARCHAR(30);
+ALTER TABLE `device`
+    MODIFY control VARCHAR(30);
+ALTER TABLE `device`
+    MODIFY delay_time VARCHAR(200);
+ALTER TABLE `device`
+    DROP COLUMN delay;
+
+DROP TABLE `user`;
+CREATE TABLE IF NOT EXISTS `user`
+(
+    `id`           BIGINT UNSIGNED AUTO_INCREMENT,
+    `phone`        VARCHAR(20),
+    `ha_address_1` VARCHAR(200) COMMENT '公网ip加端口',
+    `ha_address_2` VARCHAR(200) COMMENT '内网ip加端口',
+    `updated_at`   timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '数据修改时间',
+    `created_at`   timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '数据入库时间',
+    PRIMARY KEY (`id`),
+    INDEX index_created_phone (`created_at`, `phone`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 30000 COMMENT ='用户信息表'
+  DEFAULT CHARSET = utf8;

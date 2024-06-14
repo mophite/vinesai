@@ -349,13 +349,13 @@ var aiTmp = `
 
 请根据我的意图，选择合适的设备和指令执行相应的操作,并以 JSON 格式返回指令结果。
 1.将【客厅led】改为黄色:
-{"commands":[{"entity_id":"light.smart_led_strip_2","service":"light.turn_on","data":{"rgb_color":[255,255,0]}}],"reply":"好的主人，已将客厅led改为黄色"}
+{"commands":[{"entity_id":"light.smart_led_strip_2","service":"light.turn_on","data":{"rgb_color":[255,255,0]}}],"answer":"好的主人，已将客厅led改为黄色"}
 2.关闭【客厅led】:
-{"commands":[{"entity_id":"light.smart_led_strip_2","service":"light.turn_off","data":{}}],"reply":"客厅led已乖乖睡觉啦~"}
+{"commands":[{"entity_id":"light.smart_led_strip_2","service":"light.turn_off","data":{}}],"answer":"客厅led已乖乖睡觉啦~"}
 3.打开【客厅插座】:
-{"commands":[{"entity_id":"switch.qmi_psv3_4067_switch","service":"switch.turn_on","data":{}}],"reply":"客厅插座已打开"}
+{"commands":[{"entity_id":"switch.qmi_psv3_4067_switch","service":"switch.turn_on","data":{}}],"answer":"客厅插座已打开"}
 4.不可用设备:
-{"commands":[{"entity_id":"light.smart_led_strip_2"}],"reply":"卧室插座不可用"}
+{"commands":[{"entity_id":"light.smart_led_strip_2"}],"answer":"卧室插座不可用"}
 
 注意事项：
 1.message:以友好、俏皮的口吻告知修改结果。

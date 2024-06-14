@@ -5,7 +5,7 @@ import (
 	"vinesai/internel/config"
 	"vinesai/proto/phub"
 
-	"github.com/coreos/etcd/clientv3"
+	"go.etcd.io/etcd/client/v3"
 	"vinesai/app/srv/srv.hub/chatgpt4esp"
 )
 

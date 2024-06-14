@@ -17,12 +17,13 @@ package ava
 
 import (
 	"fmt"
-	"github.com/coreos/etcd/clientv3"
 	"io"
 	"os"
 	"strings"
 	"sync"
 	"time"
+
+	"go.etcd.io/etcd/client/v3"
 )
 
 var defaultConfigSchema = "configava"
@@ -232,7 +233,7 @@ func NewConfig(opts ...configOptions) error {
 
 	if gRConfig.opt.e == nil && gRConfig.opt.etcdConfig != nil {
 		// init e.DefaultEtcd
-		err := chaosEtcd(time.Second*5, 5, gRConfig.opt.etcdConfig)
+		err := chaosEtcd(time.Second*5, 60, gRConfig.opt.etcdConfig)
 		if err != nil {
 			panic("etcdConfig occur error: " + err.Error())
 		}

@@ -8,10 +8,11 @@ import (
 	"vinesai/proto/pha"
 	"vinesai/proto/pmini"
 
-	"github.com/coreos/etcd/clientv3"
+	"go.etcd.io/etcd/client/v3"
 	"vinesai/app/api/api.home/homeassistant"
 	"vinesai/app/api/api.home/miniprogram"
 	"vinesai/app/api/api.home/mqtt"
+	"vinesai/app/api/api.home/user"
 )
 
 func main() {
@@ -35,6 +36,7 @@ func main() {
 	pmini.RegisterChat4MiniServer(miniprogram.NewMini())
 	pmini.RegisterDeviceControlServer(&mqtt.MqttHub{})
 	pha.RegisterLlmServer(&homeassistant.HomeAssistant{})
+	pha.RegisterUserServer(&user.User{})
 
 	go func() {
 		//启动原生的websocket

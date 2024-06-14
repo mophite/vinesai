@@ -102,9 +102,9 @@ mysql安装：
 https://www.mysqltutorial.org/getting-started-with-mysql/install-mysql-centos/
 3.
 etcd安装：
-https://github.com/etcd-io/etcd
+https://github.com/coreos/etcd
 直接下载压缩包
-wget https://github.com/etcd-io/etcd/releases/download/v3.5.12/etcd-v3.5.12-linux-amd64.tar.gz
+wget https://github.com/coreos/etcd/releases/download/v3.5.12/etcd-v3.5.12-linux-amd64.tar.gz
 etcd启动:
 nohup ./etcd --listen-client-urls http://0.0.0.0:2379 --advertise-client-urls http://0.0.0.0:2379 &
 4.
@@ -233,8 +233,8 @@ docker exec -it 599afbb1d950 /bin/bash
 
 docker run -d \
 --restart always \
---name homeassistant_2  \
--v /data/homeassistant_2/config:/config \
+--name homeassistant  \
+-v /data/homeassistant/config:/config \
 -e TZ=Asia/Shanghai   \
 -p 8124:8124   \
 homeassistant/home-assistant:latest
@@ -246,3 +246,7 @@ Access Secret/Client Secret: 39381fc7af394435bf49961a0c4b0733
 项目 Code: p1716437079043pf53ca
 
 {"client_id":"5wxqk97nxcmnfdw8jjgu","client_secret":"39381fc7af394435bf49961a0c4b0733","code":"p1716437079043pf53ca"}
+
+发现包的版本跟github上不一致首先执行
+go get -u github.com/xxx/xxx@v.1.1.1
+然后在代码里面强制引用即可

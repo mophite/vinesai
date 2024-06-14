@@ -38,7 +38,7 @@ func runXiaoMiSpeaker(home string) {
 		id := entities[i].EntityId
 
 		if isXiaoMiSpeaker(id) {
-			ava.Debug(id)
+			ava.Debugf("runXiaoMiSpeaker |有音响设备加入 |entityId: %s", id)
 
 			gHub.addEntity(home, &entity{home: home, entityId: id})
 		}
@@ -65,7 +65,7 @@ func receiveMessage(c *ava.Context, home, message string, isSend bool) error {
 
 	//发送message给小爱音响
 	if isSend {
-		send2XiaomiSpeaker(c, home, result.Reply)
+		send2XiaomiSpeaker(c, home, result.Answer)
 	}
 	return nil
 }

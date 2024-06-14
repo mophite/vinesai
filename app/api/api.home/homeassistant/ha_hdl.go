@@ -44,7 +44,10 @@ func (h *HomeAssistant) Speaker(c *ava.Context, req *pha.SpeakerReq, rsp *pha.Sp
 	}
 
 	rsp.Code = http.StatusOK
-	rsp.Result = result.Reply
+	if result.Answer == "" {
+		result.Answer = "奴家不太明白"
+	}
+	rsp.Result = result.Answer
 }
 
 // Call todo 用户输入，控制设备
@@ -76,7 +79,10 @@ func (h *HomeAssistant) Call(c *ava.Context, req *pha.CallReq, rsp *pha.CallRsp)
 	}
 
 	rsp.Code = http.StatusOK
-	rsp.Msg = result.Reply
+	if result.Answer == "" {
+		result.Answer = "奴家不太明白"
+	}
+	rsp.Msg = result.Answer
 }
 
 // 获取指令列表

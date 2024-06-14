@@ -2,11 +2,12 @@ package oauth2
 
 import (
 	"errors"
-	"github.com/golang-jwt/jwt/v4"
-	"github.com/google/uuid"
 	"time"
 	"vinesai/internel/ava"
 	"vinesai/internel/x"
+
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
 type token struct {

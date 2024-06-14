@@ -11,7 +11,7 @@ import (
 	"vinesai/internel/ipc"
 	"vinesai/proto/phub"
 
-	"github.com/coreos/etcd/clientv3"
+	"go.etcd.io/etcd/client/v3"
 	"vinesai/app/api/api.hub/device"
 	"vinesai/app/api/api.hub/oauth2"
 )

@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/coreos/etcd/clientv3"
 	"vinesai/internel/ava"
-	"vinesai/internel/ava/_example/tutorial/app/srv/srv.hello/hello"
 	"vinesai/internel/ava/_example/tutorial/proto/phello"
+
+	"go.etcd.io/etcd/client/v3"
+	"vinesai/internel/ava/_example/tutorial/app/srv/srv.hello/hello"
 )
 
 func main() {

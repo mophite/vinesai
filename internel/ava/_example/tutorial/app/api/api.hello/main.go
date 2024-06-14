@@ -1,15 +1,16 @@
 package main
 
 import (
-	"github.com/coreos/etcd/clientv3"
 	"vinesai/internel/ava"
+	"vinesai/internel/ava/_example/tutorial/internal/ipc"
+	"vinesai/internel/ava/_example/tutorial/proto/phello"
+	"vinesai/internel/ava/_example/tutorial/proto/pim"
+
+	"go.etcd.io/etcd/client/v3"
 	"vinesai/internel/ava/_example/tutorial/app/api/api.hello/hello"
 	"vinesai/internel/ava/_example/tutorial/app/api/api.hello/hijack"
 	"vinesai/internel/ava/_example/tutorial/app/api/api.hello/http"
 	"vinesai/internel/ava/_example/tutorial/app/api/api.hello/im"
-	"vinesai/internel/ava/_example/tutorial/internal/ipc"
-	"vinesai/internel/ava/_example/tutorial/proto/phello"
-	"vinesai/internel/ava/_example/tutorial/proto/pim"
 )
 
 // ```shell

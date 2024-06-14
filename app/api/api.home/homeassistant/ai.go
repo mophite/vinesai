@@ -23,7 +23,7 @@ type command struct {
 
 type Commands struct {
 	Commands []command `json:"commands"`
-	Reply    string    `json:"reply"`
+	Answer   string    `json:"answer"`
 }
 
 type wsCallService struct {
