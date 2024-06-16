@@ -34,3 +34,4 @@ cmd/
 go.sum
 
 node_modules
+.vscode
