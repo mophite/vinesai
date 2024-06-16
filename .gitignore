@@ -33,4 +33,4 @@ cmd/
 
 go.sum
 
-ha_front
+node_modules
