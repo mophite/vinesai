@@ -16,7 +16,6 @@
 package ava
 
 import (
-	"net/http"
 	"os"
 	"os/signal"
 	"path/filepath"
@@ -98,7 +97,7 @@ type Option struct {
 	Endpoint *endpoint
 
 	//only need cors middleware on ava http api POST/DELETE/GET/PUT/OPTIONS method
-	CorsOptions *cors.Options
+	Cors *cors.Cors
 
 	LocalIp string
 
@@ -204,21 +203,9 @@ func NewOpts(opts ...Options) Option {
 		opt.Signal = defaultSignal
 	}
 
-	if opt.CorsOptions == nil {
+	if opt.Cors == nil {
 		//allowed all
-		opt.CorsOptions = &cors.Options{
-			AllowedOrigins: []string{"*"},
-			AllowedMethods: []string{
-				http.MethodGet,
-				http.MethodPost,
-				http.MethodPut,
-				http.MethodDelete,
-				http.MethodOptions,
-			},
-			AllowedHeaders:   []string{"*"},
-			AllowCredentials: false,
-			Debug:            false,
-		}
+		opt.Cors = cors.AllowAll()
 	}
 
 	return opt
@@ -488,9 +475,9 @@ func KeepaliveLifetime(keepaliveLifetime time.Duration) Options {
 	}
 }
 
-func Cors(m *cors.Options) Options {
+func Cors(m *cors.Cors) Options {
 	return func(option *Option) {
-		option.CorsOptions = m
+		option.Cors = m
 	}
 }
 

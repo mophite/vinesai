@@ -86,10 +86,18 @@ func createDocker(c *ava.Context, port string) error {
 		return err
 	}
 
+	// 定义端口映射
+	exposedPorts, portBindings, err := nat.ParsePortSpecs([]string{fmt.Sprintf("%s:8123", port)})
+	if err != nil {
+		c.Error(err)
+		return err
+	}
+
 	// 创建容器配置
 	containerConfig := &container.Config{
-		Image: "homeassistant/home-assistant:latest",
-		Env:   []string{"TZ=Asia/Shanghai"},
+		Image:        "homeassistant/home-assistant:latest",
+		Env:          []string{"TZ=Asia/Shanghai"},
+		ExposedPorts: exposedPorts,
 	}
 
 	// 创建主机配置
@@ -104,13 +112,7 @@ func createDocker(c *ava.Context, port string) error {
 				Target: "/config",
 			},
 		},
-		PortBindings: nat.PortMap{
-			nat.Port(port + "/tcp"): []nat.PortBinding{
-				{
-					HostPort: port,
-				},
-			},
-		},
+		PortBindings: portBindings,
 	}
 
 	// 创建网络配置

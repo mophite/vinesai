@@ -68,10 +68,12 @@ export default {
         if (loginRsp.code === 200) {
           const accessToken = loginRsp.data.access_token;
           localStorage.setItem('access_token', accessToken);
-          alert('登录成功');
+          alert('创建中，请稍等');
           // 可以在这里进行后续操作，例如跳转页面
           // 获取重定向 URL
-          window.location.href = "http://"+loginRsp.data.redirect_url;
+          setTimeout(() => {
+            window.location.href = "http://" + loginRsp.data.redirect_url;
+          }, 10000);
         } else {
           alert('登录失败：' + loginRsp.msg);
         }

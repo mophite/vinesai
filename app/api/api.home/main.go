@@ -31,12 +31,13 @@ func main() {
 				miniprogram.ChaosOpenAI,
 				mqtt.Chaos,
 			)),
+		//ava.Cors(lib.Cors()),
 	)
 
 	pmini.RegisterChat4MiniServer(miniprogram.NewMini())
 	pmini.RegisterDeviceControlServer(&mqtt.MqttHub{})
 	pha.RegisterLlmServer(&homeassistant.HomeAssistant{})
-	pha.RegisterUserServer(&user.User{})
+	pha.RegisterUserServer(&user.User{RemoteIp: "43.139.244.233"})
 
 	go func() {
 		//启动原生的websocket

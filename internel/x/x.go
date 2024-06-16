@@ -1,8 +1,6 @@
 package x
 
 import (
-	"io"
-	"net/http"
 	"time"
 
 	"github.com/RussellLuo/timingwheel"
@@ -37,17 +35,19 @@ func TimingwheelTicker(t time.Duration, f func()) *timingwheel.Timer {
 }
 
 func RemoteIp() (string, error) {
-	resp, err := http.Get("https://api.ipify.org?format=text")
-	if err != nil {
-		return "", err
-	}
-	defer resp.Body.Close()
+	//resp, err := http.Get("https://api.ipify.org?format=text")
+	//if err != nil {
+	//	return "", err
+	//}
+	//defer resp.Body.Close()
+	//
+	//// 读取响应内容
+	//body, err := io.ReadAll(resp.Body)
+	//if err != nil {
+	//	return "", err
+	//}
+	//
+	//return string(body), nil
 
-	// 读取响应内容
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return "", err
-	}
-
-	return string(body), nil
+	return "", nil
 }

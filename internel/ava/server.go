@@ -24,8 +24,6 @@ import (
 	"sync"
 	"syscall"
 	"time"
-
-	"github.com/rs/cors"
 )
 
 var defaultSignal = []os.Signal{
@@ -152,27 +150,21 @@ func (s *Server) Run() {
 	if s.opts.HttpAddress != "" {
 		go func() {
 
-			prefix := s.opts.Name
+			prefix := s.Name()
 
 			if !strings.HasPrefix(prefix, "/") {
 				prefix = "/" + prefix
 			}
 
-			if !strings.HasSuffix(prefix, "/") {
-				prefix = prefix + "/"
-			}
-
-			http.Handle(prefix, cors.New(*s.opts.CorsOptions).Handler(s))
-
 			s.httpServer = &http.Server{
-				Handler:      s,
+				Handler:      s.opts.Cors.Handler(s),
 				Addr:         s.opts.HttpAddress,
 				WriteTimeout: 15 * time.Second,
 				ReadTimeout:  15 * time.Second,
 				IdleTimeout:  time.Second * 60,
 			}
 
-			if err := s.httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			if err := s.httpServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 				Errorf("service %s |err=%v", s.opts.Name, err)
 			}
 		}()

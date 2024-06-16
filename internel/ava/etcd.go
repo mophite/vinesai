@@ -39,7 +39,7 @@ type etcd struct {
 	leaseId clientv3.LeaseID
 
 	//use leaseId to keepalive
-	leaseKeepaliveChan chan *clientv3.LeaseKeepAliveResponse
+	//leaseKeepaliveChan chan *clientv3.LeaseKeepAliveResponse
 
 	//etcd config
 	config *clientv3.Config
@@ -60,7 +60,7 @@ func chaosEtcd(timeout time.Duration, leaseTLL int64, config *clientv3.Config) e
 
 	defaultEtcd = new(etcd)
 
-	defaultEtcd.leaseKeepaliveChan = make(chan *clientv3.LeaseKeepAliveResponse)
+	//defaultEtcd.leaseKeepaliveChan = make(chan *clientv3.LeaseKeepAliveResponse)
 	defaultEtcd.config = config
 	defaultEtcd.timeout = timeout
 	defaultEtcd.leaseTLL = leaseTLL
@@ -124,18 +124,11 @@ func (s *etcd) PutWithLease(key, value string) error {
 		}
 
 		go func() {
-			for {
-				select {
-				case c := <-s.leaseKeepaliveChan: // if leaseKeepaliveChan is nil,lease keepalive stop!
-					if c == nil {
-						Warnf("etcd leaseKeepalive stop! leaseID: %d prefix:%s value:%s", s.leaseId, key, value)
-						return
-					}
-				}
+			select {
+			case <-ch: // if leaseKeepaliveChan is nil,lease keepalive stop!
+				return
 			}
 		}()
-
-		s.leaseKeepaliveChan <- <-ch
 	}
 
 	_, err := s.client.Put(context.TODO(), key, value, clientv3.WithLease(s.leaseId))

@@ -233,10 +233,10 @@ docker exec -it 599afbb1d950 /bin/bash
 
 docker run -d \
 --restart always \
---name homeassistant  \
+--name homeassistant_test \
 -v /data/homeassistant/config:/config \
--e TZ=Asia/Shanghai   \
--p 8124:8124   \
+-e TZ=Asia/Shanghai \
+-p 8123:8123 \
 homeassistant/home-assistant:latest
 
 
@@ -250,3 +250,12 @@ Access Secret/Client Secret: 39381fc7af394435bf49961a0c4b0733
 发现包的版本跟github上不一致首先执行
 go get -u github.com/xxx/xxx@v.1.1.1
 然后在代码里面强制引用即可
+
+docker run -d \
+  --name go2rtc \
+  --network host \
+  --privileged \
+  --restart unless-stopped \
+  -e TZ=Asia/Shanghai \
+  -v ~/go2rtc:/config \
+  alexxit/go2rtc

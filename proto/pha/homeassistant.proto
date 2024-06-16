@@ -72,7 +72,7 @@ message AuthReq{
 
 message authRspData{
   string redirect_url = 1;
-  string access_token=3;
+  string access_token = 3;
 }
 
 message AuthRsp{
@@ -81,6 +81,19 @@ message AuthRsp{
   authRspData data = 3;
 }
 
+message CodeReq{
+  string phone = 1;
+}
+
+
+message CodeRsp{
+  int32 code = 1;
+  string msg = 2;
+}
+
 service user{
+  //获取短信验证码
+  rpc Code(CodeReq)returns(CodeRsp);
+  //用户登录
   rpc Login(AuthReq)returns(AuthRsp){};
 }
