@@ -71,9 +71,7 @@ export default {
           alert('创建中，请稍等');
           // 可以在这里进行后续操作，例如跳转页面
           // 获取重定向 URL
-          setTimeout(() => {
-            window.location.href = "http://" + loginRsp.data.redirect_url;
-          }, 10000);
+          window.location.href = "http://" + loginRsp.data.redirect_url;
         } else {
           alert('登录失败：' + loginRsp.msg);
         }

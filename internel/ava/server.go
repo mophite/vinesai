@@ -150,6 +150,7 @@ func (s *Server) Run() {
 	if s.opts.HttpAddress != "" {
 		go func() {
 
+			//todo prefix
 			prefix := s.Name()
 
 			if !strings.HasPrefix(prefix, "/") {
