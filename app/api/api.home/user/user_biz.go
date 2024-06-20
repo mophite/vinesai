@@ -102,6 +102,9 @@ func createDocker(c *ava.Context, port string) error {
 
 	// 创建主机配置
 	hostConfig := &container.HostConfig{
+		//StorageOpt: map[string]string{
+		//	"size": "1G",
+		//},
 		RestartPolicy: container.RestartPolicy{
 			Name: "always",
 		},

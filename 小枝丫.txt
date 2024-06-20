@@ -237,6 +237,15 @@ docker run -d \
 -v /data/homeassistant/config:/config \
 -e TZ=Asia/Shanghai \
 -p 8123:8123 \
+--storage-opt size=5GB \
+homeassistant/home-assistant:latest
+
+docker run -d \
+--restart always \
+--name homeassistant_test \
+-v /data/homeassistant/config:/config \
+-e TZ=Asia/Shanghai \
+-p 8123:8123 \
 homeassistant/home-assistant:latest
 
 
@@ -259,3 +268,7 @@ docker run -d \
   -e TZ=Asia/Shanghai \
   -v ~/go2rtc:/config \
   alexxit/go2rtc
+
+docker stop $(docker ps -aq)
+docker rm $(docker ps -aq)
+

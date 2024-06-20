@@ -124,9 +124,8 @@ func (s *etcd) PutWithLease(key, value string) error {
 		}
 
 		go func() {
-			select {
-			case <-ch: // if leaseKeepaliveChan is nil,lease keepalive stop!
-				return
+			for range ch {
+
 			}
 		}()
 	}

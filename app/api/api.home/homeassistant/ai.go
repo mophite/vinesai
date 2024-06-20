@@ -67,7 +67,7 @@ type difyReq struct {
 }
 
 const (
-	difyUrl    = "http://223.72.19.182:8000/v1/workflows/run"
+	difyUrl    = "http://223.72.19.238:8000/v1/workflows/run"
 	difyBearer = "Bearer app-gmhMQjOwBtsyYMfvlcQDx0E0"
 )
 
