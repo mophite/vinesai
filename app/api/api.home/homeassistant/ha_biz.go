@@ -123,6 +123,8 @@ func getServices(c *ava.Context, home string) (string, error) {
 
 	body, err := io.ReadAll(resp.Body)
 
+	return string(body), nil
+
 	//c.Info("--------------services", x.BytesToString(body))
 
 	//var filter = make([]map[string]interface{}, 0, 100)
@@ -144,16 +146,16 @@ func getServices(c *ava.Context, home string) (string, error) {
 	//	}
 	//}
 
-	var shortData shortServicesStruct
-	err = x.MustUnmarshal(body, &shortData)
-	if err != nil {
-		c.Error(err)
-		return "", err
-	}
+	//var shortData shortServicesStruct
+	//err = x.MustUnmarshal(body, &shortData)
+	//if err != nil {
+	//	c.Error(err)
+	//	return "", err
+	//}
 
 	//c.Info("--------------services", x.MustMarshal2String(shortData))
 
-	return x.MustMarshal2String(shortData), nil
+	//return x.MustMarshal2String(shortData), nil
 
 }
 

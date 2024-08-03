@@ -272,3 +272,11 @@ docker run -d \
 docker stop $(docker ps -aq)
 docker rm $(docker ps -aq)
 
+本地homeassistant账号密码：
+地址：
+ssh root@homeassistant.local
+密码：4个空格
+
+涂鸦开发者平台账号密码
+15180875135
+young@905906

@@ -59,16 +59,15 @@ type difyRsp struct {
 }
 
 type difyReq struct {
-	Inputs struct {
-		Query string `json:"query"`
-	} `json:"inputs"`
-	ResponseMode string `json:"response_mode"`
-	User         string `json:"user"`
+	Inputs       struct{} `json:"inputs"`
+	Query        string   `json:"query"`
+	ResponseMode string   `json:"response_mode"`
+	User         string   `json:"user"`
 }
 
 const (
-	difyUrl    = "http://223.72.19.238:8000/v1/workflows/run"
-	difyBearer = "Bearer app-gmhMQjOwBtsyYMfvlcQDx0E0"
+	difyUrl    = "https://377g072s12.vicp.fun/v1/chat-messages"
+	difyBearer = "Bearer app-Cejy98LrusL3Zxrji4HVc3E3"
 )
 
 func SelectAI(c *ava.Context, home, message string) (*Commands, error) {
@@ -81,7 +80,7 @@ func dify(c *ava.Context, home, message string) (*Commands, error) {
 	var difyReq difyReq
 	difyReq.User = "abc-123"
 	difyReq.ResponseMode = "blocking"
-	difyReq.Inputs.Query = message
+	difyReq.Query = message
 
 	req, _ := http.NewRequest("POST", difyUrl, bytes.NewReader(x.MustMarshal(&difyReq)))
 	req.Header.Set("Authorization", difyBearer)
