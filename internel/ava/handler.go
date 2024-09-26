@@ -17,6 +17,7 @@ package ava
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"sync"
 
@@ -48,7 +49,7 @@ type DogHandler func(c *Context) (proto.Message, error)
 type HijackHandler func(c *Context, r *http.Request, w http.ResponseWriter, req, rsp *Packet) (abort bool)
 
 var (
-	errNotFoundHandler = errors.New("not found route path")
+	errNotFoundHandler = "not found route path [%s]"
 	errAbort           = errors.New("some hijacker  abort")
 )
 
@@ -117,7 +118,7 @@ func (r *Router) RegisterChannelHandler(service string, rc ChannelHandler) {
 func (r *Router) FF(c *Context, req *Packet) error {
 	rrHandler, ok := r.rrRoute[c.Metadata.Method()]
 	if !ok {
-		return errNotFoundHandler
+		return fmt.Errorf(errNotFoundHandler, c.Metadata.Method())
 	}
 
 	_, err := rrHandler(c, req, r.ffInterrupt())
@@ -127,7 +128,7 @@ func (r *Router) FF(c *Context, req *Packet) error {
 func (r *Router) RR(c *Context, req *Packet, rsp *Packet) error {
 	rrHandler, ok := r.rrRoute[c.Metadata.Method()]
 	if !ok {
-		return errNotFoundHandler
+		return fmt.Errorf(errNotFoundHandler, c.Metadata.Method())
 	}
 
 	resp, err := rrHandler(c, req, r.rrInterrupt())
@@ -157,7 +158,7 @@ func (r *Router) RS(c *Context, req *Packet, exit chan struct{}) (chan proto.Mes
 
 	rsHandler, ok := r.rsRoute[c.Metadata.Method()]
 	if !ok {
-		return nil, errNotFoundHandler
+		return nil, fmt.Errorf(errNotFoundHandler, c.Metadata.Method())
 	}
 
 	return rsHandler(c, req, exit), nil
@@ -175,7 +176,7 @@ func (r *Router) RC(c *Context, req chan *Packet, exit chan struct{}) (chan prot
 
 	rcHandler, ok := r.rcRoute[c.Metadata.Method()]
 	if !ok {
-		return nil, errNotFoundHandler
+		return nil, fmt.Errorf(errNotFoundHandler, c.Metadata.Method())
 	}
 
 	return rcHandler(c, req, exit), nil

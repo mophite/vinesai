@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 user="root"
 remote_path="/root/code/vinesai/"
-remote_host="43.139.244.233"
+remote_host="47.106.129.170"
 port="22"
 
 #VERSION=`git describe --tags`

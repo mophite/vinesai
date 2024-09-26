@@ -485,4 +485,4 @@ func LogLevel(level logger.Level) {
 	logger.DefaultOutput.SetLevel(level)
 }
 
-var AntsPool, _ = ants.NewPool(runtime.NumCPU())
+var AntsPool, _ = ants.NewPool(runtime.NumCPU() * 10)

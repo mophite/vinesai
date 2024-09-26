@@ -15,7 +15,7 @@ require (
 	github.com/jjeffcaii/reactor-go v0.5.5
 	github.com/json-iterator/go v1.1.12
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c
-	github.com/panjf2000/ants/v2 v2.5.0
+	github.com/panjf2000/ants/v2 v2.10.0
 	github.com/redis/go-redis/v9 v9.5.3
 	github.com/rs/cors v1.11.0
 	github.com/rs/xid v1.5.0
@@ -25,6 +25,7 @@ require (
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/asr v1.0.941
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.941
 	github.com/thinkerou/favicon v0.2.0
+	github.com/tuya/tuya-connector-go v1.0.5
 	github.com/urfave/cli/v2 v2.27.2
 	go.etcd.io/etcd/client/v3 v3.5.14
 	gorm.io/driver/mysql v1.5.7
@@ -73,6 +74,9 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
+	github.com/satori/go.uuid v1.2.0 // indirect
+	github.com/sirupsen/logrus v1.9.3 // indirect
+	github.com/tuya/pulsar-client-go v0.0.0-20210318030624-2c99a816287b // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
 	github.com/xrash/smetrics v0.0.0-20240312152122-5f08fbb34913 // indirect
@@ -99,6 +103,7 @@ require (
 	google.golang.org/grpc v1.64.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
+	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gotest.tools/v3 v3.5.1 // indirect
 )

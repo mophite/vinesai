@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package ptuya;
+// this proto file is for api.hello/srv.hello
+
+//
+//用户获取手机验证码
+message LoginCodeReq{
+  string phone = 1;
+}
+
+message loginCodeData{
+  string code = 1;
+}
+
+message LoginCodeRsp{
+  int32 code = 1;
+  string msg = 2;
+  loginCodeData data = 3;
+}
+
+//
+//用户登录，返回涂鸦用户uid
+//https://developer.tuya.com/cn/docs/cloud/21707ff1ba?id=Kawfjd7120rb0
+message LoginReq{
+  string phone = 1;
+  string password = 2;
+}
+
+message loginData{
+  string token = 3;//返回的用户jwttoken,里面包含涂鸦的uid
+}
+
+message LoginRsp{
+  int32 code = 1;
+  string msg = 2;
+  loginData data = 3;
+}
+
+//
+//todo 获取某个用户的所有设备列表，暂时用不上
+//https://developer.tuya.com/cn/docs/cloud/ad2823ae46?id=Kconjtzq1vk1q
+
+
+//
+//用户意图-----AI(设备列表，设备指令集，ai识别判断)----返回控制指令-----下发设备控制指令
+//https://developer.tuya.com/cn/docs/cloud/device-control?id=K95zu01ksols7#title-35-%E4%B8%8B%E5%8F%91%E8%AE%BE%E5%A4%87%E6%8C%87%E4%BB%A4
+
+message UserIntentReq{
+  string content = 1;
+  int32 home_id=2;
+}
+
+message userIntentData{
+  string content = 1; //返回AI处理需要播报的结果
+}
+
+message UserIntentRsp{
+  int32 code = 1;
+  string msg = 2;
+  userIntentData data = 3;
+}
+
+//
+//查询用户的家庭列表
+//https://developer.tuya.com/cn/docs/cloud/f5dd40ed14?id=Kawfjh9hpov1n
+message HomeListReq{
+
+}
+
+message homeListData{
+  string geo_name = 1;
+  int32 home_id = 2;
+  float lat = 3;
+  float lon = 4;
+  string name = 5;
+  string role = 6;
+}
+
+message HomeListRsp{
+  int32 code = 1;
+  string msg = 2;
+  repeated homeListData data = 3;
+}
+
+service Tuya{
+  rpc Code(LoginCodeReq)returns(LoginCodeRsp);
+  rpc Login(LoginReq)returns(LoginRsp){};
+  rpc Intent(UserIntentReq)returns(UserIntentRsp){};
+  rpc HomeList(HomeListReq)returns(HomeListRsp){};
+}

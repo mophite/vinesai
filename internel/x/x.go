@@ -1,6 +1,8 @@
 package x
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"time"
 
 	"github.com/RussellLuo/timingwheel"
@@ -50,4 +52,18 @@ func RemoteIp() (string, error) {
 	//return string(body), nil
 
 	return "", nil
+}
+
+func Md5(data string) string {
+	// Create a new MD5 hash
+	hash := md5.New()
+
+	// Write data to it
+	hash.Write([]byte(data))
+
+	// Get the resulting hash as a byte slice
+	hashBytes := hash.Sum(nil)
+
+	// Convert the byte slice to a hexadecimal string
+	return hex.EncodeToString(hashBytes)
 }

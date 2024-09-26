@@ -280,3 +280,20 @@ ssh root@homeassistant.local
 涂鸦开发者平台账号密码
 15180875135
 young@905906
+
+对公账户：
+统一信用代码:
+91520111MADYJPU551
+对公账户：
+2402006909200121902
+
+ha盒子账号密码
+jinbanglin
+JBLjbl123
+ssh登录
+ssh hassio@homeassistant.local
+123
+
+阿里云服务器：
+ssh root@47.106.129.170
+JBLjbl123
