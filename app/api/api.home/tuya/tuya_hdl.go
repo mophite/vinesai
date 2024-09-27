@@ -9,11 +9,11 @@ import (
 	"sync/atomic"
 	"time"
 	"vinesai/internel/ava"
+	"vinesai/internel/lib/connector"
 	"vinesai/internel/x"
 	"vinesai/proto/ptuya"
 
 	"github.com/panjf2000/ants/v2"
-	"github.com/tuya/tuya-connector-go/connector"
 )
 
 type Tuya struct {
@@ -221,8 +221,8 @@ func (t *Tuya) Intent(c *ava.Context, req *ptuya.UserIntentReq, rsp *ptuya.UserI
 
 	var now_1 = time.Now()
 	//请求ai获取控制指令和播报消息
-	//msg2GptResp, err := msg2Gpt(c, req.Content, x.MustMarshal2String(cmd), x.MustMarshal2String(shortDeviceList))
-	msg2GptResp, err := msg2Qianwen(c, req.Content, x.MustMarshal2String(cmd), x.MustMarshal2String(shortDeviceList))
+	//msg2AiResp, err := msg2Gpt(c, req.Content, x.MustMarshal2String(cmd), x.MustMarshal2String(shortDeviceList))
+	msg2AiResp, err := msg2Qianwen(c, req.Content, x.MustMarshal2String(cmd), x.MustMarshal2String(shortDeviceList))
 	if err != nil {
 		c.Error(err)
 		rsp.Code = http.StatusInternalServerError
@@ -241,7 +241,7 @@ func (t *Tuya) Intent(c *ava.Context, req *ptuya.UserIntentReq, rsp *ptuya.UserI
 
 	var commandCount int64 = 0
 
-	pool, err := ants.NewPool(len(msg2GptResp.Result))
+	pool, err := ants.NewPool(len(msg2AiResp.Result))
 	if err != nil {
 		c.Error(err)
 		rsp.Code = http.StatusInternalServerError
@@ -250,8 +250,8 @@ func (t *Tuya) Intent(c *ava.Context, req *ptuya.UserIntentReq, rsp *ptuya.UserI
 	}
 
 	//并发发起设备控制
-	for i := range msg2GptResp.Result {
-		var tmpResp = msg2GptResp.Result[i]
+	for i := range msg2AiResp.Result {
+		var tmpResp = msg2AiResp.Result[i]
 
 		_ = pool.Submit(func() {
 			var cdResp = &controlDeviceResp{}
@@ -351,5 +351,5 @@ func (t *Tuya) Intent(c *ava.Context, req *ptuya.UserIntentReq, rsp *ptuya.UserI
 	}
 
 	rsp.Code = http.StatusOK
-	rsp.Data = &ptuya.UserIntentData{Content: msg2GptResp.Voice}
+	rsp.Data = &ptuya.UserIntentData{Content: msg2AiResp.Voice}
 }

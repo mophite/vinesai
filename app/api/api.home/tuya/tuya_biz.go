@@ -4,14 +4,14 @@ import (
 	"errors"
 	"time"
 	"vinesai/internel/ava"
+	"vinesai/internel/lib/connector"
+	"vinesai/internel/lib/connector/env"
 	"vinesai/internel/x"
 	"vinesai/proto/phub"
 
 	"github.com/gogo/protobuf/proto"
 	jwtv5 "github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
-	"github.com/tuya/tuya-connector-go/connector"
-	"github.com/tuya/tuya-connector-go/connector/env"
 )
 
 func init() {
