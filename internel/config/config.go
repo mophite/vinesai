@@ -62,6 +62,32 @@ func ChaosOpenAI() error {
 	return nil
 }
 
+func ChaosRedis() error {
+	if GConfig == nil {
+		GConfig = new(config)
+	}
+
+	var r redis
+	err := ava.ConfigDecPublic("redis", &r)
+	if err != nil {
+		ava.Error(err)
+		return err
+	}
+
+	ava.Debugf("redis |data=%v", r)
+
+	GConfig.Redis = r
+
+	//初始化redis
+	err = db.ChaosRedis(r.Address, r.Password)
+	if err != nil {
+		ava.Error(err)
+		return err
+	}
+
+	return nil
+}
+
 func ChaosDB() error {
 	if GConfig == nil {
 		GConfig = new(config)

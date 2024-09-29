@@ -10,7 +10,7 @@ import (
 	"github.com/sashabaranov/go-openai"
 )
 
-var botTmp = `根据用户的场景描述，推断他们的需求，并将其映射为具体的设备控制指令。
+var botTmp = `根据我的意图描述，将其映射为具体的设备控制指令。
 
 [设备清单]包含以下设备信息：
 %s
@@ -21,19 +21,30 @@ var botTmp = `根据用户的场景描述，推断他们的需求，并将其映
 请根据以上信息生成相应的设备控制命令，并严格按照以下 JSON 格式返回。如果无法根据用户描述推断出合理的控制指令，返回标准的错误响应。
 
 **返回格式**（必须严格遵守以下格式，否则视为非法数据）：
-- "voice" 字段：对应用户语音响应，用淘气的语气
+- "voice" 字段：对应用户语音响应，用淘气的语气，包含对某个设备的控制详情
 - "result" 字段：包含要控制的设备列表及具体指令
 
 ### 正确的 JSON 示例格式：
 {
-    "voice": "好的主人，灯光已经调整了",
+    "voice": "好的主人，客厅双色温筒灯已为你打开，并将亮度调到了30；客厅多彩射灯已为你打开，并将亮度调到了20",
     "result": [
        {
          "id": "device_id_1",
+         "name":"客厅双色温筒灯",
          "data": {
            "commands": [
              {"code": "switch_led", "value": true},
              {"code": "bright", "value": 30}
+           ]
+         }
+       },
+       {
+         "id": "device_id_2",
+         "name":"客厅多彩射灯",
+         "data": {
+           "commands": [
+             {"code": "switch_led", "value": true},
+             {"code": "bright", "value": 20}
            ]
          }
        }
@@ -55,7 +66,7 @@ var filterDevice = `根据用户的意图，从家里的设备中筛选出需要
 [设备清单]信息如下:
 %v
 
-请根据用户的意图进行筛选，并严格按照以下 JSON 格式输出。如果没有符合的设备，请输出空的 "devices" 数组。格式必须严格遵守以下示例格式，否则会被视为非法数据：
+根据我的意图进行筛选，并严格按照以下 JSON 格式输出。如果没有符合的设备，请输出空的 "devices" 数组。格式必须严格遵守以下示例格式，否则会被视为非法数据：
 
 ### JSON 输出示例：
 {
@@ -79,18 +90,26 @@ var filterDevice = `根据用户的意图，从家里的设备中筛选出需要
 
 var gOpenAi *openai.Client
 
+var defaultKey = "sk-08cdfea5547040209ea0e2d874fff912"
+
+//var defaultKey="sk-2RET3Pqa6Z3g6b0pE29351119e9b410fAfC3D44b4eC4C4A9"
+
+var defaultUrl = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+
+//var defaultUrl = "https://ai-yyds.com/v1"
+
 func init() {
-	ocf := openai.DefaultConfig("sk-2RET3Pqa6Z3g6b0pE29351119e9b410fAfC3D44b4eC4C4A9")
-	ocf.BaseURL = "https://ai-yyds.com/v1"
+	ocf := openai.DefaultConfig(defaultKey)
+	ocf.BaseURL = defaultUrl
 	gOpenAi = openai.NewClientWithConfig(ocf)
 }
 
 type devicesFromGpt struct {
-	Devices []*shortDeviceInfo `json:"devices"`
+	Devices []*shortDevice `json:"devices"`
 }
 
 // 通过ai获取到需要控制的设备列表
-func deviceListGpt(c *ava.Context, content string, devices []*device) ([]*shortDeviceInfo, map[string]*device, []string, error) {
+func deviceListGpt(c *ava.Context, content string, devices []*device) ([]*shortDevice, map[string]*device, []string, error) {
 	var msgList = make([]openai.ChatCompletionMessage, 0, 6)
 
 	//设置配置指令
@@ -116,7 +135,8 @@ func deviceListGpt(c *ava.Context, content string, devices []*device) ([]*shortD
 		context.Background(),
 		openai.ChatCompletionRequest{
 			//Model:          "gpt-4o",
-			Model:          "gpt-4o-mini-2024-07-18",
+			//Model:          "gpt-4o-mini-2024-07-18",
+			Model:          "qwen-turbo-latest",
 			Messages:       msgList,
 			Temperature:    0.1,
 			TopP:           0.1,
@@ -171,7 +191,8 @@ func msg2Gpt(c *ava.Context, content, commands, deviceList string) (*aiResp, err
 		context.Background(),
 		openai.ChatCompletionRequest{
 			//Model:          "gpt-4o",
-			Model:          "gpt-4o-mini-2024-07-18",
+			//Model:          "gpt-4o-mini-2024-07-18",
+			Model:          "qwen-turbo-latest",
 			Messages:       msgList,
 			Temperature:    0.1,
 			TopP:           0.1,

@@ -1,8 +1,8 @@
 package connector
 
 import (
+	"vinesai/internel/ava"
 	_ "vinesai/internel/lib/connector/header"
-	_ "vinesai/internel/lib/connector/logger"
 	_ "vinesai/internel/lib/connector/message"
 	_ "vinesai/internel/lib/connector/sign"
 	_ "vinesai/internel/lib/connector/token"
@@ -14,7 +14,6 @@ import (
 	"vinesai/internel/lib/connector/env"
 	"vinesai/internel/lib/connector/env/extension"
 	"vinesai/internel/lib/connector/httplib"
-	"vinesai/internel/lib/connector/logger"
 )
 
 type ParamFunc func(*httplib.ProxyHttp)
@@ -27,17 +26,13 @@ func InitWithOptions(opts ...env.OptionFunc) {
 		v(env.Config)
 	}
 	env.Config.Init()
-	if !env.Config.DebugMode() {
-		logger.Log.SetLevel(logger.INFO)
-	}
-	logger.Log.Info("### iot core init success ###")
 }
 
 // make request api
 func makeRequest(ctx context.Context, params ...ParamFunc) error {
 	defer func() {
 		if v := recover(); v != nil {
-			logger.Log.Errorf("unknown error, err=%+v", v)
+			ava.Errorf("unknown error, err=%+v", v)
 		}
 	}()
 	ph := httplib.NewProxyHttp()
@@ -48,6 +43,7 @@ func makeRequest(ctx context.Context, params ...ParamFunc) error {
 	ctx = context.WithValue(ctx, constant.REQ_INFO, ph.GetReqHandler())
 	// set header
 	ph.SetHeader(extension.GetHeader(constant.TUYA_HEADER).Do(ctx))
+
 	//get req
 	return ph.DoRequest(ctx)
 }

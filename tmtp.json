@@ -1,18 +1,34 @@
-我发送了一段文本给AI，要求它按照我指定的JSON格式返回数据，但是不稳定，得不到期望，有什么好的办法吗，例如：
-{
-  "messages": [
-    {
-      "content": "你是一个智能管家",
-      "role": "system"
-    },
-    {
-      "content": "\n\u003c|system_start|\u003e\n家里有以下设备，根据我的意图，筛选出需要控制的设备id，\n严格以下面 JSON 格式输出,开头和末尾后不要有多余的内容，否则被视为非法数据,例如：\n{\"devices\":[{\"id\":\"device_id_1\",\"name\":\"开关1\"},{\"id\":\"device_id_2\",\"name\":\"灯光2\"}]}\n\n[设备清单]信息如下:\n[{\"id\":\"3260041148e729537503\",\"name\":\"智能烟感\",\"category\":\"ywbj\",\"online\":true},{\"id\":\"6cbbfc12cf0f2f1c2fkyo9\",\"name\":\"双色温明装射灯\",\"category\":\"dj\",\"online\":true},{\"id\":\"6c3f4cb6c5899478efrgea\",\"name\":\"客厅插板\",\"category\":\"pc\",\"online\":true},{\"id\":\"6c4be3105d2115238drlyh\",\"name\":\"双色温明装筒灯-主灯\",\"category\":\"dj\",\"online\":true},{\"id\":\"6c27421c93972d5e0b9mua\",\"name\":\"双色温射灯\",\"category\":\"dj\",\"online\":true},{\"id\":\"6c4d52c786b24bcab6yf1k\",\"name\":\"场景开关\",\"category\":\"wxkg\",\"online\":true},{\"id\":\"6cb3bd288aa5ee1755jz5a\",\"name\":\"人体移动传感器\",\"category\":\"pir\",\"online\":true},{\"id\":\"6c54d390a7e4b4db9cidmn\",\"name\":\"开关\",\"category\":\"cjkg\",\"online\":true},{\"id\":\"6cda9c74b5e5f7df45ihxr\",\"name\":\"全屋大脑中控屏\",\"category\":\"dgnzk\",\"online\":true},{\"id\":\"6c28dd7dcd804d3d53ruvf\",\"name\":\"入户门锁\",\"category\":\"videolock\",\"online\":true},{\"id\":\"6c612c9387db9e9f56bqnc\",\"name\":\"双色温射灯\",\"category\":\"dj\",\"online\":true},{\"id\":\"6c3588db3bf0e20917bjs2\",\"name\":\"空气质量温湿度\",\"category\":\"hjjcy\",\"online\":true},{\"id\":\"6c1bc7bef5407ebb38tmgi\",\"name\":\"智能摄像机\",\"category\":\"sp\",\"online\":true},{\"id\":\"6c12b45fa73d5db3a5rti2\",\"name\":\"X5有线多模网关\",\"category\":\"wg2\",\"online\":true},{\"id\":\"6c68ec09d50859dfcfe2ge\",\"name\":\"Zigbee 红外遥控器\",\"category\":\"wnykq\",\"online\":true},{\"id\":\"6ca0ba9ccd79d3c06cfhoe\",\"name\":\"电视\",\"category\":\"infrared_tv\",\"online\":true},{\"id\":\"6cd331d2d272232b41am2l\",\"name\":\"门磁\",\"category\":\"mcs\",\"online\":true},{\"id\":\"6c48ddc25f730ea67a58al\",\"name\":\"水浸传感器\",\"category\":\"sj\",\"online\":true},{\"id\":\"6c02ef68786cba7129a1ko\",\"name\":\"动静传感器\",\"category\":\"hps\",\"online\":true}]\n\u003c|system_end|\u003e",
-      "role": "system"
-    },
-    {
-      "content": "关闭所有灯光",
-      "role": "user"
-    }
-  ],
-  "model": "qwen-turbo-latest"
-}
+[DBUG] httplib.go:102 2024-09-29T02:02:25.9497 --------711--------
+[ERRO] httplib.go:104 2024-09-29T02:02:25.9498 [ProxyHttp] do req failed req:&{GET https://openapi.tuyacn.com/v1.0/homes/178176713/rooms/53096642/devices  0 0 map[Access_token:[4196cc03371bef04deb946e7a7756707] Client_id:[55tvajraw3edkr78qqa9] Content-Type:[application/json] Dev_channel:[SaaSFramework] Dev_lang:[golang] Nonce:[6450343f-e81e-44db-a9f8-a3820a2c7bf6] Sign:[218CC7B4642B6263E305207BCBC806F50CF4D6E02098352EE18382AEE5896578] Sign_method:[HMAC-SHA256] T:[1727546545902]] <nil> <nil> 0 [] false  map[] map[] <nil> map[]   <nil> <nil> <nil> <nil> <nil> [] map[]}, resp:{"code":1004,"msg":"sign invalid","success":false,"t":1727546545934,"tid":"d1885d5e7dc311ef85d3d23a9009298a"}
+[DBUG] httplib.go:121 2024-09-29T02:02:25.9498 --------1000--------
+[DBUG] httplib.go:127 2024-09-29T02:02:25.9499 --------1111--------
+[INFO] httplib.go:129 2024-09-29T02:02:25.9499 [ProxyHttp] success req:&{GET https://openapi.tuyacn.com/v1.0/homes/178176713/rooms/53096642/devices  0 0 map[Access_token:[4196cc03371bef04deb946e7a7756707] Client_id:[55tvajraw3edkr78qqa9] Content-Type:[application/json] Dev_channel:[SaaSFramework] Dev_lang:[golang] Nonce:[6450343f-e81e-44db-a9f8-a3820a2c7bf6] Sign:[218CC7B4642B6263E305207BCBC806F50CF4D6E02098352EE18382AEE5896578] Sign_method:[HMAC-SHA256] T:[1727546545902]] <nil> <nil> 0 [] false  map[] map[] <nil> map[]   <nil> <nil> <nil> <nil> <nil> [] map[]}, resp:&{Result:[] Position: Success:false T:1727546545934 Tid:d1885d5e7dc311ef85d3d23a9009298a}
+----------------8888--------
+[DBUG] tuya_biz.go:301 2024-09-29T02:02:25.9499 get device list from room fail |data=&{[]  false 1727546545934 d1885d5e7dc311ef85d3d23a9009298a}
+[DBUG] httplib.go:102 2024-09-29T02:02:25.9802 --------711--------
+[DBUG] httplib.go:121 2024-09-29T02:02:25.9802 --------1000--------
+[DBUG] httplib.go:127 2024-09-29T02:02:25.9802 --------1111--------
+[INFO] httplib.go:129 2024-09-29T02:02:25.9802 [ProxyHttp] success req:&{GET https://openapi.tuyacn.com/v1.0/homes/178176713/rooms/53096638/devices  0 0 map[Access_token:[4196cc03371bef04deb946e7a7756707] Client_id:[55tvajraw3edkr78qqa9] Content-Type:[application/json] Dev_channel:[SaaSFramework] Dev_lang:[golang] Nonce:[3c17d7cd-01fa-4380-93c7-49f095357e37] Sign:[DD1834275B19E222F7F921CD33049567D8CB6B322D5492D7BDED5B0350DD4FE3] Sign_method:[HMAC-SHA256] T:[1727546545902]] <nil> <nil> 0 [] false  map[] map[] <nil> map[]   <nil> <nil> <nil> <nil> <nil> [] map[]}, resp:&{Result:[] Position: Success:true T:1727546545964 Tid:d1885cd47dc311ef8a74e283003eef7e}
+----------------8888--------
+[DBUG] httplib.go:102 2024-09-29T02:02:25.9809 --------711--------
+[DBUG] httplib.go:121 2024-09-29T02:02:25.9809 --------1000--------
+[DBUG] httplib.go:127 2024-09-29T02:02:25.9809 --------1111--------
+[INFO] httplib.go:129 2024-09-29T02:02:25.9810 [ProxyHttp] success req:&{GET https://openapi.tuyacn.com/v1.0/homes/178176713/rooms/53096640/devices  0 0 map[Access_token:[4196cc03371bef04deb946e7a7756707] Client_id:[55tvajraw3edkr78qqa9] Content-Type:[application/json] Dev_channel:[SaaSFramework] Dev_lang:[golang] Nonce:[93e9938f-e0d5-4181-8ec2-ce346a58de08] Sign:[F4971B8D5E3F0D3846582517767101E1C42D87647B71EE7CC545A405DE458436] Sign_method:[HMAC-SHA256] T:[1727546545902]] <nil> <nil> 0 [] false  map[] map[] <nil> map[]   <nil> <nil> <nil> <nil> <nil> [] map[]}, resp:&{Result:[] Position: Success:true T:1727546545966 Tid:d1888d977dc311ef9d678eabef3e7626}
+----------------8888--------
+[DBUG] httplib.go:102 2024-09-29T02:02:25.9863 --------711--------
+[DBUG] httplib.go:121 2024-09-29T02:02:25.9864 --------1000--------
+[DBUG] httplib.go:127 2024-09-29T02:02:25.9864 --------1111--------
+[INFO] httplib.go:129 2024-09-29T02:02:25.9864 [ProxyHttp] success req:&{GET https://openapi.tuyacn.com/v1.0/homes/178176713/rooms/53096641/devices  0 0 map[Access_token:[4196cc03371bef04deb946e7a7756707] Client_id:[55tvajraw3edkr78qqa9] Content-Type:[application/json] Dev_channel:[SaaSFramework] Dev_lang:[golang] Nonce:[b0c14ee4-8407-4674-8149-afbe0ada47da] Sign:[40DC8F6E61254CF5921982F0C14C9973867D00FCB0CDFA49520963C9F212D919] Sign_method:[HMAC-SHA256] T:[1727546545902]] <nil> <nil> 0 [] false  map[] map[] <nil> map[]   <nil> <nil> <nil> <nil> <nil> [] map[]}, resp:&{Result:[] Position: Success:true T:1727546545971 Tid:d188512e7dc311ef8a74e283003eef7e}
+----------------8888--------
+[DBUG] httplib.go:102 2024-09-29T02:02:25.9867 --------711--------
+[DBUG] httplib.go:121 2024-09-29T02:02:25.9867 --------1000--------
+[DBUG] httplib.go:127 2024-09-29T02:02:25.9867 --------1111--------
+[INFO] httplib.go:129 2024-09-29T02:02:25.9867 [ProxyHttp] success req:&{GET https://openapi.tuyacn.com/v1.0/homes/178176713/rooms/53096639/devices  0 0 map[Access_token:[4196cc03371bef04deb946e7a7756707] Client_id:[55tvajraw3edkr78qqa9] Content-Type:[application/json] Dev_channel:[SaaSFramework] Dev_lang:[golang] Nonce:[1240e403-7052-4982-a204-98843bad3f20] Sign:[F506E92966E5CF9230EFD33A1512279CE21C29BE14CB12F200CA1B7C53A586FD] Sign_method:[HMAC-SHA256] T:[1727546545902]] <nil> <nil> 0 [] false  map[] map[] <nil> map[]   <nil> <nil> <nil> <nil> <nil> [] map[]}, resp:&{Result:[] Position: Success:true T:1727546545972 Tid:d1889bab7dc311ef9d678eabef3e7626}
+----------------8888--------
+[DBUG] httplib.go:102 2024-09-29T02:02:26.0432 --------711--------
+[DBUG] httplib.go:121 2024-09-29T02:02:26.0433 --------1000--------
+[DBUG] httplib.go:127 2024-09-29T02:02:26.0435 --------1111--------
+[INFO] httplib.go:129 2024-09-29T02:02:26.0435 [ProxyHttp] success req:&{GET https://openapi.tuyacn.com/v1.0/homes/178176713/rooms/53096637/devices  0 0 map[Access_token:[4196cc03371bef04deb946e7a7756707] Client_id:[55tvajraw3edkr78qqa9] Content-Type:[application/json] Dev_channel:[SaaSFramework] Dev_lang:[golang] Nonce:[7de766a4-2853-4559-ae71-cce4d460c2cb] Sign:[04C601E69DBEEA9A581B56C44139EB563D8437E7F3F67F45694692D3B3F59C32] Sign_method:[HMAC-SHA256] T:[1727546545902]] <nil> <nil> 0 [] false  map[] map[] <nil> map[]   <nil> <nil> <nil> <nil> <nil> [] map[]}, resp:&{Result:[0xc00fc88960 0xc00fc889c0 0xc00fc88a20 0xc00fc88a80 0xc00fc88ae0 0xc00fc88b40 0xc00fc88ba0 0xc00fc88c00 0xc00fc88c60 0xc00fc88cc0 0xc00fc88d20] Position: Success:true T:1727546546025 Tid:d1887fc37dc311ef85d3d23a9009298a}
+----------------8888--------
+[ERRO] langchain.go:43 2024-09-29T02:02:26.0476 crs49cbg5ngpd4od0o60 |run not supported in chain with more then one expected input
+[DBUG] handler.go:202 2024-09-29T02:02:26.0477 crs49cbg5ngpd4od0o60 |FROM={"content":"关闭所有灯","home_id":178176713} |TO={} |PATH=/home/tuya/intent

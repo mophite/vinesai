@@ -2,13 +2,14 @@ package token
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"vinesai/internel/ava"
 	"vinesai/internel/lib/connector/constant"
 	"vinesai/internel/lib/connector/env"
 	"vinesai/internel/lib/connector/env/extension"
 	"vinesai/internel/lib/connector/httplib"
-	"vinesai/internel/lib/connector/logger"
 	"vinesai/internel/lib/connector/utils"
 )
 
@@ -61,9 +62,18 @@ func (t *token) commonReqToken(ctx context.Context, uri string) (*tokenAPIRespon
 		constant.Header_Sign:        signStr,
 		constant.Header_Nonce:       nonce,
 	})
-	err := th.DoRequest(ctx)
+	bbbbb, err := json.Marshal(map[string]string{
+		constant.Header_ContentType: constant.ContentType_JSON,
+		constant.Header_SignMethod:  constant.SignMethod_HMAC,
+		constant.Header_ClientID:    env.Config.GetAccessID(),
+		constant.Header_TimeStamp:   ts,
+		constant.Header_Sign:        signStr,
+		constant.Header_Nonce:       nonce,
+	})
+	fmt.Println("=---------6----6-6----=", string(bbbbb))
+	err = th.DoRequest(ctx)
 	if err != nil {
-		logger.Log.Infof("[commonReqToken] req failed, req:%v, err:%v", th.GetReqHandler(), err)
+		ava.Infof("[commonReqToken] req failed, req:%v, err:%v", th.GetReqHandler(), err)
 		return nil, err
 	}
 	t.setToken(resp.Result.AccessToken, resp.Result.RefreshToken, resp.Result.ExpireTime)

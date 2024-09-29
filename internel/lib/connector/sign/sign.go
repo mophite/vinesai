@@ -9,10 +9,10 @@ import (
 	"net/url"
 	"sort"
 	"strings"
+	"vinesai/internel/ava"
 	"vinesai/internel/lib/connector/constant"
 	"vinesai/internel/lib/connector/env"
 	"vinesai/internel/lib/connector/env/extension"
-	"vinesai/internel/lib/connector/logger"
 	"vinesai/internel/lib/connector/utils"
 )
 
@@ -88,7 +88,8 @@ func (t *signWrapper) calStringToSign(ctx context.Context) string {
 	}
 
 	stringToSign := req.Method + "\n" + contentSha256 + "\n" + headers + "\n" + uri
-	logger.Log.Debugf("[calStringToSign] httpMethod=%s, contentSha256=%s, headers=%s, uri=%s, stringToSign=%s",
+
+	ava.Debugf("[calStringToSign] httpMethod=%s, contentSha256=%s, headers=%s, uri=%s, stringToSign=%s",
 		req.Method, contentSha256, headers, uri, stringToSign)
 
 	return stringToSign

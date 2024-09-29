@@ -9,10 +9,10 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
+	"vinesai/internel/ava"
 	"vinesai/internel/lib/connector/constant"
 	"vinesai/internel/lib/connector/env"
 	"vinesai/internel/lib/connector/env/extension"
-	"vinesai/internel/lib/connector/logger"
 	"vinesai/internel/lib/connector/utils"
 
 	"github.com/tuya/pulsar-client-go/core/manage"
@@ -44,7 +44,7 @@ func NewEventMsgWrapper() extension.IEventMessage {
 func (e *eventMessage) SubEventMessage(f interface{}) {
 	fv := reflect.ValueOf(f)
 	if fv.Kind() != reflect.Func {
-		logger.Log.Errorf("event message handler is not function")
+		ava.Errorf("event message handler is not function")
 		return
 	}
 	msgType := fv.Type().In(0).Elem().Name()
@@ -105,7 +105,7 @@ func (e *eventMessage) InitMessageClient() {
 
 func printAsyncErr(e chan error) {
 	for err := range e {
-		logger.Log.Error("async errors", err.Error())
+		ava.Error("async errors", err.Error())
 	}
 }
 
@@ -137,7 +137,7 @@ func newClient(c *clientConfig) *client {
 }
 
 func (c *client) subscribe(csmCfg manage.ConsumerConfig) {
-	logger.Log.Infof("start creating consumer, pulsar=%s, topic=%s", c.cfg.addr, c.cfg.topic)
+	ava.Infof("start creating consumer, pulsar=%s, topic=%s", c.cfg.addr, c.cfg.topic)
 	size := 1
 	isPartitioned := false
 	prt, err := c.pool.Partitions(context.Background(), csmCfg.ClientConfig, c.cfg.topic)
@@ -161,7 +161,7 @@ func (c *client) subscribe(csmCfg manage.ConsumerConfig) {
 		go csm.receive(context.Background(), c.receiveMsg())
 		c.csmPool[i] = csm
 	}
-	logger.Log.Infof("create consumer success, pulsar=%s, topic=%s", c.cfg.addr, c.cfg.topic)
+	ava.Infof("create consumer success, pulsar=%s, topic=%s", c.cfg.addr, c.cfg.topic)
 }
 
 func subscriptionName(topic string) string {

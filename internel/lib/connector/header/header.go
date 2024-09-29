@@ -3,10 +3,10 @@ package header
 import (
 	"context"
 	"fmt"
+	"vinesai/internel/ava"
 	"vinesai/internel/lib/connector/constant"
 	"vinesai/internel/lib/connector/env"
 	"vinesai/internel/lib/connector/env/extension"
-	"vinesai/internel/lib/connector/logger"
 	"vinesai/internel/lib/connector/utils"
 )
 
@@ -37,7 +37,7 @@ func (t *headerWrapper) Do(ctx context.Context) map[string]string {
 	m[constant.Header_Nonce] = nonce
 	var token, err = extension.GetToken(constant.TUYA_TOKEN).Do(ctx)
 	if err != nil {
-		logger.Log.Errorf("[GetHeader] get token err: %s", err.Error())
+		ava.Errorf("[GetHeader] get token err: %s", err.Error())
 		return nil
 	}
 	m[constant.Header_AccessToken] = token
@@ -49,6 +49,7 @@ func (t *headerWrapper) Do(ctx context.Context) map[string]string {
 	ctx = context.WithValue(ctx, constant.TS, ts)
 	ctx = context.WithValue(ctx, constant.NONCE, nonce)
 	signStr := extension.GetSign(constant.TUYA_SIGN).Sign(ctx)
+	fmt.Println("-----4-------4-4--4-")
 	m[constant.Header_Sign] = signStr
 	return m
 }

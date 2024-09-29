@@ -38,7 +38,7 @@ type qianwenResp struct {
 }
 
 // 通过ai获取到需要控制的设备列表
-func deviceListQianwen(c *ava.Context, content string, devices []*device) ([]*shortDeviceInfo, map[string]*device, []string, error) {
+func deviceListQianwen(c *ava.Context, content string, devices []*device) ([]*shortDevice, map[string]*device, []string, error) {
 	requestBody := map[string]interface{}{
 		"temperature": 0.1,
 		"top_p":       0.1,

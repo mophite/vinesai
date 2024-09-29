@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync/atomic"
 	"time"
-	"vinesai/internel/lib/connector/logger"
+	"vinesai/internel/ava"
 
 	"github.com/tuya/pulsar-client-go/core/manage"
 	"github.com/tuya/pulsar-client-go/core/msg"
@@ -24,7 +24,7 @@ func (c *consumer) receiveAsync(ctx context.Context, queue chan msg.Message) {
 	go func() {
 		err := c.csm.ReceiveAsync(ctx, queue)
 		if err != nil {
-			logger.Log.Debug("consumer stopped, topic=%s", c.topic)
+			ava.Debug("consumer stopped, topic=%s", c.topic)
 		}
 	}()
 }
@@ -46,7 +46,7 @@ func (c *consumer) receive(ctx context.Context, revHandler messageFunc) {
 				close(c.stopped)
 				return
 			}
-			logger.Log.Debugf("consumer receive message, topic=%s", c.topic)
+			ava.Debugf("consumer receive message, topic=%s", c.topic)
 			c.handler(context.Background(), &m, revHandler)
 		}
 	}
@@ -65,7 +65,7 @@ func (c *consumer) cronFlow() {
 		select {
 		case <-c.stopped:
 			tk.Stop()
-			logger.Log.Infof("stop CronFlow, topic=%s", c.topic)
+			ava.Infof("stop CronFlow, topic=%s", c.topic)
 			return
 		case <-tk.C:
 			mc := c.csm.Consumer(context.Background())
@@ -73,10 +73,10 @@ func (c *consumer) cronFlow() {
 				continue
 			}
 			if len(mc.Overflow) > 0 {
-				logger.Log.Infof("RedeliverOverflow, topic=%s, num=%d", mc.Topic, len(mc.Overflow))
+				ava.Infof("RedeliverOverflow, topic=%s, num=%d", mc.Topic, len(mc.Overflow))
 				_, err := mc.RedeliverOverflow(context.Background())
 				if err != nil {
-					logger.Log.Warnf("RedeliverOverflow failed, topic=%s, err=%s", mc.Topic, err.Error())
+					ava.Warnf("RedeliverOverflow failed, topic=%s, err=%s", mc.Topic, err.Error())
 				}
 			}
 
@@ -85,7 +85,7 @@ func (c *consumer) cronFlow() {
 			}
 			err := mc.Flow(c.flowPermit)
 			if err != nil {
-				logger.Log.Errorf("flow failed, topic=%s, err=%s", mc.Topic, err.Error())
+				ava.Errorf("flow failed, topic=%s, err=%s", mc.Topic, err.Error())
 			}
 		}
 	}
@@ -98,7 +98,7 @@ func (c *consumer) handler(ctx context.Context, m *msg.Message, revHandler messa
 	defer func(start time.Time) {
 		spend := time.Since(start)
 		fields = append(fields, ", total spend="+spend.String())
-		logger.Log.Debug(fields...)
+		ava.Debug(fields...)
 	}(time.Now())
 
 	now := time.Now()
@@ -108,7 +108,7 @@ func (c *consumer) handler(ctx context.Context, m *msg.Message, revHandler messa
 	if num > 0 && m.Meta.NumMessagesInBatch != nil {
 		list, err = msg.DecodeBatchMessage(m)
 		if err != nil {
-			logger.Log.Error("DecodeBatchMessage failed", err.Error())
+			ava.Error("DecodeBatchMessage failed", err.Error())
 			return
 		}
 	}
@@ -117,7 +117,7 @@ func (c *consumer) handler(ctx context.Context, m *msg.Message, revHandler messa
 
 	now = time.Now()
 	if c.csm.Unactive() {
-		logger.Log.Warnf("unused msg because of consumer is unactivated, payload=%s", string(m.Payload))
+		ava.Warnf("unused msg because of consumer is unactivated, payload=%s", string(m.Payload))
 		return
 	}
 	spend = time.Since(now)
@@ -126,7 +126,7 @@ func (c *consumer) handler(ctx context.Context, m *msg.Message, revHandler messa
 	idCtx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	now = time.Now()
 	if c.csm.ConsumerID(idCtx) != m.ConsumerID {
-		logger.Log.Warnf("unused msg because of different ConsumerID, payload=%s", string(m.Payload))
+		ava.Warnf("unused msg because of different ConsumerID, payload=%s", string(m.Payload))
 		return
 	}
 	spend = time.Since(now)
@@ -144,7 +144,7 @@ func (c *consumer) handler(ctx context.Context, m *msg.Message, revHandler messa
 	spend = time.Since(now)
 	fields = append(fields, ", HandlePayload spend="+spend.String())
 	if err != nil {
-		logger.Log.Errorf("handle message failed, topic=%s, err=%+v", m.Topic, err)
+		ava.Errorf("handle message failed, topic=%s, err=%+v", m.Topic, err)
 	}
 
 	now = time.Now()
@@ -154,7 +154,7 @@ func (c *consumer) handler(ctx context.Context, m *msg.Message, revHandler messa
 	spend = time.Since(now)
 	fields = append(fields, ", Ack spend="+spend.String())
 	if err != nil {
-		logger.Log.Error("ack failed", err.Error())
+		ava.Error("ack failed", err.Error())
 	}
 
 }

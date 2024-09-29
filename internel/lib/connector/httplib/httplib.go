@@ -8,9 +8,9 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"vinesai/internel/ava"
 	"vinesai/internel/lib/connector/constant"
 	"vinesai/internel/lib/connector/env/extension"
-	"vinesai/internel/lib/connector/logger"
 )
 
 type ProxyHttp struct {
@@ -50,7 +50,7 @@ func (t *ProxyHttp) SetAPIUri(v string) {
 	t.apiUri = v
 	u, err := url.Parse(v)
 	if err != nil {
-		logger.Log.Errorf("[SetAPIUri] set uri err: %s", err.Error())
+		ava.Errorf("[SetAPIUri] set uri err: %s", err.Error())
 	}
 	t.req.URL = u
 }
@@ -84,30 +84,34 @@ func (t *ProxyHttp) DoRequest(ctx context.Context) error {
 	var err error
 	resp, err := http.DefaultClient.Do(t.req)
 	if err != nil {
-		logger.Log.Errorf("[ProxyHttp] do req failed err:%v, req:%v", err.Error(), t.req)
+		ava.Errorf("[ProxyHttp] do req failed err:%v, req:%v", err.Error(), t.req)
 		return err
 	}
 	defer resp.Body.Close()
 	bs, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		logger.Log.Errorf("[ProxyHttp] do req failed err:%v, req:%v", err.Error(), t.req)
+		ava.Errorf("[ProxyHttp] do req failed err:%v, req:%v", err.Error(), t.req)
 		return err
 	}
 	var rst response
 	err = json.Unmarshal(bs, &rst)
 	if err != nil {
-		logger.Log.Errorf("[ProxyHttp] do req failed err:%v, req:%v, resp:%v", err.Error(), t.req, string(bs))
+		ava.Errorf("[ProxyHttp] do req failed err:%v, req:%v, resp:%v", err.Error(), t.req, string(bs))
 		return err
 	}
+	ava.Debugf("--------711--------")
 	if !rst.Success {
-		logger.Log.Errorf("[ProxyHttp] do req failed req:%v, resp:%v", t.req, string(bs))
+		ava.Debugf("--------611--------")
+		ava.Errorf("[ProxyHttp] do req failed req:%v, resp:%v", t.req, string(bs))
 		if f, ok := t.errMap[rst.Code]; ok {
+			ava.Debugf("--------811--------")
 			// avoid loop
 			exeCnt := ctx.Value(constant.ExeCount)
 			if exeCnt != nil && exeCnt.(int) > 0 {
 				return errors.New(rst.Msg)
 			}
 			ctx = context.WithValue(ctx, constant.ExeCount, 1)
+			ava.Debugf("--------911--------")
 			f.Process(ctx, rst.Code, rst.Msg)
 			if rst.Code == constant.TOKEN_EXPIRED {
 				return nil
@@ -115,11 +119,14 @@ func (t *ProxyHttp) DoRequest(ctx context.Context) error {
 			return errors.New(rst.Msg)
 		}
 	}
+	ava.Debugf("--------1000--------")
 	err = json.Unmarshal(bs, &t.resp)
 	if err != nil {
-		logger.Log.Errorf("[ProxyHttp] do req failed err:%v, req:%v, resp:%v", err.Error(), t.req, string(bs))
+		ava.Errorf("[ProxyHttp] do req failed err:%v, req:%v, resp:%v", err.Error(), t.req, string(bs))
 		return err
 	}
-	logger.Log.Infof("[ProxyHttp] success req:%v, resp:%+v", t.req, t.resp)
+	ava.Debugf("--------1111--------")
+
+	ava.Infof("[ProxyHttp] success req:%v, resp:%+v", t.req, t.resp)
 	return nil
 }

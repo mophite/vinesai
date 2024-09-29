@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"reflect"
-	"vinesai/internel/lib/connector/logger"
+	"vinesai/internel/ava"
 	"vinesai/internel/lib/connector/message/event"
 	"vinesai/internel/lib/connector/utils"
 )
@@ -15,26 +15,26 @@ func (c *client) receiveMsg() messageFunc {
 	return func(msg []byte) {
 		defer func() {
 			if v := recover(); v != nil {
-				logger.Log.Errorf("distribute event message failed, err=%+v", v)
+				ava.Errorf("distribute event message failed, err=%+v", v)
 			}
 		}()
 		m := map[string]interface{}{}
 		err := json.Unmarshal(msg, &m)
 		if err != nil {
-			logger.Log.Errorf("json unmarshal failed, err=%s", err.Error())
+			ava.Errorf("json unmarshal failed, err=%s", err.Error())
 			return
 		}
 		protocol := int64(m["protocol"].(float64))
 		bs := m["data"].(string)
 		de, err := base64.StdEncoding.DecodeString(bs)
 		if err != nil {
-			logger.Log.Errorf("base64 decode failed, err=%s", err.Error())
+			ava.Errorf("base64 decode failed, err=%s", err.Error())
 			return
 		}
 		deData := utils.AesEcbDecrypt(de, []byte(c.cfg.accessKey[8:24]))
 		err = json.Unmarshal(deData, &m)
 		if err != nil {
-			logger.Log.Errorf("de json unmarshal failed, err=%s", err.Error())
+			ava.Errorf("de json unmarshal failed, err=%s", err.Error())
 			return
 		}
 		if protocol == event.PROTOCOL_STATUS {
@@ -51,7 +51,7 @@ func (c *client) receiveMsg() messageFunc {
 			m := &event.StatusReportMessage{}
 			err := json.Unmarshal(deData, &m)
 			if err != nil {
-				logger.Log.Errorf("protocol %d json unmarshal failed, err=%s", protocol, err.Error())
+				ava.Errorf("protocol %d json unmarshal failed, err=%s", protocol, err.Error())
 			}
 			params := []reflect.Value{reflect.ValueOf(m)}
 			fv.Call(params)
@@ -67,7 +67,7 @@ func (c *client) receiveMsg() messageFunc {
 				c.switchCode(code.(string), deData, f)
 			}
 		} else {
-			logger.Log.Warnf("please contact tuya technical support, protocol=%d", protocol)
+			ava.Warnf("please contact tuya technical support, protocol=%d", protocol)
 		}
 		return
 	}
@@ -134,7 +134,7 @@ func (c *client) switchCode(code string, deData []byte, f interface{}) {
 	}
 	err := json.Unmarshal(deData, &m)
 	if err != nil {
-		logger.Log.Errorf("%s json unmarshal failed, err=%s", code, err.Error())
+		ava.Errorf("%s json unmarshal failed, err=%s", code, err.Error())
 	}
 	params[0] = reflect.ValueOf(m)
 	fv.Call(params)
