@@ -155,9 +155,9 @@ func (d *DevicesHub) TransmitControlCommandFile(c *ava.Context, req *phub.Contro
 	//
 	//var h = &db_hub.MessageHistory{
 	//	Message: *result.Response.Result,
-	//	Tip:     cRsp.Data.Tip, //todo 这里看下chatgpt返回的是什么，只需要返回语音合成tts需要内容
-	//	Exp:     cRsp.Data.Exp,
-	//	Resp:    cRsp.Data.Resp,
+	//	Tip:     cRsp.Categories.Tip, //todo 这里看下chatgpt返回的是什么，只需要返回语音合成tts需要内容
+	//	Exp:     cRsp.Categories.Exp,
+	//	Resp:    cRsp.Categories.Resp,
 	//	HomeID:  home.HomeId,
 	//}
 
@@ -174,9 +174,9 @@ func (d *DevicesHub) TransmitControlCommandFile(c *ava.Context, req *phub.Contro
 	rsp.Msg = x.StatusOK
 
 	//data := &phub.ControlDevicesData{
-	//	Tip:  cRsp.Data.Tip,
-	//	Exp:  cRsp.Data.Exp,
-	//	Resp: cRsp.Data.Resp,
+	//	Tip:  cRsp.Categories.Tip,
+	//	Exp:  cRsp.Categories.Exp,
+	//	Resp: cRsp.Categories.Resp,
 	//}
 
 	data := &phub.ControlDevicesData{

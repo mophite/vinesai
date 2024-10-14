@@ -130,3 +130,32 @@ func GetWithout(url string, header map[string]string) ([]byte, error) {
 
 	return rsp, nil
 }
+
+func PUT(c *ava.Context, url string, data []byte, header map[string]string) ([]byte, error) {
+	request, err := http.NewRequest(http.MethodPut, url, bytes.NewReader(data))
+	if err != nil {
+		c.Error(err)
+		return nil, err
+	}
+
+	if header != nil {
+		for k, v := range header {
+			request.Header.Set(k, v)
+		}
+	}
+
+	resp, err := Client.Do(request)
+	if err != nil {
+		c.Error(err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	rsp, err := io.ReadAll(resp.Body)
+	if err != nil {
+		c.Error(err)
+		return nil, err
+	}
+
+	return rsp, nil
+}

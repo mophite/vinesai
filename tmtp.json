@@ -1,34 +1,285 @@
-[DBUG] httplib.go:102 2024-09-29T02:02:25.9497 --------711--------
-[ERRO] httplib.go:104 2024-09-29T02:02:25.9498 [ProxyHttp] do req failed req:&{GET https://openapi.tuyacn.com/v1.0/homes/178176713/rooms/53096642/devices  0 0 map[Access_token:[4196cc03371bef04deb946e7a7756707] Client_id:[55tvajraw3edkr78qqa9] Content-Type:[application/json] Dev_channel:[SaaSFramework] Dev_lang:[golang] Nonce:[6450343f-e81e-44db-a9f8-a3820a2c7bf6] Sign:[218CC7B4642B6263E305207BCBC806F50CF4D6E02098352EE18382AEE5896578] Sign_method:[HMAC-SHA256] T:[1727546545902]] <nil> <nil> 0 [] false  map[] map[] <nil> map[]   <nil> <nil> <nil> <nil> <nil> [] map[]}, resp:{"code":1004,"msg":"sign invalid","success":false,"t":1727546545934,"tid":"d1885d5e7dc311ef85d3d23a9009298a"}
-[DBUG] httplib.go:121 2024-09-29T02:02:25.9498 --------1000--------
-[DBUG] httplib.go:127 2024-09-29T02:02:25.9499 --------1111--------
-[INFO] httplib.go:129 2024-09-29T02:02:25.9499 [ProxyHttp] success req:&{GET https://openapi.tuyacn.com/v1.0/homes/178176713/rooms/53096642/devices  0 0 map[Access_token:[4196cc03371bef04deb946e7a7756707] Client_id:[55tvajraw3edkr78qqa9] Content-Type:[application/json] Dev_channel:[SaaSFramework] Dev_lang:[golang] Nonce:[6450343f-e81e-44db-a9f8-a3820a2c7bf6] Sign:[218CC7B4642B6263E305207BCBC806F50CF4D6E02098352EE18382AEE5896578] Sign_method:[HMAC-SHA256] T:[1727546545902]] <nil> <nil> 0 [] false  map[] map[] <nil> map[]   <nil> <nil> <nil> <nil> <nil> [] map[]}, resp:&{Result:[] Position: Success:false T:1727546545934 Tid:d1885d5e7dc311ef85d3d23a9009298a}
-----------------8888--------
-[DBUG] tuya_biz.go:301 2024-09-29T02:02:25.9499 get device list from room fail |data=&{[]  false 1727546545934 d1885d5e7dc311ef85d3d23a9009298a}
-[DBUG] httplib.go:102 2024-09-29T02:02:25.9802 --------711--------
-[DBUG] httplib.go:121 2024-09-29T02:02:25.9802 --------1000--------
-[DBUG] httplib.go:127 2024-09-29T02:02:25.9802 --------1111--------
-[INFO] httplib.go:129 2024-09-29T02:02:25.9802 [ProxyHttp] success req:&{GET https://openapi.tuyacn.com/v1.0/homes/178176713/rooms/53096638/devices  0 0 map[Access_token:[4196cc03371bef04deb946e7a7756707] Client_id:[55tvajraw3edkr78qqa9] Content-Type:[application/json] Dev_channel:[SaaSFramework] Dev_lang:[golang] Nonce:[3c17d7cd-01fa-4380-93c7-49f095357e37] Sign:[DD1834275B19E222F7F921CD33049567D8CB6B322D5492D7BDED5B0350DD4FE3] Sign_method:[HMAC-SHA256] T:[1727546545902]] <nil> <nil> 0 [] false  map[] map[] <nil> map[]   <nil> <nil> <nil> <nil> <nil> [] map[]}, resp:&{Result:[] Position: Success:true T:1727546545964 Tid:d1885cd47dc311ef8a74e283003eef7e}
-----------------8888--------
-[DBUG] httplib.go:102 2024-09-29T02:02:25.9809 --------711--------
-[DBUG] httplib.go:121 2024-09-29T02:02:25.9809 --------1000--------
-[DBUG] httplib.go:127 2024-09-29T02:02:25.9809 --------1111--------
-[INFO] httplib.go:129 2024-09-29T02:02:25.9810 [ProxyHttp] success req:&{GET https://openapi.tuyacn.com/v1.0/homes/178176713/rooms/53096640/devices  0 0 map[Access_token:[4196cc03371bef04deb946e7a7756707] Client_id:[55tvajraw3edkr78qqa9] Content-Type:[application/json] Dev_channel:[SaaSFramework] Dev_lang:[golang] Nonce:[93e9938f-e0d5-4181-8ec2-ce346a58de08] Sign:[F4971B8D5E3F0D3846582517767101E1C42D87647B71EE7CC545A405DE458436] Sign_method:[HMAC-SHA256] T:[1727546545902]] <nil> <nil> 0 [] false  map[] map[] <nil> map[]   <nil> <nil> <nil> <nil> <nil> [] map[]}, resp:&{Result:[] Position: Success:true T:1727546545966 Tid:d1888d977dc311ef9d678eabef3e7626}
-----------------8888--------
-[DBUG] httplib.go:102 2024-09-29T02:02:25.9863 --------711--------
-[DBUG] httplib.go:121 2024-09-29T02:02:25.9864 --------1000--------
-[DBUG] httplib.go:127 2024-09-29T02:02:25.9864 --------1111--------
-[INFO] httplib.go:129 2024-09-29T02:02:25.9864 [ProxyHttp] success req:&{GET https://openapi.tuyacn.com/v1.0/homes/178176713/rooms/53096641/devices  0 0 map[Access_token:[4196cc03371bef04deb946e7a7756707] Client_id:[55tvajraw3edkr78qqa9] Content-Type:[application/json] Dev_channel:[SaaSFramework] Dev_lang:[golang] Nonce:[b0c14ee4-8407-4674-8149-afbe0ada47da] Sign:[40DC8F6E61254CF5921982F0C14C9973867D00FCB0CDFA49520963C9F212D919] Sign_method:[HMAC-SHA256] T:[1727546545902]] <nil> <nil> 0 [] false  map[] map[] <nil> map[]   <nil> <nil> <nil> <nil> <nil> [] map[]}, resp:&{Result:[] Position: Success:true T:1727546545971 Tid:d188512e7dc311ef8a74e283003eef7e}
-----------------8888--------
-[DBUG] httplib.go:102 2024-09-29T02:02:25.9867 --------711--------
-[DBUG] httplib.go:121 2024-09-29T02:02:25.9867 --------1000--------
-[DBUG] httplib.go:127 2024-09-29T02:02:25.9867 --------1111--------
-[INFO] httplib.go:129 2024-09-29T02:02:25.9867 [ProxyHttp] success req:&{GET https://openapi.tuyacn.com/v1.0/homes/178176713/rooms/53096639/devices  0 0 map[Access_token:[4196cc03371bef04deb946e7a7756707] Client_id:[55tvajraw3edkr78qqa9] Content-Type:[application/json] Dev_channel:[SaaSFramework] Dev_lang:[golang] Nonce:[1240e403-7052-4982-a204-98843bad3f20] Sign:[F506E92966E5CF9230EFD33A1512279CE21C29BE14CB12F200CA1B7C53A586FD] Sign_method:[HMAC-SHA256] T:[1727546545902]] <nil> <nil> 0 [] false  map[] map[] <nil> map[]   <nil> <nil> <nil> <nil> <nil> [] map[]}, resp:&{Result:[] Position: Success:true T:1727546545972 Tid:d1889bab7dc311ef9d678eabef3e7626}
-----------------8888--------
-[DBUG] httplib.go:102 2024-09-29T02:02:26.0432 --------711--------
-[DBUG] httplib.go:121 2024-09-29T02:02:26.0433 --------1000--------
-[DBUG] httplib.go:127 2024-09-29T02:02:26.0435 --------1111--------
-[INFO] httplib.go:129 2024-09-29T02:02:26.0435 [ProxyHttp] success req:&{GET https://openapi.tuyacn.com/v1.0/homes/178176713/rooms/53096637/devices  0 0 map[Access_token:[4196cc03371bef04deb946e7a7756707] Client_id:[55tvajraw3edkr78qqa9] Content-Type:[application/json] Dev_channel:[SaaSFramework] Dev_lang:[golang] Nonce:[7de766a4-2853-4559-ae71-cce4d460c2cb] Sign:[04C601E69DBEEA9A581B56C44139EB563D8437E7F3F67F45694692D3B3F59C32] Sign_method:[HMAC-SHA256] T:[1727546545902]] <nil> <nil> 0 [] false  map[] map[] <nil> map[]   <nil> <nil> <nil> <nil> <nil> [] map[]}, resp:&{Result:[0xc00fc88960 0xc00fc889c0 0xc00fc88a20 0xc00fc88a80 0xc00fc88ae0 0xc00fc88b40 0xc00fc88ba0 0xc00fc88c00 0xc00fc88c60 0xc00fc88cc0 0xc00fc88d20] Position: Success:true T:1727546546025 Tid:d1887fc37dc311ef85d3d23a9009298a}
-----------------8888--------
-[ERRO] langchain.go:43 2024-09-29T02:02:26.0476 crs49cbg5ngpd4od0o60 |run not supported in chain with more then one expected input
-[DBUG] handler.go:202 2024-09-29T02:02:26.0477 crs49cbg5ngpd4od0o60 |FROM={"content":"关闭所有灯","home_id":178176713} |TO={} |PATH=/home/tuya/intent
+{
+  "主卧zigbee双色灯": {
+    "id": "6c58f477d3d4ee3e9e1exq",
+    "name": "主卧zigbee双色灯",
+    "status": [
+      {
+        "code": "switch_led",
+        "value": false
+      },
+      {
+        "code": "work_mode",
+        "value": "white"
+      },
+      {
+        "code": "bright_value_v2",
+        "value": 1000
+      },
+      {
+        "code": "temp_value_v2",
+        "value": 42
+      },
+      {
+        "code": "scene_data_v2",
+        "value": "{\"scene_num\":1,\"scene_units\":[{\"bright\":248,\"h\":0,\"s\":33,\"temperature\":1,\"unit_change_mode\":\"jump\",\"unit_gradient_duration\":0,\"unit_switch_duration\":0,\"v\":32}]}"
+      },
+      {
+        "code": "countdown_1",
+        "value": 0
+      },
+      {
+        "code": "control_data",
+        "value": ""
+      },
+      {
+        "code": "rhythm_mode",
+        "value": "AAAAAAA="
+      },
+      {
+        "code": "sleep_mode",
+        "value": "AAA="
+      },
+      {
+        "code": "wakeup_mode",
+        "value": "AAA="
+      },
+      {
+        "code": "power_memory",
+        "value": "AAEAAAAAAAADtgH0"
+      },
+      {
+        "code": "do_not_disturb",
+        "value": false
+      },
+      {
+        "code": "cycle_timing",
+        "value": "AAMA"
+      },
+      {
+        "code": "random_timing",
+        "value": "AAMD"
+      }
+    ],
+    "category": "dj",
+    "online": false,
+    "product_id": "mnee5aa6"
+  },
+  "客厅ZigBee 雷达人体跌倒传感器60G": {
+    "id": "6c174e9807d7100a8cbbiu",
+    "name": "客厅ZigBee 雷达人体跌倒传感器60G",
+    "status": [
+      {
+        "code": "presence_state",
+        "value": "presence"
+      },
+      {
+        "code": "sensitivity",
+        "value": 4
+      },
+      {
+        "code": "drop_state",
+        "value": "normal"
+      },
+      {
+        "code": "human_motion_state",
+        "value": "motion"
+      }
+    ],
+    "category": "hps",
+    "online": false,
+    "product_id": "5uh0hjvk"
+  },
+  "客厅双色1号温明装射灯": {
+    "id": "6cbbfc12cf0f2f1c2fkyo9",
+    "name": "客厅双色1号温明装射灯",
+    "status": [
+      {
+        "code": "switch_led",
+        "value": true
+      },
+      {
+        "code": "work_mode",
+        "value": "white"
+      },
+      {
+        "code": "bright_value_v2",
+        "value": 20
+      },
+      {
+        "code": "temp_value_v2",
+        "value": 300
+      },
+      {
+        "code": "scene_data_v2",
+        "value": "{\"scene_num\":1,\"scene_units\":[{\"bright\":200,\"h\":0,\"s\":0,\"temperature\":0,\"unit_change_mode\":\"static\",\"unit_gradient_duration\":13,\"unit_switch_duration\":14,\"v\":0}]}"
+      },
+      {
+        "code": "countdown_1",
+        "value": 0
+      },
+      {
+        "code": "control_data",
+        "value": ""
+      },
+      {
+        "code": "rhythm_mode",
+        "value": "AAAAAAA="
+      },
+      {
+        "code": "sleep_mode",
+        "value": "AAA="
+      },
+      {
+        "code": "wakeup_mode",
+        "value": "AAA="
+      },
+      {
+        "code": "power_memory",
+        "value": "AAEAAAAAAAAD6APo"
+      },
+      {
+        "code": "do_not_disturb",
+        "value": false
+      },
+      {
+        "code": "cycle_timing",
+        "value": "AAMA"
+      },
+      {
+        "code": "random_timing",
+        "value": "AAMA"
+      }
+    ],
+    "category": "dj",
+    "online": true,
+    "product_id": "okcysjdv"
+  },
+  "客厅场景开关": {
+    "id": "6c4d52c786b24bcab6yf1k",
+    "name": "客厅场景开关",
+    "status": [
+      {
+        "code": "switch_mode1",
+        "value": "click"
+      },
+      {
+        "code": "switch_mode2",
+        "value": "click"
+      },
+      {
+        "code": "switch_mode3",
+        "value": "click"
+      },
+      {
+        "code": "switch_mode4",
+        "value": "click"
+      },
+      {
+        "code": "battery_percentage",
+        "value": 100
+      }
+    ],
+    "category": "wxkg",
+    "online": true,
+    "product_id": "mh9px7cq"
+  },
+  "客厅智能烟感": {
+    "id": "3260041148e729537503",
+    "name": "客厅智能烟感",
+    "status": [
+      {
+        "code": "smoke_sensor_status",
+        "value": "normal"
+      },
+      {
+        "code": "battery_state",
+        "value": "high"
+      }
+    ],
+    "category": "ywbj",
+    "online": true,
+    "product_id": "odvyuxbdpat1gzeh"
+  },
+  "客厅枪黑双色温明装筒灯": {
+    "id": "6c4be3105d2115238drlyh",
+    "name": "客厅枪黑双色温明装筒灯",
+    "status": [
+      {
+        "code": "switch_led",
+        "value": false
+      },
+      {
+        "code": "work_mode",
+        "value": "white"
+      },
+      {
+        "code": "bright_value_v2",
+        "value": 20
+      },
+      {
+        "code": "temp_value_v2",
+        "value": 300
+      },
+      {
+        "code": "scene_data_v2",
+        "value": "{\"scene_num\":1,\"scene_units\":[{\"bright\":248,\"h\":0,\"s\":33,\"temperature\":1,\"unit_change_mode\":\"jump\",\"unit_gradient_duration\":0,\"unit_switch_duration\":0,\"v\":32}]}"
+      },
+      {
+        "code": "countdown_1",
+        "value": 0
+      },
+      {
+        "code": "control_data",
+        "value": ""
+      },
+      {
+        "code": "rhythm_mode",
+        "value": "AAAAAAA="
+      },
+      {
+        "code": "sleep_mode",
+        "value": "AAA="
+      },
+      {
+        "code": "wakeup_mode",
+        "value": "AAA="
+      },
+      {
+        "code": "power_memory",
+        "value": "AAEAAAAAAAAD6APo"
+      },
+      {
+        "code": "do_not_disturb",
+        "value": true
+      },
+      {
+        "code": "cycle_timing",
+        "value": "AAMA"
+      },
+      {
+        "code": "random_timing",
+        "value": "AAMA"
+      }
+    ],
+    "category": "dj",
+    "online": false,
+    "product_id": "ijsj2evj"
+  },
+  "客厅水浸传感器": {
+    "id": "6c48ddc25f730ea67a58al",
+    "name": "客厅水浸传感器",
+    "status": [
+      {
+        "code": "watersensor_state",
+        "value": "normal"
+      },
+      {
+        "code": "battery_percentage",
+        "value": 100
+      }
+    ],
+    "category": "sj",
+    "online": true,
+    "product_id": "k4ej3ww2"
+  }
+}

@@ -297,3 +297,6 @@ ssh hassio@homeassistant.local
 阿里云服务器：
 ssh root@47.106.129.170
 JBLjbl123
+
+scp -r root@47.106.129.170:/root/code/vinesai/cmd/api.assert/out ./
+

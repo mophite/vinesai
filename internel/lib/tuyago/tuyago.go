@@ -110,14 +110,16 @@ var mux = new(sync.Mutex)
 
 // 获取token，快过期也重新获取
 func instanceToken() (*token, error) {
-	var uri = defaultTokenURL + "?grant_type=1"
-	if gToken != nil && time.Now().UnixMilli()-gToken.Result.ExpireTimeAt > 200 {
-		uri = defaultTokenURL + "/" + gToken.Result.RefreshToken
-	}
+	mux.Lock()
+	defer mux.Unlock()
 
-	if gToken == nil {
-		mux.Lock()
-		defer mux.Unlock()
+	var uri = defaultTokenURL + "?grant_type=1"
+	//if gToken != nil && gToken.Result.ExpireTimeAt-time.Now().Unix() < 200 {
+	//	uri = defaultTokenURL + "/" + gToken.Result.RefreshToken
+	//}
+
+	if gToken == nil || gToken.Result.ExpireTimeAt-time.Now().Unix() < 200 {
+		//if gToken == nil || gToken.Result.ExpireTimeAt-time.Now().Unix() < 200 {
 
 		var nonce = getUUID()
 		var ts = getTs()
@@ -136,6 +138,7 @@ func instanceToken() (*token, error) {
 			return nil, err
 		}
 
+		ava.Debugf("FROM=%s |new_token |gToken=%s |uri=%s", string(b), x.MustMarshal2String(gToken), uri)
 		gToken = new(token)
 		err = x.MustUnmarshal(b, gToken)
 		if err != nil {
@@ -147,7 +150,7 @@ func instanceToken() (*token, error) {
 			return nil, errors.New("access_token is invalid")
 		}
 
-		gToken.Result.ExpireTimeAt = time.Now().UnixMilli() + gToken.Result.ExpireTime
+		gToken.Result.ExpireTimeAt = time.Now().Unix() + gToken.Result.ExpireTime
 	}
 
 	return gToken, nil
@@ -158,6 +161,8 @@ func getTs() string {
 }
 
 func Get(c *ava.Context, uri string, v interface{}) error {
+	var now = time.Now()
+
 	uri = defaultApiHost + uri
 	var nonce = getUUID()
 	var ts = getTs()
@@ -183,6 +188,8 @@ func Get(c *ava.Context, uri string, v interface{}) error {
 		return err
 	}
 
+	c.Debugf("latency=%v秒 |uri=%v |FROM=%v", time.Now().Sub(now).Seconds(), uri, string(b))
+
 	return x.MustNativeUnmarshal(b, v)
 }
 
@@ -192,6 +199,8 @@ func getUUID() string {
 }
 
 func Post(c *ava.Context, uri string, data, v interface{}) error {
+	var now = time.Now()
+
 	uri = defaultApiHost + uri
 	var nonce = getUUID()
 	var ts = getTs()
@@ -218,6 +227,43 @@ func Post(c *ava.Context, uri string, data, v interface{}) error {
 		c.Error(err)
 		return err
 	}
+
+	c.Debugf("latency=%v秒 ｜uri=%s |TO=%v |FROM=%v", time.Now().Sub(now).Seconds(), uri, string(body), string(b))
+
+	return x.MustNativeUnmarshal(b, v)
+}
+
+func Put(c *ava.Context, uri string, data, v interface{}) error {
+	var now = time.Now()
+
+	uri = defaultApiHost + uri
+	var nonce = getUUID()
+	var ts = getTs()
+	accessToken, err := instanceToken()
+	if err != nil {
+		c.Error(err)
+		return err
+	}
+
+	var body = x.MustMarshal(data)
+
+	var header = map[string]string{
+		"client_id":    defaultClientID,
+		"sign":         generateSignature(http.MethodPut, uri, nonce, ts, accessToken.Result.AccessToken, body),
+		"nonce":        nonce,
+		"t":            ts,
+		"sign_method":  "HMAC-SHA256",
+		"access_token": accessToken.Result.AccessToken,
+		"Content-Type": "application/json",
+	}
+
+	b, err := lib.PUT(c, uri, body, header)
+	if err != nil {
+		c.Error(err)
+		return err
+	}
+
+	c.Debugf("latency=%v秒 ｜uri=%s |TO=%v |FROM=%v", time.Now().Sub(now).Seconds(), uri, string(body), string(b))
 
 	return x.MustNativeUnmarshal(b, v)
 }

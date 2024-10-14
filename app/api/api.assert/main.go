@@ -10,11 +10,12 @@ import (
 	"github.com/thinkerou/favicon"
 )
 
-//go:embed dist
+//go:embed all:out
 var f embed.FS
 
 func getAssetFS() http.FileSystem {
-	wrappedFS, err := fs.Sub(f, "dist")
+	//wrappedFS, err := fs.Sub(f, "dist")
+	wrappedFS, err := fs.Sub(f, "out")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -27,7 +28,8 @@ func main() {
 	//错误捕获
 	app.Use(gin.Recovery())
 	//配置网页左上角图标
-	app.Use(favicon.New("./dist/favicon.ico"))
+	//app.Use(favicon.New("./dist/favicon.ico"))
+	app.Use(favicon.New("./out/favicon.ico"))
 
 	//静态文件
 	app.StaticFS("/", getAssetFS())

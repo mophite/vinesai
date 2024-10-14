@@ -110,8 +110,9 @@ func getTuyaUid(c *ava.Context) string {
 
 // ai返回内容格式
 type aiResp struct {
-	Voice  string       `json:"voice"`
-	Result []aiRespData `json:"result"`
+	Voice      string       `json:"voice"`
+	Result     []aiRespData `json:"result"`
+	ResultType int          `json:"result_type"`
 }
 
 type aiRespData struct {
@@ -220,16 +221,18 @@ type roomInfo struct {
 }
 
 // 设备筛选获取设备列表,发送设备数据和指令数据给ai，让ai根据用户意图，选择控制设备，并返回设备指令
-func invokeAI(c *ava.Context, homeId int32, content string) (*aiResp, map[string]*device, error) {
+func invokeAI(c *ava.Context, homeId, content string) (*aiResp, map[string]*device, error) {
 	//获取房间信息
 	var roomResp = &roomInfo{}
 
-	err := tuyago.Get(c, fmt.Sprintf("/v1.0/homes/%d/rooms", homeId), roomResp)
+	err := tuyago.Get(c, fmt.Sprintf("/v1.0/homes/%s/rooms", homeId), roomResp)
 
 	if err != nil {
 		c.Error(err)
 		return nil, nil, err
 	}
+
+	c.Debugf("roomInfo: %v", roomResp)
 
 	//判断房间是否在用户的意图中
 	var r = make([]*room, 0, 4)
@@ -266,7 +269,7 @@ func invokeAI(c *ava.Context, homeId int32, content string) (*aiResp, map[string
 		err = pool.Submit(func() {
 			var tmpResp = &deviceListResp{}
 
-			err := tuyago.Get(c, fmt.Sprintf("/v1.0/homes/%d/rooms/%d/devices", homeId, tmpRoom.RoomID), tmpResp)
+			err := tuyago.Get(c, fmt.Sprintf("/v1.0/homes/%s/rooms/%d/devices", homeId, tmpRoom.RoomID), tmpResp)
 
 			if err != nil {
 				ava.Error(err)
@@ -344,10 +347,15 @@ func invokeAI(c *ava.Context, homeId int32, content string) (*aiResp, map[string
 
 			var cmdResp = &commandsResp{}
 			//从涂鸦api查询指令
-			err := tuyago.Get(c, fmt.Sprintf("/v1.0/devices/functions?device_ids=%s", productId[i]), cmdResp)
+			err := tuyago.Get(c, fmt.Sprintf("/v1.0/devices/functions?device_ids=%s", productIdMap[productId[i]]), cmdResp)
 
 			if err != nil {
 				c.Error(err)
+				continue
+			}
+
+			if len(cmdResp.Result) == 0 {
+				c.Debug("not found data")
 				continue
 			}
 
@@ -387,6 +395,8 @@ func invokeAI(c *ava.Context, homeId int32, content string) (*aiResp, map[string
 	for i := range out.Result {
 		resultFullInfoDevice[out.Result[i].Id] = deviceFullInfoMap[out.Result[i].Id]
 	}
+
+	c.Debugf("need control device status now |data=%v |out=%v", x.MustMarshal2String(resultFullInfoDevice), out)
 
 	return out, resultFullInfoDevice, nil
 }

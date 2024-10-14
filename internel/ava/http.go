@@ -9,6 +9,7 @@ import (
 )
 
 func handlerServerHttp(c *Context, s *Server, w http.ResponseWriter, r *http.Request) {
+
 	c.Metadata.SetMethod(r.URL.Path)
 
 	c.Writer = w
@@ -146,7 +147,7 @@ func handlerServerHttp(c *Context, s *Server, w http.ResponseWriter, r *http.Req
 	}
 
 	if err != nil {
-		c.Error(err)
+		c.Errorf("method=%s |err=%v", r.Method, err)
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write(s.opts.Err.Error500(c))
 		return

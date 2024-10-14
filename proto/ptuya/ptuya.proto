@@ -48,7 +48,7 @@ message LoginRsp{
 
 message UserIntentReq{
   string content = 1;
-  int32 home_id=2;
+  string home_id=2;
 }
 
 message userIntentData{
