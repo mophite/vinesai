@@ -23,8 +23,8 @@ import (
 var Tools = []tools.Tool{
 	//&devicesAgent{CallbacksHandler: LogHandler{}},
 	&summary{CallbacksHandler: LogHandler{}},
-	//&chat{},
 	//&action{CallbacksHandler: LogHandler{}},
+	&syncDevices{},
 }
 
 var defaultKey = "sk-08cdfea5547040209ea0e2d874fff912"
@@ -50,17 +50,6 @@ func init() {
 	}
 }
 
-func generateContent(mcList []llms.MessageContent, tool []llms.Tool) (*llms.ContentResponse, error) {
-	return langchaingoOpenAi.GenerateContent(
-		context.Background(),
-		mcList,
-		llms.WithTemperature(0.5),
-		llms.WithN(1),
-		llms.WithTopP(0.5),
-		llms.WithTools(tool),
-	)
-}
-
 func findJSON(str string) string {
 	// 正则表达式用于匹配大括号内的文本，可能包含空格和换行符
 	re := regexp.MustCompile(`(?s)\{.*\}`)
@@ -71,7 +60,7 @@ func findJSON(str string) string {
 	return matches[0]
 }
 
-func generateContentWithout(c *ava.Context, mcList []llms.MessageContent, v interface{}) error {
+func GenerateContentWithout(c *ava.Context, mcList []llms.MessageContent, v interface{}) error {
 	resp, err := langchaingoOpenAi.GenerateContent(
 		context.Background(),
 		mcList,
@@ -97,7 +86,7 @@ func generateContentWithout(c *ava.Context, mcList []llms.MessageContent, v inte
 		return err
 	}
 
-	c.Debugf("ai resp=%s |data=%s", content, x.MustMarshal2String(v))
+	c.Debugf("ai resp=%s |data=%s |content=%s", content, x.MustMarshal2String(v), resp.Choices[0].Content)
 
 	return nil
 }
@@ -127,6 +116,9 @@ func setHomeId(c *ava.Context, input string) {
 	c.Set(defaultHomeIdKey, input)
 }
 
+// 这不是一个错误,标志agent拿到想要的结果的退出标志
+var doneExitError = errors.New("done and exit")
+
 // 附带用户设备的品类
 func Run(c *ava.Context, uid, homeId, content string) (string, error) {
 	setHomeId(c, homeId)
@@ -138,6 +130,7 @@ func Run(c *ava.Context, uid, homeId, content string) (string, error) {
 	var newExecutor *agents.Executor
 	a := agents.NewOpenAIFunctionsAgent(langchaingoOpenAi,
 		Tools,
+		agents.WithMaxIterations(1),
 		agents.WithMemory(memory.NewConversationBuffer(memory.WithChatHistory(buffChatMemory))),
 		agents.NewOpenAIOption().WithSystemMessage("你叫`homingAI`，你是一个性格俏皮的智能管家，担当智能家居设备控制和其他生活管理、咨询的工作"),
 		agents.NewOpenAIOption().WithExtraMessages([]prompts.MessageFormatter{
@@ -145,8 +138,7 @@ func Run(c *ava.Context, uid, homeId, content string) (string, error) {
 		}),
 	)
 
-	newExecutor = agents.NewExecutor(a, agents.WithMaxIterations(1))
-
+	newExecutor = agents.NewExecutor(a)
 	result, err := chains.Run(
 		ctx,
 		newExecutor,
@@ -156,8 +148,9 @@ func Run(c *ava.Context, uid, homeId, content string) (string, error) {
 		chains.WithTemperature(0.5),
 	)
 
-	if err != nil {
+	if err != nil && !errors.Is(doneExitError, err) {
 		c.Errorf("result=%v |err=%v", result, err)
+		return "", err
 	}
 
 	fmt.Println("-------1--", result)

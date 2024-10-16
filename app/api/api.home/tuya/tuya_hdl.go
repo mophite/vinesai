@@ -134,9 +134,7 @@ func (t *Tuya) Intent(c *ava.Context, req *ptuya.UserIntentReq, rsp *ptuya.UserI
 	}
 
 	rsp.Code = http.StatusOK
-	rsp.Data = &ptuya.UserIntentData{
-		Content: msg,
-	}
+	rsp.Msg = msg
 }
 
 // 用户意图，通过设备列表和控制指令集发送给ai，获取到返回的播报和指令，并发送指令到涂鸦

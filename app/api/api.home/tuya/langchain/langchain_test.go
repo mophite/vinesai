@@ -7,6 +7,7 @@ import (
 	"testing"
 	"vinesai/internel/ava"
 	"vinesai/internel/config"
+	"vinesai/internel/lib/tuyago"
 
 	"github.com/tmc/langchaingo/embeddings"
 	"github.com/tmc/langchaingo/llms/openai"
@@ -32,10 +33,40 @@ func init() {
 	)
 }
 
+type grouInfo struct {
+	SpaceId   string `json:"space_id"`
+	GroupName string `json:"group_name"`
+	ProductId string `json:"product_id"`
+	DeviceIds string `json:"device_ids"`
+}
+
+func TestGroup(t *testing.T) {
+	var result struct {
+		Success bool `json:"success"`
+	}
+
+	var g = &grouInfo{
+		SpaceId:   "178176713",
+		GroupName: "测试",
+		ProductId: "",
+		DeviceIds: "",
+	}
+
+	err := tuyago.Post(ava.Background(), "/v2.0/cloud/thing/group", g, &result)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestRun(t *testing.T) {
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "打开客厅双色1号温明装射灯")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "打开所有")
-	Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "关闭客厅所有灯")
+	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "关闭客厅所有灯")
+	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "同步设备")
+	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "打开所有灯")
+	Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "同步设备"+
+		""+
+		"")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "今天贵阳的天气怎么样")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "如何看待出师表")
 }

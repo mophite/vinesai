@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-	"time"
 	"vinesai/internel/ava"
 	"vinesai/internel/db"
 	"vinesai/internel/lib/tuyago"
@@ -16,17 +15,7 @@ import (
 	"github.com/tmc/langchaingo/llms"
 )
 
-// 一次多个意图
-type summaries struct {
-	Result []*summaryData `json:"result"`
-}
-
-type summaryData struct {
-	Content string   `json:"content"`
-	Summary string   `json:"summary"`
-	Devices []string `json:"devices"`
-}
-
+// 直接设备控制
 type summary struct{ CallbacksHandler LogHandler }
 
 func (s *summary) Name() string {
@@ -34,7 +23,7 @@ func (s *summary) Name() string {
 }
 
 func (s *summary) Description() string {
-	return `明确的智能家居设备控制请求`
+	return `意图描述是明确直接控制智能家居设备`
 }
 
 var defaultSummaryMsg = "x-langchaingo-summary-msg"
@@ -91,28 +80,17 @@ func (s *summary) Call(ctx context.Context, input string) (string, error) {
 
 	setSummaryMsg(c, msg)
 
-	return msg, errors.New("exit")
-}
-
-type ShortSummaryDeviceInfo struct {
-	Result []*ShortSummryDevice `json:"result"`
-}
-
-type ShortSummryDevice struct {
-	Id        string `json:"id"`
-	Name      string `json:"name"`
-	Position  string `json:"position"`
-	ProductId string `json:"product_id"`
-	Category  string `json:"category"`
+	return msg, doneExitError
+	//return msg, nil
 }
 
 // 根据位置信息选取设备
 func chooseAndControlDevices(c *ava.Context, s *summaries, devicesMap map[string]*device) (string, error) {
 
-	var failureMessage []string
-	var successMessage []string
-	var offlineMessage []string
-	var alreadyMessage []string
+	var failureMessageArr []string
+	var successMessageArr []string
+	var offlineMessageArr []string
+	var alreadyMessageArr []string
 
 	for i := range s.Result {
 		summa := s.Result[i]
@@ -128,6 +106,10 @@ func chooseAndControlDevices(c *ava.Context, s *summaries, devicesMap map[string
 			if err != nil {
 				c.Error(err)
 				continue
+			}
+
+			if fs.FailureMsg != "" {
+				failureMessageArr = append(failureMessageArr, fs.FailureMsg)
 			}
 
 			var tmpDevicesResp = &deviceResp{}
@@ -146,7 +128,7 @@ func chooseAndControlDevices(c *ava.Context, s *summaries, devicesMap map[string
 
 			//判断设备状态是否在线
 			if !tmpDevicesResp.Result.Online {
-				offlineMessage = append(offlineMessage, offlineMsg(d.Name))
+				offlineMessageArr = append(offlineMessageArr, offlineMsg(d.Name))
 				continue
 			}
 
@@ -160,6 +142,7 @@ func chooseAndControlDevices(c *ava.Context, s *summaries, devicesMap map[string
 					if tmpFs.Code == tmpDeviceStatus.Code {
 
 						if reflect.DeepEqual(tmpFs.Value, tmpDeviceStatus.Value) {
+							c.Debugf("src=%s |dst=%s", x.MustMarshal2String(tmpFs), x.MustMarshal2String(tmpDeviceStatus))
 							isSame = true
 						} else {
 							isSame = false
@@ -172,7 +155,7 @@ func chooseAndControlDevices(c *ava.Context, s *summaries, devicesMap map[string
 
 			//状态一致不用比较
 			if isSame {
-				alreadyMessage = append(alreadyMessage, alreadyMsg(d.Name))
+				alreadyMessageArr = append(alreadyMessageArr, alreadyMsg(d.Name))
 				continue
 			}
 
@@ -183,17 +166,17 @@ func chooseAndControlDevices(c *ava.Context, s *summaries, devicesMap map[string
 
 			if err != nil {
 				c.Error(err)
-				failureMessage = append(failureMessage, failureMsg(name))
+				failureMessageArr = append(failureMessageArr, failureMsg(name))
 				continue
 			}
 
 			if controlResp.Result && controlResp.Success {
 				//判断语气中是否包含设备名称，这种情况是通过ai获取的结果
 				if strings.Contains(fs.SuccessMsg, d.Name) {
-					successMessage = append(successMessage, fs.SuccessMsg)
+					successMessageArr = append(successMessageArr, fs.SuccessMsg)
 					fs.SuccessMsg = strings.Trim(fs.SuccessMsg, d.Name)
 				} else {
-					successMessage = append(successMessage, d.Name+fs.SuccessMsg)
+					successMessageArr = append(successMessageArr, d.Name+fs.SuccessMsg)
 				}
 
 				//缓存指令
@@ -206,42 +189,42 @@ func chooseAndControlDevices(c *ava.Context, s *summaries, devicesMap map[string
 					c.Error(err)
 				}
 			} else {
-				failureMessage = append(failureMessage, failureMsg(name))
+				failureMessageArr = append(failureMessageArr, failureMsg(name))
 			}
 		}
 	}
 
 	var msg string
 
-	if len(failureMessage) > 3 {
+	if len(failureMessageArr) > 3 {
 		msg = "有大量设备控制失败，请检查"
 		return msg, nil
 	}
 
-	if len(successMessage) > 3 || len(alreadyMessage) > 3 {
+	if len(successMessageArr) > 3 || len(alreadyMessageArr) > 3 {
 		msg = "好的主人，设备都已控制成功啦"
 		return msg, nil
 	}
 
-	if len(offlineMessage) > 3 {
+	if len(offlineMessageArr) > 3 {
 		msg = "有大量设备离线，请检查"
 		return msg, nil
 	}
 
-	for i := range failureMessage {
-		msg += failureMessage[i] + ","
+	for i := range failureMessageArr {
+		msg += failureMessageArr[i] + ","
 	}
 
-	for i := range successMessage {
-		msg += successMessage[i] + ","
+	for i := range successMessageArr {
+		msg += successMessageArr[i] + ","
 	}
 
-	for i := range offlineMessage {
-		msg += offlineMessage[i] + ","
+	for i := range offlineMessageArr {
+		msg += offlineMessageArr[i] + ","
 	}
 
-	for i := range alreadyMessage {
-		msg += alreadyMessage[i] + ","
+	for i := range alreadyMessageArr {
+		msg += alreadyMessageArr[i] + ","
 	}
 
 	return msg, nil
@@ -332,14 +315,6 @@ func getProductIdCommand(c *ava.Context, productId, deviceId string) (string, er
 	return value, nil
 }
 
-type summaryCommandsResp struct {
-	SuccessMsg string `json:"success_msg"`
-	Result     []struct {
-		Code  string      `json:"code"`
-		Value interface{} `json:"value"`
-	} `json:"result"`
-}
-
 func getSummaryCommand(c *ava.Context, category, productId, summaryStr, deviceId, deviceName, input string) (*summaryCommandsResp, error) {
 
 	var key = getSummaryCategoryListKey(category, productId)
@@ -385,7 +360,7 @@ func getSummaryCommand(c *ava.Context, category, productId, summaryStr, deviceId
 		},
 	}
 
-	err = generateContentWithout(c, mcList, &resp)
+	err = GenerateContentWithout(c, mcList, &resp)
 	if err != nil {
 		c.Error(err)
 		return nil, err
@@ -397,111 +372,6 @@ func getSummaryCommand(c *ava.Context, category, productId, summaryStr, deviceId
 
 	return &resp, nil
 }
-
-// 同步用户设备信息
-// 设备名称数组
-// 设备名：详细设备数据
-func syncDevicesForSummary(c *ava.Context, homeId string) ([]string, map[string]*device, error) {
-
-	//获取房间信息
-	var roomResp = &roomInfo{}
-
-	err := tuyago.Get(c, fmt.Sprintf("/v1.0/homes/%s/rooms", homeId), roomResp)
-
-	if err != nil {
-		c.Error(err)
-		return nil, nil, err
-	}
-
-	if !roomResp.Success {
-		return nil, nil, errors.New("获取房间信息失败")
-	}
-
-	c.Debugf("roomInfo: %v", roomResp)
-
-	if len(roomResp.Result.Rooms) == 0 {
-		return nil, nil, errors.New("请创建房间，并将设备添加到房间中")
-	}
-
-	var devicesName = make([]string, 0, 20)
-	var devicesNameMap = make(map[string]*device, 20)
-
-	//遍历房间获取设备
-	for i := range roomResp.Result.Rooms {
-		var tmpRoom = roomResp.Result.Rooms[i]
-
-		var tmpDevicesResp = &deviceListResp{}
-
-		err = tuyago.Get(c, fmt.Sprintf("/v1.0/homes/%s/rooms/%d/devices", homeId, tmpRoom.RoomID), tmpDevicesResp)
-
-		if err != nil {
-			ava.Error(err)
-			return nil, nil, err
-		}
-
-		if !tmpDevicesResp.Success {
-			ava.Debugf("get device list from room fail |data=%v |id=%v", tmpDevicesResp, tmpRoom.RoomID)
-			continue
-		}
-
-		c.Debugf("所有设备 ｜homeId=%s |rooName=%s |tmpResp=%v", homeId, tmpRoom.Name, x.MustMarshal2String(tmpDevicesResp))
-
-		if len(tmpDevicesResp.Result) == 0 {
-			continue
-		}
-
-		for ii := range tmpDevicesResp.Result {
-			tmpDeviceData := tmpDevicesResp.Result[ii]
-
-			//如果设备品类不在控制范围内，则不添
-			if getCategoryName(tmpDeviceData.Category) == "" {
-				continue
-			}
-
-			//判断设备名称中是否包含房间位置
-			if !strings.Contains(tmpDeviceData.Name, tmpRoom.Name) {
-				//修改设备名称
-				renameBody := &struct {
-					Name string `json:"name"`
-				}{
-					Name: tmpRoom.Name + tmpDeviceData.Name,
-				}
-				renameResp := &struct {
-					Result bool `json:"result"`
-				}{}
-				err = tuyago.Put(c, "/v1.0/devices/"+tmpDeviceData.Id, renameBody, renameResp)
-				if err != nil {
-					c.Error(err)
-					break
-				}
-
-				if !renameResp.Result {
-					break
-				}
-
-				tmpDeviceData.Name = tmpRoom.Name + tmpDeviceData.Name
-
-			}
-			devicesName = append(devicesName, tmpDeviceData.Name)
-			devicesNameMap[tmpDeviceData.Name] = tmpDeviceData
-		}
-	}
-
-	return devicesName, devicesNameMap, nil
-}
-
-// 单个房间里的设备类型
-type SummaryCategories struct {
-	CategoryData []*summaryCategoryData `json:"category_data"`
-}
-
-type summaryCategoryData struct {
-	CategoryName string `json:"category_name"`
-	Category     string `json:"category"`
-}
-
-var redisKeyTuyaSummaryDeviceName = "TUYA_SUMMARY_DEVICE_NAME_"
-var redisKeyTuyaSummaryDeviceNameMap = "TUYA_SUMMARY_DEVICE_NAME_MAP_"
 
 func getSummaryDevices(c *ava.Context, homeId string) ([]string, map[string]*device, error) {
 	devicesNameResult, err := db.GRedis.Get(context.Background(), redisKeyTuyaSummaryDeviceName+homeId).Result()
@@ -527,26 +397,6 @@ func getSummaryDevices(c *ava.Context, homeId string) ([]string, map[string]*dev
 
 		fmt.Println("-----------deviceName-------", deviceName)
 		fmt.Println("-----------deviceNameMap-------", deviceNameMap)
-
-		err = db.GRedis.Set(
-			context.Background(),
-			redisKeyTuyaSummaryDeviceName+homeId,
-			x.MustMarshal2String(deviceName),
-			time.Hour*2).Err()
-		if err != nil {
-			c.Error(err)
-			return nil, nil, err
-		}
-
-		err = db.GRedis.Set(
-			context.Background(),
-			redisKeyTuyaSummaryDeviceNameMap+homeId,
-			x.MustMarshal2String(deviceNameMap),
-			time.Hour*2).Err()
-		if err != nil {
-			c.Error(err)
-			return nil, nil, err
-		}
 
 		return deviceName, deviceNameMap, nil
 	}
@@ -584,13 +434,13 @@ func getSummaryInfo(c *ava.Context, input string, devicesName []string) (*summar
 
 	//
 	var resp summaries
-	err := generateContentWithout(c, mcList, &resp)
+	err := GenerateContentWithout(c, mcList, &resp)
 	if err != nil {
 		c.Error(err)
 		return nil, err
 	}
 
-	c.Debugf("getSummaryInfo |data=%v", x.MustMarshal2String(resp))
+	c.Debugf("getummaryInfo |data=%v", x.MustMarshal2String(resp))
 	return &resp, nil
 }
 
@@ -601,7 +451,7 @@ var summaryActionPrompts = `根据我的意图描述，如果有多个动作意�
   "result": [
     {
       "content":"将客厅灯光调到4000k",
-      "summary": "灯调光",
+      "summary": "调灯光",
       "devices": [
          "客厅zigbee双色灯",
          "客厅双色1号温明装射灯"
@@ -612,24 +462,21 @@ var summaryActionPrompts = `根据我的意图描述，如果有多个动作意�
 
 ### 字段说明
 content:完整的意图，例如：将客厅灯光调到4000k
-summary: 简要意图，不超过5个字，例如：打开灯`
+summary: 简要意图，不超过5个字，例如：打开灯，色温100，亮度4000,等等，如果有数值，则必须在该字段中包含
+
+### 注意事项
+1.如果设备没有明确关联，不要去控制其他设备，比如客厅有插排，我的意图是关灯，但是你不知道插排是不是控制灯的时候，就不要去关闭插排`
 
 var summaryCommandPrompts = `根据我的意图描述，选择指令返回给我；
 ### 设备名称：%s
 ### 指令数据：%s
 ### 返回json数据格式：
 {
-	"success_msg":"[设备名称]已调到400k",
+	"success_msg":"[设备名称]已调到400",
+	"failure_msg":"[设备名称]灯光色温最大值是1000",
 	"result":[{"code":"",value:400}]
 }
 
 ### 字段说明
-success_msg:设备控制结果，[设备名称]+结果，例如:当设备名称是“客厅一号灯”时，success_msg的值是: 客厅一号灯已打开`
-
-var callbackAgentPrompts = `根据我的意图，从以下所有功能中找出最合适一个返回；
-### 功能数据：%s
-### 返回json数据格式:
-{
-	"argument":"summary"
-}
-`
+success_msg:设备控制结果，[设备名称]+结果，例如:当设备名称是“客厅一号灯”时，success_msg的值是: 客厅一号灯已打开；
+failure_msg:结合[指令数据]和我的意图分析是否存在指令或是否超出范围，指令正确时，这个字段为空`

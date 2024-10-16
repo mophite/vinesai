@@ -33,7 +33,7 @@ func main() {
 
 	//静态文件
 	app.StaticFS("/", getAssetFS())
-	if err := app.Run(":8122"); err != nil {
+	if err := app.Run(":8080"); err != nil {
 		panic(err)
 	}
 }

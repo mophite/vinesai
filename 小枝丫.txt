@@ -129,6 +129,7 @@ scp srv.hub root@43.132.184.162:/root
 cd /opt/app
 
 systemctl start nginx
+systemctl restart nginx
 systemctl start redis
 service mysqld start
 

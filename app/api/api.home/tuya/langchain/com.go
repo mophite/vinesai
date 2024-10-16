@@ -1,5 +1,120 @@
 package langchain
 
+type deviceResp struct {
+	Result   *device `json:"result"`
+	Position string  `json:"position"` //非接口返回字段，需要通过其他接口获取
+	Success  bool    `json:"success"`
+	T        int     `json:"t"`
+	Tid      string  `json:"tid"`
+}
+
+// 用户设备信息
+type device struct {
+	Id        string    `json:"id"`
+	Name      string    `json:"name"`
+	Status    []*status `json:"status"`
+	Category  string    `json:"category"`
+	Online    bool      `json:"online"`
+	ProductId string    `json:"product_id"`
+
+	roomName string
+}
+
+type status struct {
+	Code  string      `json:"code"`
+	Value interface{} `json:"value"`
+}
+
+// 批量获取指令集
+type commandsResp struct {
+	Result  []*command `json:"result"`
+	Success bool       `json:"success"`
+	T       int        `json:"t"`
+	Tid     string     `json:"tid"`
+}
+
+type command struct {
+	Devices   []string    `json:"devices"`
+	Functions []*function `json:"functions"`
+}
+
+type function struct {
+	Code   string      `json:"code"`
+	Desc   string      `json:"desc"`
+	Name   string      `json:"name"`
+	Type   string      `json:"type"`
+	Values interface{} `json:"values"`
+}
+
+// 获取用户的设备列表
+type deviceListResp struct {
+	Result   []*device `json:"result"`
+	Position string    `json:"position"` //非接口返回字段，需要通过其他接口获取
+	Success  bool      `json:"success"`
+	T        int       `json:"t"`
+	Tid      string    `json:"tid"`
+}
+
+type roomInfo struct {
+	Result struct {
+		GeoName string  `json:"geo_name"`
+		HomeID  int64   `json:"home_id"`
+		Lat     float64 `json:"lat"`
+		Lon     float64 `json:"lon"`
+		Name    string  `json:"name"`
+		Rooms   []*room `json:"rooms"`
+	} `json:"result"`
+	Success bool  `json:"success"`
+	T       int64 `json:"t"`
+}
+
+type room struct {
+	Name   string `json:"name"`
+	RoomID int64  `json:"room_id"`
+}
+
+type ShortSummaryDeviceInfo struct {
+	Result []*ShortSummaryDevice `json:"result"`
+}
+
+type ShortSummaryDevice struct {
+	Id        string `json:"id"`
+	Name      string `json:"name"`
+	Position  string `json:"position"`
+	ProductId string `json:"product_id"`
+	Category  string `json:"category"`
+}
+
+type summaryCommandsResp struct {
+	FailureMsg string `json:"failure_msg"`
+	SuccessMsg string `json:"success_msg"`
+	Result     []struct {
+		Code  string      `json:"code"`
+		Value interface{} `json:"value"`
+	} `json:"result"`
+}
+
+// 单个房间里的设备类型
+type SummaryCategories struct {
+	CategoryData []*summaryCategoryData `json:"category_data"`
+}
+
+type summaryCategoryData struct {
+	CategoryName string `json:"category_name"`
+	Category     string `json:"category"`
+}
+
+// 一次多个意图
+type summaries struct {
+	Result []*summaryData `json:"result"`
+}
+
+type summaryData struct {
+	Content string   `json:"content"`
+	Summary string   `json:"summary"`
+	Devices []string `json:"devices"`
+}
+
 func getCategoryName(categoryId string) string {
 	return testcategoryName[categoryId]
 }
