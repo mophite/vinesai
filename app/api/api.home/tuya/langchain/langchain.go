@@ -10,7 +10,6 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/tmc/langchaingo/agents"
-	"github.com/tmc/langchaingo/callbacks"
 	"github.com/tmc/langchaingo/chains"
 	"github.com/tmc/langchaingo/llms"
 	"github.com/tmc/langchaingo/llms/openai"
@@ -34,6 +33,7 @@ var defaultUrl = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 //var defaultUrl = "https://ai-yyds.com/v1"
 
 var langchaingoOpenAi *openai.LLM
+var newExecutor *agents.Executor
 
 func init() {
 	var err error
@@ -91,7 +91,7 @@ func GenerateContentWithout(c *ava.Context, mcList []llms.MessageContent, v inte
 	return nil
 }
 
-var buffChatMemory = newBufferChatMessageHistory()
+var buffChatMemory = newBufferChatMessageHistory(withBufferChatMessageHistoryLimit(5))
 
 func fromCtx(ctx context.Context) *ava.Context {
 	c, _ := ctx.Value(defaultAvaCtxKey).(*ava.Context)
@@ -127,33 +127,40 @@ func Run(c *ava.Context, uid, homeId, content string) (string, error) {
 	ctx := context.WithValue(context.Background(), defaultBufferUidKey, uid)
 	ctx = context.WithValue(ctx, defaultAvaCtxKey, c)
 
-	var newExecutor *agents.Executor
 	a := agents.NewOpenAIFunctionsAgent(langchaingoOpenAi,
 		Tools,
-		agents.WithMaxIterations(1),
-		agents.WithMemory(memory.NewConversationBuffer(memory.WithChatHistory(buffChatMemory))),
-		agents.NewOpenAIOption().WithSystemMessage("你叫`homingAI`，你是一个性格俏皮的智能管家，担当智能家居设备控制和其他生活管理、咨询的工作"),
+		agents.NewOpenAIOption().WithSystemMessage("你叫`homingAI`，你是一个性格俏皮的智能管家，担当智能家居设备控制和其他生活管理、咨询的工作。"),
 		agents.NewOpenAIOption().WithExtraMessages([]prompts.MessageFormatter{
-			prompts.NewHumanMessagePromptTemplate("你对场景的智能家居场景非常熟悉", nil),
+			prompts.NewHumanMessagePromptTemplate(`你对场景的智能家居场景非常熟悉,判断我的意图，如果是普通对话不要使用functioncall。
+上一次对话记录：
+{{.history}}`, nil),
 		}),
 	)
 
-	newExecutor = agents.NewExecutor(a)
+	newExecutor = agents.NewExecutor(
+		a,
+		agents.WithMemory(memory.NewConversationBuffer(memory.WithChatHistory(buffChatMemory))),
+		agents.WithMaxIterations(1),
+	)
+
 	result, err := chains.Run(
 		ctx,
 		newExecutor,
 		content,
-		chains.WithCallback(callbacks.LogHandler{}),
+		//chains.WithCallback(callbacks.LogHandler{}),
 		chains.WithTopP(0.5),
 		chains.WithTemperature(0.5),
 	)
 
 	if err != nil && !errors.Is(doneExitError, err) {
 		c.Errorf("result=%v |err=%v", result, err)
-		return "", err
+		return "出了点小故障，请重试", err
 	}
 
 	fmt.Println("-------1--", result)
+	if result != "" {
+		return result, err
+	}
 
 	return getSummaryMsg(c)
 }

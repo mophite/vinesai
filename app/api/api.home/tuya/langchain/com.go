@@ -106,7 +106,8 @@ type summaryCategoryData struct {
 
 // 一次多个意图
 type summaries struct {
-	Result []*summaryData `json:"result"`
+	FailureMsg string         `json:"failure_msg"`
+	Result     []*summaryData `json:"result"`
 }
 
 type summaryData struct {

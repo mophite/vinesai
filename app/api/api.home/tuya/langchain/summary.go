@@ -46,6 +46,11 @@ func (s *summary) Call(ctx context.Context, input string) (string, error) {
 	var c = fromCtx(ctx)
 	var homeId = getHomeId(c)
 
+	var msg = "请告诉我你要控制什么设备"
+	defer func() {
+		setSummaryMsg(c, msg)
+	}()
+
 	//获取所有设备
 	devicesName, devicesNameMap, err := getSummaryDevices(c, homeId)
 	if err != nil {
@@ -59,7 +64,11 @@ func (s *summary) Call(ctx context.Context, input string) (string, error) {
 		return "", err
 	}
 
-	msg, err := chooseAndControlDevices(c, summary, devicesNameMap)
+	if summary.FailureMsg != "" {
+		return "", doneExitError
+	}
+
+	msg, err = chooseAndControlDevices(c, summary, devicesNameMap)
 	if err != nil {
 		c.Error(err)
 		return "", err
@@ -77,8 +86,6 @@ func (s *summary) Call(ctx context.Context, input string) (string, error) {
 	//}
 	//
 	//s.CallbacksHandler.HandleLLMGenerateContentEnd(ctx, &llms.ContentResponse{Choices: choice})
-
-	setSummaryMsg(c, msg)
 
 	return msg, doneExitError
 	//return msg, nil
@@ -448,6 +455,7 @@ var summaryActionPrompts = `根据我的意图描述，如果有多个动作意�
 ### 设备列表：%s
 ### 返回json数据格式：
 {
+  "failure_msg":"请告诉我你想要控制什么设备",
   "result": [
     {
       "content":"将客厅灯光调到4000k",
@@ -461,8 +469,9 @@ var summaryActionPrompts = `根据我的意图描述，如果有多个动作意�
 }
 
 ### 字段说明
-content:完整的意图，例如：将客厅灯光调到4000k
-summary: 简要意图，不超过5个字，例如：打开灯，色温100，亮度4000,等等，如果有数值，则必须在该字段中包含
+summary: 简要意图，不超过5个字，例如：打开灯，色温100，亮度4000,等等，如果有数值，则必须在该字段中包含;
+content:完整的意图，例如：将客厅灯光调到4000k;
+failure_msg:1.根据意图，如果分析意图失败，返回例子：请告诉我你想要控制什么设备;2.根据[设备列表]数据，如果没有找到设备，返回例子：你还没有空调
 
 ### 注意事项
 1.如果设备没有明确关联，不要去控制其他设备，比如客厅有插排，我的意图是关灯，但是你不知道插排是不是控制灯的时候，就不要去关闭插排`

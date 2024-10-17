@@ -13,7 +13,6 @@ import (
 )
 
 // 同步设备
-// 检查信号强度
 type syncDevices struct{ CallbacksHandler LogHandler }
 
 func (s *syncDevices) Name() string {
@@ -21,7 +20,7 @@ func (s *syncDevices) Name() string {
 }
 
 func (s *syncDevices) Description() string {
-	return `用于同步设备`
+	return `用于同步设备,初始化分组，分组创建`
 }
 
 // 设备数量通知，离线设备通知，场景数量通知，

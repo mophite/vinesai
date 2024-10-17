@@ -11,6 +11,7 @@ import (
 
 	"github.com/tmc/langchaingo/embeddings"
 	"github.com/tmc/langchaingo/llms/openai"
+	"github.com/tmc/langchaingo/prompts"
 	"github.com/tmc/langchaingo/schema"
 	"github.com/tmc/langchaingo/vectorstores"
 	"github.com/tmc/langchaingo/vectorstores/redisvector"
@@ -64,11 +65,23 @@ func TestRun(t *testing.T) {
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "关闭客厅所有灯")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "同步设备")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "打开所有灯")
-	Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "同步设备"+
-		""+
-		"")
+	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "同步设备")
+	Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "你好")
+	Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "我上一句说了什么")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "今天贵阳的天气怎么样")
-	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "如何看待出师表")
+	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "调高地暖温度")
+}
+
+func TestPrompts(t *testing.T) {
+	var tmp = `
+{{.history}}
+`
+	p := prompts.NewPromptTemplate(tmp, []string{"history"})
+	s, err := p.Format(map[string]any{"history": "ssss"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(s)
 }
 
 /*
