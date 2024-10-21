@@ -6,8 +6,7 @@ import "context"
 type scene struct{ CallbacksHandler LogHandler }
 
 func (s *scene) Name() string {
-	//TODO implement me
-	panic("implement me")
+	return "smart_home_scene"
 }
 
 func (s *scene) Description() string {

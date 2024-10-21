@@ -6,13 +6,17 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"sync"
+	"time"
 	"vinesai/internel/ava"
 	"vinesai/internel/db"
 	"vinesai/internel/lib/tuyago"
 	"vinesai/internel/x"
 
+	"vinesai/internel/langchaingo/llms"
+
+	"github.com/panjf2000/ants/v2"
 	"github.com/redis/go-redis/v9"
-	"github.com/tmc/langchaingo/llms"
 )
 
 // 直接设备控制
@@ -23,22 +27,7 @@ func (s *summary) Name() string {
 }
 
 func (s *summary) Description() string {
-	return `意图描述是明确直接控制智能家居设备`
-}
-
-var defaultSummaryMsg = "x-langchaingo-summary-msg"
-
-func setSummaryMsg(c *ava.Context, value string) {
-	c.Set(defaultSummaryMsg, value)
-}
-
-func getSummaryMsg(c *ava.Context) (string, error) {
-	s := c.GetString(defaultSummaryMsg)
-	if len(s) == 0 {
-		return "", errors.New("获取数据失败")
-	}
-
-	return s, nil
+	return `明确直接控制智能家居设备`
 }
 
 func (s *summary) Call(ctx context.Context, input string) (string, error) {
@@ -47,31 +36,28 @@ func (s *summary) Call(ctx context.Context, input string) (string, error) {
 	var homeId = getHomeId(c)
 
 	var msg = "请告诉我你要控制什么设备"
-	defer func() {
-		setSummaryMsg(c, msg)
-	}()
 
 	//获取所有设备
 	devicesName, devicesNameMap, err := getSummaryDevices(c, homeId)
 	if err != nil {
 		c.Error(err)
-		return "", err
+		return msg, err
 	}
 
 	summary, err := getSummaryInfo(c, getFirstInput(c), devicesName)
 	if err != nil {
 		c.Error(err)
-		return "", err
+		return msg, err
 	}
 
 	if summary.FailureMsg != "" {
-		return "", doneExitError
+		return summary.FailureMsg, nil
 	}
 
 	msg, err = chooseAndControlDevices(c, summary, devicesNameMap)
 	if err != nil {
 		c.Error(err)
-		return "", err
+		return msg, err
 	}
 
 	c.Debug("-------msg----", msg)
@@ -87,118 +73,147 @@ func (s *summary) Call(ctx context.Context, input string) (string, error) {
 	//
 	//s.CallbacksHandler.HandleLLMGenerateContentEnd(ctx, &llms.ContentResponse{Choices: choice})
 
-	return msg, doneExitError
-	//return msg, nil
+	//return msg, doneExitError
+	return msg, nil
 }
 
 // 根据位置信息选取设备
-func chooseAndControlDevices(c *ava.Context, s *summaries, devicesMap map[string]*device) (string, error) {
+func chooseAndControlDevices(c *ava.Context, s *summaries, devicesMap map[string]*mgoDocDevice) (string, error) {
+
+	if len(devicesMap) == 0 {
+		return "没有设备需要控制", errors.New("no mgoDocDevice need to control")
+	}
 
 	var failureMessageArr []string
 	var successMessageArr []string
 	var offlineMessageArr []string
 	var alreadyMessageArr []string
 
+	pool, err := ants.NewPool(5)
+	if err != nil {
+		c.Error(err)
+		return "ants no submit", err
+	}
+	var mux = new(sync.Mutex)
+
 	for i := range s.Result {
 		summa := s.Result[i]
-		for ii := range summa.Devices {
-			name := summa.Devices[ii]
-			d, ok := devicesMap[name]
-			if !ok {
-				continue
-			}
+		ds := strings.Split(summa.Devices, ",")
+		for ii := range ds {
+			name := ds[ii]
 
-			//从redis获取简短的设备指令
-			fs, err := getSummaryCommand(c, d.Category, d.ProductId, summa.Summary, d.Id, d.Name, summa.Content)
-			if err != nil {
-				c.Error(err)
-				continue
-			}
+			err = pool.Submit(func() {
 
-			if fs.FailureMsg != "" {
-				failureMessageArr = append(failureMessageArr, fs.FailureMsg)
-			}
+				d, ok := devicesMap[name]
+				if !ok {
+					return
+				}
 
-			var tmpDevicesResp = &deviceResp{}
+				//从redis获取简短的设备指令
+				fs, err := getSummaryCommand(c, d.Category, d.ProductID, summa.Summary, d.ID, d.Name, summa.Content)
+				if err != nil {
+					ava.Error(err)
+					return
+				}
 
-			err = tuyago.Get(c, fmt.Sprintf("/v1.0/devices/%s", d.Id), tmpDevicesResp)
+				if fs.FailureMsg != "" {
+					syncStringArr(mux, &failureMessageArr, fs.FailureMsg)
+				}
 
-			if err != nil {
-				c.Error(err)
-				continue
-			}
+				var tmpDevicesResp = &deviceResp{}
 
-			if !tmpDevicesResp.Success {
-				c.Debugf("get device list from room fail |data=%v |id=%v", tmpDevicesResp, d.Id)
-				continue
-			}
+				err = tuyago.Get(c, fmt.Sprintf("/v1.0/devices/%s", d.ID), tmpDevicesResp)
 
-			//判断设备状态是否在线
-			if !tmpDevicesResp.Result.Online {
-				offlineMessageArr = append(offlineMessageArr, offlineMsg(d.Name))
-				continue
-			}
+				if err != nil {
+					ava.Error(err)
+					return
+				}
 
-			var isSame = false
-			//判断设备当前状态是否和指令返回一致
-			for iii := range fs.Result {
-				tmpFs := fs.Result[iii]
-				for iiii := range tmpDevicesResp.Result.Status {
-					tmpDeviceStatus := tmpDevicesResp.Result.Status[iiii]
+				if !tmpDevicesResp.Success {
+					c.Debugf("get mgoDocDevice list from room fail |data=%v |id=%v", tmpDevicesResp, d.ID)
+					return
+				}
 
-					if tmpFs.Code == tmpDeviceStatus.Code {
+				//判断设备状态是否在线
+				if !tmpDevicesResp.Result.Online {
+					syncStringArr(mux, &offlineMessageArr, offlineMsg(d.Name))
+					return
+				}
 
-						if reflect.DeepEqual(tmpFs.Value, tmpDeviceStatus.Value) {
-							c.Debugf("src=%s |dst=%s", x.MustMarshal2String(tmpFs), x.MustMarshal2String(tmpDeviceStatus))
-							isSame = true
-						} else {
-							isSame = false
+				var isSame = false
+				//判断设备当前状态是否和指令返回一致
+				for iii := range fs.Result {
+					tmpFs := fs.Result[iii]
+					for iiii := range tmpDevicesResp.Result.Status {
+						tmpDeviceStatus := tmpDevicesResp.Result.Status[iiii]
+
+						if tmpFs.Code == tmpDeviceStatus.Code {
+
+							if reflect.DeepEqual(tmpFs.Value, tmpDeviceStatus.Value) {
+								c.Debugf("src=%s |dst=%s", x.MustMarshal2String(tmpFs), x.MustMarshal2String(tmpDeviceStatus))
+								isSame = true
+							} else {
+								isSame = false
+							}
+
+							break
 						}
-
-						break
 					}
 				}
-			}
 
-			//状态一致不用比较
-			if isSame {
-				alreadyMessageArr = append(alreadyMessageArr, alreadyMsg(d.Name))
-				continue
-			}
+				//状态一致不用比较
+				if isSame {
+					syncStringArr(mux, &alreadyMessageArr, alreadyMsg(d.Name))
+					return
+				}
 
-			//执行设备控制
-			var controlResp summaryControlDeviceResp
-			//执行控制
-			err = tuyago.Post(c, fmt.Sprintf("/v1.0/devices/%s/commands", d.Id), &summaryControlData{Commands: x.MustMarshal2String(fs.Result)}, &controlResp)
+				//执行设备控制
+				var controlResp summaryControlDeviceResp
+				//执行控制
+				err = tuyago.Post(c, fmt.Sprintf("/v1.0/devices/%s/commands", d.ID), &summaryControlData{Commands: x.MustMarshal2String(fs.Result)}, &controlResp)
+
+				if err != nil {
+					ava.Error(err)
+					syncStringArr(mux, &failureMessageArr, failureMsg(d.Name))
+					return
+				}
+
+				if controlResp.Result && controlResp.Success {
+					//判断语气中是否包含设备名称，这种情况是通过ai获取的结果
+					if strings.Contains(fs.SuccessMsg, d.Name) {
+						syncStringArr(mux, &successMessageArr, fs.SuccessMsg)
+
+						fs.SuccessMsg = strings.Trim(fs.SuccessMsg, d.Name)
+					} else {
+						syncStringArr(mux, &successMessageArr, d.Name+fs.SuccessMsg)
+					}
+
+					//缓存指令
+					err = db.GRedis.HSet(
+						context.Background(),
+						getSummaryCategoryListKey(d.Category, d.ProductID),
+						summa.Summary,
+						x.MustMarshal2String(fs)).Err()
+					if err != nil {
+						ava.Error(err)
+					}
+				} else {
+					syncStringArr(mux, &failureMessageArr, failureMsg(name))
+				}
+			})
 
 			if err != nil {
-				c.Error(err)
-				failureMessageArr = append(failureMessageArr, failureMsg(name))
+				ava.Error(err)
 				continue
 			}
 
-			if controlResp.Result && controlResp.Success {
-				//判断语气中是否包含设备名称，这种情况是通过ai获取的结果
-				if strings.Contains(fs.SuccessMsg, d.Name) {
-					successMessageArr = append(successMessageArr, fs.SuccessMsg)
-					fs.SuccessMsg = strings.Trim(fs.SuccessMsg, d.Name)
-				} else {
-					successMessageArr = append(successMessageArr, d.Name+fs.SuccessMsg)
-				}
-
-				//缓存指令
-				err = db.GRedis.HSet(
-					context.Background(),
-					getSummaryCategoryListKey(d.Category, d.ProductId),
-					summa.Summary,
-					x.MustMarshal2String(fs)).Err()
-				if err != nil {
-					c.Error(err)
-				}
-			} else {
-				failureMessageArr = append(failureMessageArr, failureMsg(name))
-			}
 		}
+	}
+
+	err = pool.ReleaseTimeout(time.Second * 20)
+	if err != nil {
+		c.Error(err)
+		return "ants release timeout", err
 	}
 
 	var msg string
@@ -234,7 +249,17 @@ func chooseAndControlDevices(c *ava.Context, s *summaries, devicesMap map[string
 		msg += alreadyMessageArr[i] + ","
 	}
 
+	if msg == "" {
+		return "没有设备需要控制", nil
+	}
+
 	return msg, nil
+}
+
+func syncStringArr(mux *sync.Mutex, arr *[]string, message string) {
+	mux.Lock()
+	*arr = append(*arr, message)
+	mux.Unlock()
 }
 
 // 设备，动作，值
@@ -380,7 +405,7 @@ func getSummaryCommand(c *ava.Context, category, productId, summaryStr, deviceId
 	return &resp, nil
 }
 
-func getSummaryDevices(c *ava.Context, homeId string) ([]string, map[string]*device, error) {
+func getSummaryDevices(c *ava.Context, homeId string) ([]string, map[string]*mgoDocDevice, error) {
 	devicesNameResult, err := db.GRedis.Get(context.Background(), redisKeyTuyaSummaryDeviceName+homeId).Result()
 	if err != nil && !errors.Is(err, redis.Nil) {
 		c.Error(err)
@@ -415,7 +440,7 @@ func getSummaryDevices(c *ava.Context, homeId string) ([]string, map[string]*dev
 		return nil, nil, err
 	}
 
-	var devicesNameMap map[string]*device
+	var devicesNameMap map[string]*mgoDocDevice
 	err = x.MustUnmarshal([]byte(deviceNameMapResult), &devicesNameMap)
 	if err != nil {
 		c.Error(err)
@@ -451,35 +476,35 @@ func getSummaryInfo(c *ava.Context, input string, devicesName []string) (*summar
 	return &resp, nil
 }
 
-var summaryActionPrompts = `根据我的意图描述，如果有多个动作意图，拆分出来，并找出你将要控制的设备，严格按照json数据格式返回给我，json数据前后不要出现任何字符；
-### 设备列表：%s
-### 返回json数据格式：
+var summaryActionPrompts = `分析我的意图，找出你将要控制的设备，严格按照返回例子的JSON数据结构返回；
+### 1.设备列表：%s
+
+### 2.字段说明：
+failure_msg:1.例子：你的要求暂时无法实现;2.根据[设备列表]数据，如果没有找到设备，返回例子：你还没有空调
+result:对象数组，一句话里面可能有一个或多个意图
+content:完整的意图，例如：将客厅灯光调到4000k;
+summary: 简要意图，不超过5个字，例如：打开灯，色温100，亮度4000等，如果有数值，则必须在该字段中包含;
+devices:字符串数组，如果可能有多个设备需要被控制，这些设备都写入到devices中
+
+### 3.注意事项
+如果开关、插座没有明确关联灯具，不要去使用开关、插座，除非我告诉你开关、插座是控制什么设备的
+
+### 4.返回例子：
 {
   "failure_msg":"请告诉我你想要控制什么设备",
   "result": [
     {
       "content":"将客厅灯光调到4000k",
-      "summary": "调灯光",
-      "devices": [
-         "客厅zigbee双色灯",
-         "客厅双色1号温明装射灯"
-      ]
+      "summary":"调灯光",
+      "devices":"客厅zigbee双色灯,客厅双色1号温明装射灯"
     }
   ]
-}
+}`
 
-### 字段说明
-summary: 简要意图，不超过5个字，例如：打开灯，色温100，亮度4000,等等，如果有数值，则必须在该字段中包含;
-content:完整的意图，例如：将客厅灯光调到4000k;
-failure_msg:1.根据意图，如果分析意图失败，返回例子：请告诉我你想要控制什么设备;2.根据[设备列表]数据，如果没有找到设备，返回例子：你还没有空调
-
-### 注意事项
-1.如果设备没有明确关联，不要去控制其他设备，比如客厅有插排，我的意图是关灯，但是你不知道插排是不是控制灯的时候，就不要去关闭插排`
-
-var summaryCommandPrompts = `根据我的意图描述，选择指令返回给我；
+var summaryCommandPrompts = `根据我的意图描述，选择指令按照json格式返回给我；
 ### 设备名称：%s
 ### 指令数据：%s
-### 返回json数据格式：
+### 返回例子：
 {
 	"success_msg":"[设备名称]已调到400",
 	"failure_msg":"[设备名称]灯光色温最大值是1000",

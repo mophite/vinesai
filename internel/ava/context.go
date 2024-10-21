@@ -51,6 +51,16 @@ func recycleContext(p *Context) {
 	}
 }
 
+func (c *Context) Recycle() {
+
+	c.reset()
+
+	select {
+	case gContextPool.c <- c:
+	default: //if pool full,throw away
+	}
+}
+
 func getContext() (p *Context) {
 	select {
 	case p = <-gContextPool.c:

@@ -1,6 +1,8 @@
 package x
 
 import (
+	"bytes"
+	"crypto/aes"
 	"crypto/md5"
 	"encoding/hex"
 	"time"
@@ -36,24 +38,6 @@ func TimingwheelTicker(t time.Duration, f func()) *timingwheel.Timer {
 	return tw.ScheduleFunc(&EveryScheduler{Interval: t}, f)
 }
 
-func RemoteIp() (string, error) {
-	//resp, err := http.Get("https://api.ipify.org?format=text")
-	//if err != nil {
-	//	return "", err
-	//}
-	//defer resp.Body.Close()
-	//
-	//// 读取响应内容
-	//body, err := io.ReadAll(resp.Body)
-	//if err != nil {
-	//	return "", err
-	//}
-	//
-	//return string(body), nil
-
-	return "", nil
-}
-
 func Md5(data string) string {
 	// Create a new MD5 hash
 	hash := md5.New()
@@ -66,4 +50,38 @@ func Md5(data string) string {
 
 	// Convert the byte slice to a hexadecimal string
 	return hex.EncodeToString(hashBytes)
+}
+
+func PKCS5Padding(ciphertext []byte, blockSize int) []byte {
+	padding := blockSize - len(ciphertext)%blockSize
+	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
+	return append(ciphertext, padtext...)
+}
+
+func PKCS5Unpadding(origData []byte) []byte {
+	length := len(origData)
+	unpadding := int(origData[length-1])
+	return origData[:(length - unpadding)]
+}
+
+func EcbEncrypt(data, key []byte) []byte {
+	block, _ := aes.NewCipher(key)
+	data = PKCS5Padding(data, block.BlockSize())
+	decrypted := make([]byte, len(data))
+	size := block.BlockSize()
+
+	for bs, be := 0, size; bs < len(data); bs, be = bs+size, be+size {
+		block.Encrypt(decrypted[bs:be], data[bs:be])
+	}
+	return decrypted
+}
+
+func EcbDecrypt(data, key []byte) []byte {
+	block, _ := aes.NewCipher(key)
+	decrypted := make([]byte, len(data))
+	size := block.BlockSize()
+	for bs, be := 0, size; bs < len(data); bs, be = bs+size, be+size {
+		block.Decrypt(decrypted[bs:be], data[bs:be])
+	}
+	return PKCS5Unpadding(decrypted)
 }

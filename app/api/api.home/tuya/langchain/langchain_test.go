@@ -9,12 +9,13 @@ import (
 	"vinesai/internel/config"
 	"vinesai/internel/lib/tuyago"
 
-	"github.com/tmc/langchaingo/embeddings"
-	"github.com/tmc/langchaingo/llms/openai"
-	"github.com/tmc/langchaingo/prompts"
-	"github.com/tmc/langchaingo/schema"
-	"github.com/tmc/langchaingo/vectorstores"
-	"github.com/tmc/langchaingo/vectorstores/redisvector"
+	"vinesai/internel/langchaingo/embeddings"
+	"vinesai/internel/langchaingo/llms/openai"
+	"vinesai/internel/langchaingo/prompts"
+	"vinesai/internel/langchaingo/schema"
+	"vinesai/internel/langchaingo/vectorstores"
+	"vinesai/internel/langchaingo/vectorstores/redisvector"
+
 	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
@@ -28,7 +29,8 @@ func init() {
 		//ava.WatchDog(tuya.Authorization),
 		ava.ConfigOption(
 			ava.Chaos(
-				config.ChaosRedis,
+				config.ChaosRedisAndMongo,
+				tuyago.Chaos,
 			)),
 		//ava.Cors(lib.Cors()),
 	)
@@ -64,12 +66,17 @@ func TestRun(t *testing.T) {
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "打开所有")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "关闭客厅所有灯")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "同步设备")
-	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "打开所有灯")
+	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "关闭所有灯")
+	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "关闭所有灯")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "同步设备")
-	Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "你好")
-	Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "我上一句说了什么")
+	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "你好")
+	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "我上一句说了什么")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "今天贵阳的天气怎么样")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "调高地暖温度")
+	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "我有多少个设备")
+	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "我只有16个设备，为什么是20个")
+	Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "客厅灯开着吗")
+	select {}
 }
 
 func TestPrompts(t *testing.T) {

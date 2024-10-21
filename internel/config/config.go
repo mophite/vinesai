@@ -12,6 +12,7 @@ type config struct {
 	Mysql  mysql  `json:"mysql"`
 	OpenAI openAI `json:"openai"`
 	Tuya   tuya   `json:"tuya"`
+	Mongo  mongo  `json:"mongo"`
 }
 
 // 涂鸦开放者平台配置
@@ -45,6 +46,11 @@ type openAI struct {
 	Method      string  `json:"method"`
 }
 
+//go:generate ETCDCTL_API=3 etcdctl put  configava/v1.0.0/public/ava.mongo "{ \"dsn\":\"mongodb://homingai:ojo1QbOygiKjT1uZ@47.106.129.170/:27017/homingai\"}"
+type mongo struct {
+	Dsn string `json:"dsn"`
+}
+
 func ChaosOpenAI() error {
 	if GConfig == nil {
 		GConfig = new(config)
@@ -62,7 +68,7 @@ func ChaosOpenAI() error {
 	return nil
 }
 
-func ChaosRedis() error {
+func ChaosRedisAndMongo() error {
 	if GConfig == nil {
 		GConfig = new(config)
 	}
@@ -80,6 +86,23 @@ func ChaosRedis() error {
 
 	//初始化redis
 	err = db.ChaosRedis(r.Address, r.Password)
+	if err != nil {
+		ava.Error(err)
+		return err
+	}
+
+	var m mongo
+	err = ava.ConfigDecPublic("mongo", &m)
+	if err != nil {
+		ava.Error(err)
+		return err
+	}
+
+	ava.Debugf("mongo |data=%v", m)
+
+	GConfig.Mongo = m
+
+	err = db.ChaosMongo(m.Dsn)
 	if err != nil {
 		ava.Error(err)
 		return err

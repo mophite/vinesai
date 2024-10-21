@@ -3,6 +3,7 @@ package main
 import (
 	"vinesai/internel/ava"
 	"vinesai/internel/config"
+	"vinesai/internel/lib/tuyago"
 	"vinesai/proto/ptuya"
 
 	"go.etcd.io/etcd/client/v3"
@@ -20,7 +21,8 @@ func main() {
 		//ava.WatchDog(tuya.Authorization),
 		ava.ConfigOption(
 			ava.Chaos(
-				config.ChaosRedis,
+				config.ChaosRedisAndMongo,
+				tuyago.Chaos,
 			)),
 		//ava.Cors(lib.Cors()),
 	)

@@ -129,6 +129,10 @@ func (t *Tuya) Intent(c *ava.Context, req *ptuya.UserIntentReq, rsp *ptuya.UserI
 	if err != nil {
 		c.Error(err)
 		rsp.Code = http.StatusBadRequest
+		if msg != "" {
+			rsp.Msg = msg
+			return
+		}
 		rsp.Msg = "请重试"
 		return
 	}

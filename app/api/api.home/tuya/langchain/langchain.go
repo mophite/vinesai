@@ -6,22 +6,26 @@ import (
 	"regexp"
 	"sync"
 	"vinesai/internel/ava"
+	"vinesai/internel/lib/tuyago"
 	"vinesai/internel/x"
 
+	"vinesai/internel/langchaingo/agents"
+	"vinesai/internel/langchaingo/chains"
+	"vinesai/internel/langchaingo/llms"
+	"vinesai/internel/langchaingo/llms/openai"
+	"vinesai/internel/langchaingo/memory"
+	"vinesai/internel/langchaingo/schema"
+	"vinesai/internel/langchaingo/tools"
+
 	"github.com/pkg/errors"
-	"github.com/tmc/langchaingo/agents"
-	"github.com/tmc/langchaingo/chains"
-	"github.com/tmc/langchaingo/llms"
-	"github.com/tmc/langchaingo/llms/openai"
-	"github.com/tmc/langchaingo/memory"
-	"github.com/tmc/langchaingo/prompts"
-	"github.com/tmc/langchaingo/schema"
-	"github.com/tmc/langchaingo/tools"
 )
 
 var Tools = []tools.Tool{
 	//&devicesAgent{CallbacksHandler: LogHandler{}},
 	&summary{CallbacksHandler: LogHandler{}},
+	&queryOnline{CallbacksHandler: LogHandler{}},
+	&queryOffline{CallbacksHandler: LogHandler{}},
+	&queryDevice{CallbacksHandler: LogHandler{}},
 	//&action{CallbacksHandler: LogHandler{}},
 	&syncDevices{},
 }
@@ -33,6 +37,7 @@ var defaultUrl = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 //var defaultUrl = "https://ai-yyds.com/v1"
 
 var langchaingoOpenAi *openai.LLM
+var llmOpenAi *openai.LLM
 var newExecutor *agents.Executor
 
 func init() {
@@ -42,12 +47,25 @@ func init() {
 		openai.WithToken(defaultKey),
 		//openai.WithModel("gpt-4o-mini-2024-07-18"),
 		openai.WithModel("qwen-turbo-latest"),
+		openai.WithCallback(LogHandler{}),
+	)
+
+	llmOpenAi, err = openai.New(
+		openai.WithBaseURL(defaultUrl),
+		openai.WithToken(defaultKey),
+		//openai.WithModel("gpt-4o-mini-2024-07-18"),
+		openai.WithModel("qwen-turbo-latest"),
 		openai.WithResponseFormat(openai.ResponseFormatJSON),
 		openai.WithCallback(LogHandler{}),
 	)
+
 	if err != nil {
 		panic(err)
 	}
+
+	tuyago.Register("deviceOffline", &deviceOffline{})     //设备离线
+	tuyago.Register("deviceOnline", &deviceOnline{})       //设备上线
+	tuyago.Register("deviceBindSpace", &deviceBindSpace{}) //删除设备
 }
 
 func findJSON(str string) string {
@@ -61,7 +79,7 @@ func findJSON(str string) string {
 }
 
 func GenerateContentWithout(c *ava.Context, mcList []llms.MessageContent, v interface{}) error {
-	resp, err := langchaingoOpenAi.GenerateContent(
+	resp, err := llmOpenAi.GenerateContent(
 		context.Background(),
 		mcList,
 		llms.WithTemperature(0.5),
@@ -116,9 +134,6 @@ func setHomeId(c *ava.Context, input string) {
 	c.Set(defaultHomeIdKey, input)
 }
 
-// 这不是一个错误,标志agent拿到想要的结果的退出标志
-var doneExitError = errors.New("done and exit")
-
 // 附带用户设备的品类
 func Run(c *ava.Context, uid, homeId, content string) (string, error) {
 	setHomeId(c, homeId)
@@ -127,18 +142,19 @@ func Run(c *ava.Context, uid, homeId, content string) (string, error) {
 	ctx := context.WithValue(context.Background(), defaultBufferUidKey, uid)
 	ctx = context.WithValue(ctx, defaultAvaCtxKey, c)
 
+	var prompt = runSystemPromptsWithHostory
+	if buffChatMemory.Len(ctx) == 0 {
+		prompt = runSystemPrompts
+	}
+
 	a := agents.NewOpenAIFunctionsAgent(langchaingoOpenAi,
 		Tools,
-		agents.NewOpenAIOption().WithSystemMessage("你叫`homingAI`，你是一个性格俏皮的智能管家，担当智能家居设备控制和其他生活管理、咨询的工作。"),
-		agents.NewOpenAIOption().WithExtraMessages([]prompts.MessageFormatter{
-			prompts.NewHumanMessagePromptTemplate(`你对场景的智能家居场景非常熟悉,判断我的意图，如果是普通对话不要使用functioncall。
-上一次对话记录：
-{{.history}}`, nil),
-		}),
+		agents.NewOpenAIOption().WithSystemMessage(prompt),
 	)
 
 	newExecutor = agents.NewExecutor(
 		a,
+		agents.WithCallbacksHandler(LogHandler{}),
 		agents.WithMemory(memory.NewConversationBuffer(memory.WithChatHistory(buffChatMemory))),
 		agents.WithMaxIterations(1),
 	)
@@ -147,22 +163,22 @@ func Run(c *ava.Context, uid, homeId, content string) (string, error) {
 		ctx,
 		newExecutor,
 		content,
-		//chains.WithCallback(callbacks.LogHandler{}),
+		chains.WithCallback(LogHandler{}),
 		chains.WithTopP(0.5),
 		chains.WithTemperature(0.5),
 	)
 
-	if err != nil && !errors.Is(doneExitError, err) {
+	if err != nil {
 		c.Errorf("result=%v |err=%v", result, err)
+		if result != "" {
+			return result, err
+		}
 		return "出了点小故障，请重试", err
 	}
 
 	fmt.Println("-------1--", result)
-	if result != "" {
-		return result, err
-	}
 
-	return getSummaryMsg(c)
+	return result, err
 }
 
 type Response struct {
@@ -236,7 +252,7 @@ func (c *buffChatMessage) AddMessage(ctx context.Context, message llms.ChatMessa
 }
 
 func (c *buffChatMessage) AddUserMessage(ctx context.Context, message string) error {
-	ava.Debugf("buffChatMessage |AddAIMessage |data=%v", message)
+	ava.Debugf("buffChatMessage |AddUserMessage |data=%v", message)
 
 	c.lock.Lock()
 	if len(c.Message[c.getUID(ctx)]) >= c.Limit {
@@ -270,7 +286,12 @@ func (c *buffChatMessage) Clear(ctx context.Context) error {
 	c.Message[c.getUID(ctx)] = nil
 	c.Message[c.getUID(ctx)] = make([]llms.ChatMessage, c.Limit)
 	c.lock.Unlock()
+
 	return nil
+}
+
+func (c *buffChatMessage) Len(ctx context.Context) int {
+	return len(c.Message[c.getUID(ctx)])
 }
 
 func (c *buffChatMessage) Messages(ctx context.Context) ([]llms.ChatMessage, error) {
@@ -293,5 +314,16 @@ func (c *buffChatMessage) SetMessages(ctx context.Context, messages []llms.ChatM
 		c.Message[c.getUID(ctx)] = c.Message[c.getUID(ctx)][:3]
 	}
 	c.lock.Unlock()
+
+	ava.Debugf("buffChatMessage |message |data=%v", x.MustMarshal2String(messages))
+
 	return nil
 }
+
+var runSystemPromptsWithHostory = `你名字叫小冰，是一个性格俏皮的智能管家，担当智能家居设备控制和其他生活管理、咨询的工作。
+你对场景的智能家居场景非常熟悉,判断我的意图，如果是普通对话不要使用Function Calling。你的所有返回都必须是JSON格式。
+上一次对话记录：
+{{.history}}`
+
+var runSystemPrompts = `你名字叫小冰，是一个性格俏皮的智能管家，担当智能家居设备控制和其他生活管理、咨询的工作。
+你对场景的智能家居场景非常熟悉,判断我的意图，如果是普通对话不要使用Function Calling。你的所有返回都必须是JSON格式。`

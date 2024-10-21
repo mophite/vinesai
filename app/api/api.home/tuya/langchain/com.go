@@ -1,23 +1,47 @@
 package langchain
 
+// 设备详情
 type deviceResp struct {
-	Result   *device `json:"result"`
-	Position string  `json:"position"` //非接口返回字段，需要通过其他接口获取
-	Success  bool    `json:"success"`
-	T        int     `json:"t"`
-	Tid      string  `json:"tid"`
+	Result   *mgoDocDevice `json:"result"`
+	Position string        `json:"position"` //非接口返回字段，需要通过其他接口获取
+	Success  bool          `json:"success"`
+	T        int           `json:"t"`
+	Tid      string        `json:"tid"`
 }
 
-// 用户设备信息
-type device struct {
-	Id        string    `json:"id"`
-	Name      string    `json:"name"`
-	Status    []*status `json:"status"`
-	Category  string    `json:"category"`
-	Online    bool      `json:"online"`
-	ProductId string    `json:"product_id"`
+var mgoCollectionNameDevice = "tuya_device"
 
-	roomName string
+// 用户设备信息
+type mgoDocDevice struct {
+	ID          string ` bson:"_id"`
+	ActiveTime  int
+	BizType     int
+	Category    string
+	CreateTime  int
+	Icon        string
+	IP          string
+	Lat         string
+	LocalKey    string
+	Lon         string
+	Model       string
+	Name        string
+	Online      bool
+	OwnerID     string
+	ProductID   string
+	ProductName string
+	Status      []status
+	Sub         bool
+	TimeZone    string
+	UID         string
+	UpdateTime  int
+	UUID        string
+
+	//以下非接口直接返回数据
+	RoomName     string
+	HomeId       string
+	RoomId       int
+	CategoryName string
+	//HomeName string `json:"home_name"`
 }
 
 type status struct {
@@ -48,11 +72,11 @@ type function struct {
 
 // 获取用户的设备列表
 type deviceListResp struct {
-	Result   []*device `json:"result"`
-	Position string    `json:"position"` //非接口返回字段，需要通过其他接口获取
-	Success  bool      `json:"success"`
-	T        int       `json:"t"`
-	Tid      string    `json:"tid"`
+	Result   []*mgoDocDevice `json:"result"`
+	Position string          `json:"position"` //非接口返回字段，需要通过其他接口获取
+	Success  bool            `json:"success"`
+	T        int             `json:"t"`
+	Tid      string          `json:"tid"`
 }
 
 type roomInfo struct {
@@ -70,19 +94,12 @@ type roomInfo struct {
 
 type room struct {
 	Name   string `json:"name"`
-	RoomID int64  `json:"room_id"`
+	RoomID int    `json:"room_id"`
 }
 
-type ShortSummaryDeviceInfo struct {
-	Result []*ShortSummaryDevice `json:"result"`
-}
-
-type ShortSummaryDevice struct {
-	Id        string `json:"id"`
-	Name      string `json:"name"`
-	Position  string `json:"position"`
-	ProductId string `json:"product_id"`
-	Category  string `json:"category"`
+type ShortDevice struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
 }
 
 type summaryCommandsResp struct {
@@ -111,9 +128,26 @@ type summaries struct {
 }
 
 type summaryData struct {
-	Content string   `json:"content"`
-	Summary string   `json:"summary"`
-	Devices []string `json:"devices"`
+	Content string `json:"content"`
+	Summary string `json:"summary"`
+	Devices string `json:"devices"` //逗号分割
+}
+
+type queryOnlineResp struct {
+	Content string `json:"content"`
+}
+
+type queryOnlineOrOfflineData struct {
+	Name         string
+	CategoryName string
+	RoomName     string
+}
+
+type queryDevicesData struct {
+	Name         string
+	CategoryName string
+	RoomName     string
+	Status       []status
 }
 
 func getCategoryName(categoryId string) string {

@@ -7,12 +7,12 @@ import (
 	"vinesai/internel/ava"
 	"vinesai/internel/x"
 
-	"github.com/tmc/langchaingo/callbacks"
-	"github.com/tmc/langchaingo/chains"
-	"github.com/tmc/langchaingo/llms"
-	"github.com/tmc/langchaingo/llms/openai"
-	"github.com/tmc/langchaingo/memory"
-	"github.com/tmc/langchaingo/schema"
+	"vinesai/internel/langchaingo/callbacks"
+	"vinesai/internel/langchaingo/chains"
+	"vinesai/internel/langchaingo/llms"
+	"vinesai/internel/langchaingo/llms/openai"
+	"vinesai/internel/langchaingo/memory"
+	"vinesai/internel/langchaingo/schema"
 )
 
 var langchaingoOpenAi *openai.LLM

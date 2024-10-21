@@ -22,7 +22,7 @@ redis/mongodb/etcd:
 ojo1QbOygiKjT1uZ
 
 
-db.createUser({user: 'root', pwd: 'ojo1QbOygiKjT1uZ', roles: ['root']})
+db.createUser({user: 'homingai', pwd: 'ojo1QbOygiKjT1uZ', roles: ['userAdminAnyDatabase', db: 'admin']})
 
 
 redis:6379
@@ -301,3 +301,8 @@ JBLjbl123
 
 scp -r root@47.106.129.170:/root/code/vinesai/cmd/api.assert/out ./
 
+现在nginx的配置文件配置server_name:
+执行：sudo certbot --nginx -d api.homingai.com
+
+mongo -u homingai -p ojo1QbOygiKjT1uZ --host 47.106.129.170 --port 27017
+sudo systemctl restart mongod
