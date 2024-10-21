@@ -46,6 +46,7 @@ func (q *queryDevice) Call(ctx context.Context, input string) (string, error) {
 		return "服务器出小毛病了", err
 	}
 
+	//todo 分两步，先问ai需要获取哪些设备，再查结果
 	mcList := []llms.MessageContent{
 		{
 			Role:  llms.ChatMessageTypeSystem,
@@ -69,14 +70,14 @@ func (q *queryDevice) Call(ctx context.Context, input string) (string, error) {
 	return msg, nil
 }
 
-var queryDevicePrompts = `分析我的意图，并根据以下设备列表返回json数据结果。
-### 所有设备列表：%s
-### 返回json格式和例子：
+var queryDevicePrompts = `分析我的意图，并根据以下设备列表，用最严格按照JSON格式返回结果。
+### 输入：所有设备列表：%s
+### 返回JSON格式：
 {
-	"content":"你在客厅有两个设备离线了"
+	"content":"客厅灯亮度500"
 }
-### 统计说明：
+
+### 注意事项：
 1.根据Name字段的数量统计设备数量；
 2.如果是查询设备状态，根据Status总结设备的重要信息
-3.如果需要告诉我的详细设备信息数超过5个，直接总结告诉我
-`
+3.如果需要告诉我的详细设备信息数超过5个，直接总结告诉我`

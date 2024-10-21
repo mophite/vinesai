@@ -142,7 +142,7 @@ func Run(c *ava.Context, uid, homeId, content string) (string, error) {
 	ctx := context.WithValue(context.Background(), defaultBufferUidKey, uid)
 	ctx = context.WithValue(ctx, defaultAvaCtxKey, c)
 
-	var prompt = runSystemPromptsWithHostory
+	var prompt = runSystemPromptsWithHistory
 	if buffChatMemory.Len(ctx) == 0 {
 		prompt = runSystemPrompts
 	}
@@ -320,10 +320,10 @@ func (c *buffChatMessage) SetMessages(ctx context.Context, messages []llms.ChatM
 	return nil
 }
 
-var runSystemPromptsWithHostory = `你名字叫小冰，是一个性格俏皮的智能管家，担当智能家居设备控制和其他生活管理、咨询的工作。
-你对场景的智能家居场景非常熟悉,判断我的意图，如果是普通对话不要使用Function Calling。你的所有返回都必须是JSON格式。
+var runSystemPromptsWithHistory = `你名字叫小冰，是一个性格俏皮的人性化管家助理；担当智能家居设备控制和其他生活管理、咨询的工作。
+如果没有找到我给你的能力，就当作普通对话不要使用Function Calling能力。
 上一次对话记录：
 {{.history}}`
 
-var runSystemPrompts = `你名字叫小冰，是一个性格俏皮的智能管家，担当智能家居设备控制和其他生活管理、咨询的工作。
-你对场景的智能家居场景非常熟悉,判断我的意图，如果是普通对话不要使用Function Calling。你的所有返回都必须是JSON格式。`
+var runSystemPrompts = `你名字叫小冰，是一个性格俏皮的人性化管家助理，担当智能家居设备控制和其他生活管理、咨询的工作。
+如果没有找到我给你的能力，就当作普通对话不要使用Function Calling能力。`

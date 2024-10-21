@@ -128,11 +128,13 @@ func (t *Tuya) Intent(c *ava.Context, req *ptuya.UserIntentReq, rsp *ptuya.UserI
 	msg, err := langchain.Run(c, defaultUid, req.HomeId, req.Content)
 	if err != nil {
 		c.Error(err)
-		rsp.Code = http.StatusBadRequest
 		if msg != "" {
 			rsp.Msg = msg
+			rsp.Code = http.StatusOK
 			return
 		}
+
+		rsp.Code = http.StatusBadRequest
 		rsp.Msg = "请重试"
 		return
 	}

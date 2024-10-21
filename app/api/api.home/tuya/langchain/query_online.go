@@ -69,9 +69,11 @@ func (q *queryOnline) Call(ctx context.Context, input string) (string, error) {
 	return msg, nil
 }
 
-var queryOnlinePrompts = `分析我的意图，并根据以下设备列表返回json数据结果。
-### 所有在线的设备列表：%s
-### 返回json格式和例子：
+var queryOnlinePrompts = `请分析我的意图，并根据以下设备列表，严格按照JSON 格式返回。
+### 输入：以下是所有在线的设备列表：%s
+### 返回的 JSON 格式要求如下：
 {
-	"content":"你在客厅有两个设备"
-}`
+	"content": "请根据输入内容提供一段符合设备在线情况的自然语言描述，描述中包含设备位置及数量。例如：你的家里没有任何在线设备"
+}
+### 注意事项：
+如果没有在线设备就告诉我：没有在线设备`

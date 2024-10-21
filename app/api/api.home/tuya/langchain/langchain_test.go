@@ -30,7 +30,7 @@ func init() {
 		ava.ConfigOption(
 			ava.Chaos(
 				config.ChaosRedisAndMongo,
-				tuyago.Chaos,
+				//tuyago.Chaos,
 			)),
 		//ava.Cors(lib.Cors()),
 	)
@@ -75,8 +75,8 @@ func TestRun(t *testing.T) {
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "调高地暖温度")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "我有多少个设备")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "我只有16个设备，为什么是20个")
-	Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "客厅灯开着吗")
-	select {}
+	Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "灯都关闭了吗")
+	//select {}
 }
 
 func TestPrompts(t *testing.T) {

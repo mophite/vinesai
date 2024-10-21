@@ -235,6 +235,9 @@ func chooseAndControlDevices(c *ava.Context, s *summaries, devicesMap map[string
 
 	for i := range failureMessageArr {
 		msg += failureMessageArr[i] + ","
+		if i == len(failureMessageArr)-1 {
+			msg += "控制失败"
+		}
 	}
 
 	for i := range successMessageArr {
@@ -243,10 +246,16 @@ func chooseAndControlDevices(c *ava.Context, s *summaries, devicesMap map[string
 
 	for i := range offlineMessageArr {
 		msg += offlineMessageArr[i] + ","
+		if i == len(offlineMessageArr)-1 {
+			msg += "已离线"
+		}
 	}
 
 	for i := range alreadyMessageArr {
 		msg += alreadyMessageArr[i] + ","
+		if i == len(alreadyMessageArr)-1 {
+			msg += "已经是你想要的状态了"
+		}
 	}
 
 	if msg == "" {
@@ -268,15 +277,15 @@ func successMsg(name, successMsg string) string {
 }
 
 func failureMsg(name string) string {
-	return name + "控制失败"
+	return name
 }
 
 func offlineMsg(name string) string {
-	return name + "已离线"
+	return name
 }
 
 func alreadyMsg(name string) string {
-	return name + "已经是你想要的状态了"
+	return name
 }
 
 type summaryControlDeviceResp struct {
@@ -480,11 +489,11 @@ var summaryActionPrompts = `分析我的意图，找出你将要控制的设备�
 ### 1.设备列表：%s
 
 ### 2.字段说明：
-failure_msg:1.例子：你的要求暂时无法实现;2.根据[设备列表]数据，如果没有找到设备，返回例子：你还没有空调
-result:对象数组，一句话里面可能有一个或多个意图
+failure_msg:1.例子：你的要求暂时无法实现;2.根据[设备列表]数据，没有找到设备例子：你还没有空调
+result: 对象数组，一句话里面可能有一个或多个意图
 content:完整的意图，例如：将客厅灯光调到4000k;
-summary: 简要意图，不超过5个字，例如：打开灯，色温100，亮度4000等，如果有数值，则必须在该字段中包含;
-devices:字符串数组，如果可能有多个设备需要被控制，这些设备都写入到devices中
+summary:简要意图，不超过5个字，例如：打开灯，色温100，亮度4000等，如果有数值，则必须在该字段中包含;
+devices:字符串，逗号分隔设备，如果可能有多个设备需要被控制，这些设备都写入到devices中
 
 ### 3.注意事项
 如果开关、插座没有明确关联灯具，不要去使用开关、插座，除非我告诉你开关、插座是控制什么设备的
