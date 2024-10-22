@@ -2,11 +2,12 @@ package db
 
 import (
 	"context"
-	"time"
+	"vinesai/internel/ava"
 
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"go.mongodb.org/mongo-driver/mongo/readpref"
+	"go.mongodb.org/mongo-driver/v2/event"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/mongo/readpref"
 )
 
 var Mgo *mongo.Database
@@ -14,11 +15,15 @@ var Mgo *mongo.Database
 var mongoClient *mongo.Client
 
 func ChaosMongo(dsn string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
+
+	monitor := &event.CommandMonitor{
+		Started: func(_ context.Context, evt *event.CommandStartedEvent) {
+			ava.Debugf("Command: %s\nRequest: %+v\n", evt.CommandName, evt.Command)
+		},
+	}
 
 	var err error
-	mongoClient, err := mongo.Connect(ctx, options.Client().ApplyURI(dsn))
+	mongoClient, err := mongo.Connect(options.Client().ApplyURI(dsn).SetMonitor(monitor))
 	if err != nil {
 		return err
 	}

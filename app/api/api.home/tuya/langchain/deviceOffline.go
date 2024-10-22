@@ -20,7 +20,7 @@ type deviceOffline struct {
 	Ts int64 `json:"ts"`
 }
 
-func (o *deviceOffline) Call(c *ava.Context) {
+func (o *deviceOffline) Call(c *ava.Context) error {
 
 	//更新离线设备数据库
 	filter := bson.M{"_id": o.BizData.DevID}
@@ -28,5 +28,8 @@ func (o *deviceOffline) Call(c *ava.Context) {
 	_, err := db.Mgo.Collection(mgoCollectionNameDevice).UpdateOne(context.Background(), filter, update)
 	if err != nil {
 		c.Error(err)
+		return err
 	}
+
+	return nil
 }

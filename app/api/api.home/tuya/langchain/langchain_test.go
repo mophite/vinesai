@@ -30,10 +30,13 @@ func init() {
 		ava.ConfigOption(
 			ava.Chaos(
 				config.ChaosRedisAndMongo,
-				//tuyago.Chaos,
 			)),
 		//ava.Cors(lib.Cors()),
 	)
+}
+
+func TestConsumer(t *testing.T) {
+	select {}
 }
 
 type grouInfo struct {
@@ -68,14 +71,17 @@ func TestRun(t *testing.T) {
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "同步设备")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "关闭所有灯")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "关闭所有灯")
-	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "同步设备")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "你好")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "我上一句说了什么")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "今天贵阳的天气怎么样")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "调高地暖温度")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "我有多少个设备")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "我只有16个设备，为什么是20个")
-	Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "灯都关闭了吗")
+	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "灯都关闭了吗")
+	Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "创建一个离家模式")
+	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "我想睡觉了")
+	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "你会去控制哪些设备")
+
 	//select {}
 }
 

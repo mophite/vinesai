@@ -10,43 +10,39 @@ type deviceResp struct {
 }
 
 var mgoCollectionNameDevice = "tuya_device"
+var mgoCollectionNameCodes = "tuya_codes"
 
 // 用户设备信息
 type mgoDocDevice struct {
-	ID          string ` bson:"_id"`
-	ActiveTime  int
-	BizType     int
-	Category    string
-	CreateTime  int
-	Icon        string
-	IP          string
-	Lat         string
-	LocalKey    string
-	Lon         string
-	Model       string
-	Name        string
-	Online      bool
-	OwnerID     string
-	ProductID   string
-	ProductName string
-	Status      []status
-	Sub         bool
-	TimeZone    string
-	UID         string
-	UpdateTime  int
-	UUID        string
+	ID          string   `json:"id" bson:"_id"`
+	ActiveTime  int      `json:"active_time"`
+	BizType     int      `json:"biz_type"`
+	Category    string   `json:"category"`
+	CreateTime  int      `json:"create_time"`
+	Icon        string   `json:"icon"`
+	IP          string   `json:"ip"`
+	Lat         string   `json:"lat"`
+	LocalKey    string   `json:"local_key"`
+	Lon         string   `json:"lon"`
+	Model       string   `json:"model"`
+	Name        string   `json:"name"`
+	Online      bool     `json:"online"`
+	OwnerID     string   `json:"owner_id"`
+	ProductID   string   `json:"product_id"`
+	ProductName string   `json:"product_name"`
+	Status      []status `json:"status"`
+	Sub         bool     `json:"sub"`
+	TimeZone    string   `json:"time_zone"`
+	UID         string   `json:"uid"`
+	UpdateTime  int      `json:"update_time"`
+	UUID        string   `json:"uuid"`
 
 	//以下非接口直接返回数据
-	RoomName     string
-	HomeId       string
-	RoomId       int
-	CategoryName string
+	RoomName     string `json:"room_name"`
+	HomeId       string `json:"home_id"`
+	RoomId       int    `json:"room_id"`
+	CategoryName string `json:"category_name"`
 	//HomeName string `json:"home_name"`
-}
-
-type status struct {
-	Code  string      `json:"code"`
-	Value interface{} `json:"value"`
 }
 
 // 批量获取指令集
@@ -146,8 +142,60 @@ type queryOnlineOrOfflineData struct {
 type queryDevicesData struct {
 	Name         string
 	CategoryName string
-	RoomName     string
-	Status       []status
+	//RoomName     string
+	Status []status
+}
+
+type status struct {
+	Code  string      `json:"code"`
+	Value interface{} `json:"value"`
+}
+
+// 查询支持场景的设备列表
+type supportSceneDevices struct {
+	Result []struct {
+		DeviceID string `json:"device_id"`
+		Name     string `json:"name"`
+	} `json:"result"`
+	Success bool   `json:"success"`
+	T       int64  `json:"t"`
+	Tid     string `json:"tid"`
+}
+
+// 获取家庭设备支持的场景动作，触发事件
+type homeCodeAndStatusResp struct {
+	Result  []homeFunctionAndStatus `json:"result"`
+	Success bool                    `json:"success"`
+	T       int                     `json:"t"`
+	Tid     string                  `json:"tid"`
+}
+
+type homeFunctionAndStatus struct {
+	DeviceId  string        `json:"device_id" bson:"_id"`
+	Functions []interface{} `json:"functions"`
+	Status    []interface{} `json:"status"`
+	//非接口返回字段
+	Name     string `json:"name"`
+	HomeId   string `json:"home_id"`
+	RoomName string `json:"room_name"`
+}
+
+type homeFunction struct {
+	DeviceId  string        `json:"device_id" bson:"_id"`
+	Functions []interface{} `json:"functions"`
+}
+
+type createScene struct {
+	Name       string    `json:"name"`
+	Background string    `json:"background"`
+	Actions    []actions `json:"actions"`
+	Content    string    `json:"content"`
+}
+
+type actions struct {
+	ExecutorProperty interface{} `json:"executor_property"`
+	ActionExecutor   string      `json:"action_executor"`
+	EntityID         string      `json:"entity_id"`
 }
 
 func getCategoryName(categoryId string) string {

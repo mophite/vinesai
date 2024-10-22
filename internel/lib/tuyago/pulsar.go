@@ -56,7 +56,6 @@ func Chaos() error {
 			for {
 				var c = ava.Background()
 
-				fmt.Println("----1-")
 				msg, err := pulsarConsumer.Receive(context.Background())
 				if err != nil {
 					c.Error(err)
@@ -93,7 +92,11 @@ func Chaos() error {
 				}
 
 				//通过协议号找到对应的处理函数
-				invoke(c, bizCodeIn, payload)
+				err = invoke(c, bizCodeIn, payload)
+				if err != nil {
+					c.Error(err)
+					continue
+				}
 			}
 		}()
 	}

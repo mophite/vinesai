@@ -8,7 +8,7 @@ import (
 )
 
 type Handler interface {
-	Call(c *ava.Context)
+	Call(c *ava.Context) error
 }
 
 var dispatch = &dispatcher{
@@ -45,19 +45,19 @@ func Register(name string, h Handler) {
 	dispatch.mux.Unlock()
 }
 
-func invoke(c *ava.Context, bizCode string, data []byte) {
+func invoke(c *ava.Context, bizCode string, data []byte) error {
 	//调用函数业务逻辑处理
 	h, err := dispatch.getHandler(bizCode)
 	if err != nil {
 		ava.Error(err)
-		return
+		return err
 	}
 
 	err = x.MustUnmarshal(data, h)
 	if err != nil {
 		ava.Error(err)
-		return
+		return err
 	}
 
-	h.Call(c)
+	return h.Call(c)
 }

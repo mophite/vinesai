@@ -22,7 +22,7 @@ type deviceBindSpace struct {
 	Ts int64 `json:"ts"`
 }
 
-func (o *deviceBindSpace) Call(c *ava.Context) {
+func (o *deviceBindSpace) Call(c *ava.Context) error {
 
 	//todo 同步redis
 	//查询数据
@@ -32,5 +32,8 @@ func (o *deviceBindSpace) Call(c *ava.Context) {
 	_, err := db.Mgo.Collection(mgoCollectionNameDevice).DeleteOne(context.Background(), filter)
 	if err != nil {
 		c.Error(err)
+		return err
 	}
+
+	return nil
 }

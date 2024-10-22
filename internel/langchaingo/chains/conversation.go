@@ -15,10 +15,14 @@ Current conversation:
 Human: {{.input}}
 AI:`
 
-func NewConversation(llm llms.Model, memory schema.Memory) LLMChain {
+func NewConversation(llm llms.Model, memory schema.Memory, prompt ...string) LLMChain {
+	var p = _conversationTemplate
+	if len(prompt) > 0 {
+		p = prompt[0]
+	}
 	return LLMChain{
 		Prompt: prompts.NewPromptTemplate(
-			_conversationTemplate,
+			p,
 			[]string{"history", "input"},
 		),
 		LLM:          llm,

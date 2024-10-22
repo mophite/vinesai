@@ -81,6 +81,7 @@ func syncDevicesForSummary(c *ava.Context, homeId string) ([]string, map[string]
 	var devicesNameMap = make(map[string]*mgoDocDevice, 20)
 
 	var deviceDoc = make([]interface{}, 0, 30)
+	var devicesMap = make(map[string]*mgoDocDevice, 30)
 
 	//遍历房间获取设备
 	for i := range roomResp.Result.Rooms {
@@ -119,6 +120,7 @@ func syncDevicesForSummary(c *ava.Context, homeId string) ([]string, map[string]
 			tmpDeviceData.HomeId = homeId
 			tmpDeviceData.CategoryName = getCategoryName(tmpDeviceData.Category)
 			deviceDoc = append(deviceDoc, tmpDeviceData)
+			devicesMap[tmpDeviceData.ID] = tmpDeviceData
 
 			//如果设备品类不在控制范围内，则不添
 			if getCategoryName(tmpDeviceData.Category) == "" {
@@ -135,8 +137,8 @@ func syncDevicesForSummary(c *ava.Context, homeId string) ([]string, map[string]
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	collection := db.Mgo.Collection(mgoCollectionNameDevice)
-	result, err := collection.DeleteMany(ctx, bson.M{"homeid": homeId})
+	collectionDevices := db.Mgo.Collection(mgoCollectionNameDevice)
+	result, err := collectionDevices.DeleteMany(ctx, bson.M{"homeid": homeId})
 	if err != nil {
 		c.Error(err)
 		return nil, nil, err
@@ -144,7 +146,47 @@ func syncDevicesForSummary(c *ava.Context, homeId string) ([]string, map[string]
 
 	c.Debugf("sync devices delete result %v", result)
 
-	_, err = collection.InsertMany(ctx, deviceDoc)
+	_, err = collectionDevices.InsertMany(ctx, deviceDoc)
+	if err != nil {
+		c.Error(err)
+		return nil, nil, err
+	}
+
+	//家庭设备支持的场景
+	//删除所有数据，重新插入
+	collectionCodes := db.Mgo.Collection(mgoCollectionNameCodes)
+	resultCodes, err := collectionCodes.DeleteMany(ctx, bson.M{"homeid": homeId})
+	if err != nil {
+		c.Error(err)
+		return nil, nil, err
+	}
+
+	c.Debugf("resultCodes delete result %v", resultCodes)
+
+	//所有家庭场景动作指令
+	var codes homeCodeAndStatusResp
+	err = tuyago.Get(c, fmt.Sprintf("/v1.0/homes/%s/enable-linkage/codes", homeId), &codes)
+	if err != nil {
+		c.Error(err)
+		return nil, nil, err
+	}
+
+	if len(codes.Result) == 0 || !codes.Success {
+		return nil, nil, fmt.Errorf("no devices |homeid=%s", homeId)
+	}
+
+	for i := range codes.Result {
+		if v, ok := devicesMap[codes.Result[i].DeviceId]; ok {
+			if v.HomeId == "" {
+				continue
+			}
+			codes.Result[i].Name = v.Name
+			codes.Result[i].HomeId = v.HomeId
+			codes.Result[i].RoomName = v.RoomName
+		}
+	}
+
+	_, err = collectionCodes.InsertMany(ctx, codes.Result)
 	if err != nil {
 		c.Error(err)
 		return nil, nil, err
@@ -177,6 +219,15 @@ func syncDevicesForSummary(c *ava.Context, homeId string) ([]string, map[string]
 	//}
 
 	return devicesName, devicesNameMap, nil
+}
+
+func removeWhitespace(input string) string {
+	// 去除空格、换行符、回车符、制表符等空白字符
+	result := strings.ReplaceAll(input, " ", "")
+	result = strings.ReplaceAll(result, "\n", "")
+	result = strings.ReplaceAll(result, "\r", "")
+	result = strings.ReplaceAll(result, "\t", "")
+	return result
 }
 
 //type devicesGroup struct {
