@@ -171,7 +171,7 @@ var onClickSceneCreatePrompts = `分析我的意图，从指令数据信息中�
 
 返回：
 {
- "content":"关闭客厅插座场景创建成功",
+ "content":"关闭客厅插座场景创建成功，这里要说明比较详细的创建过程",
  "name": "关闭客厅插座",
  "actions": [
         {

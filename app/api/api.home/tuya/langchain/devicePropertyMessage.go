@@ -2,11 +2,13 @@ package langchain
 
 import (
 	"context"
+	"errors"
 	"strings"
 	"vinesai/internel/ava"
 	"vinesai/internel/db"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 // 设备离线
@@ -46,7 +48,27 @@ func (o *devicePropertyMessage) Call(c *ava.Context) error {
 
 		err := db.Mgo.Collection(mgoCollectionNameDevice).
 			FindOneAndUpdate(context.Background(), filter, update).Err()
-		if err != nil {
+		// 如果没有匹配的元素（即 err 为 mongo.ErrNoDocuments），则插入新的数组元素
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			// 插入新的数组元素
+			update = bson.D{
+				{"$push", bson.D{
+					{"status", bson.M{
+						"code":  status.Code,
+						"value": status.Value,
+					}},
+				}},
+			}
+
+			err = db.Mgo.Collection(mgoCollectionNameDevice).
+				FindOneAndUpdate(context.Background(),
+					bson.M{"_id": o.BizData.DevID}, update).Err()
+			if err != nil {
+				c.Error(err)
+				return err
+			}
+		} else if err != nil {
+			// 处理其他错误
 			c.Error(err)
 			return err
 		}

@@ -40,12 +40,22 @@ var defaultUrl = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 //var defaultUrl = "https://ai-yyds.com/v1"
 
 var langchaingoOpenAi *openai.LLM
+var langchaingoGuideOpenAi *openai.LLM
 var llmOpenAi *openai.LLM
 var newExecutor *agents.Executor
 
 func init() {
 	var err error
 	langchaingoOpenAi, err = openai.New(
+		openai.WithBaseURL(defaultUrl),
+		openai.WithToken(defaultKey),
+		//openai.WithModel("gpt-4o-mini-2024-07-18"),
+		//openai.WithModel("qwen-turbo-latest"),
+		openai.WithModel("qwen-turbo"),
+		openai.WithCallback(LogHandler{}),
+	)
+
+	langchaingoGuideOpenAi, err = openai.New(
 		openai.WithBaseURL(defaultUrl),
 		openai.WithToken(defaultKey),
 		//openai.WithModel("gpt-4o-mini-2024-07-18"),
@@ -87,7 +97,7 @@ func findJSON(str string) string {
 
 func GenerateContentTurbo(c *ava.Context, prompt, input string) (string, error) {
 
-	conversation := chains.NewConversation(langchaingoOpenAi, memory.NewConversationBuffer(memory.WithChatHistory(buffChatMemory)), prompt)
+	conversation := chains.NewConversation(langchaingoGuideOpenAi, memory.NewConversationBuffer(memory.WithChatHistory(buffChatMemory)), prompt)
 	result, err := chains.Run(
 		context.Background(),
 		conversation,

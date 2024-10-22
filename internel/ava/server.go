@@ -160,9 +160,9 @@ func (s *Server) Run() {
 			s.httpServer = &http.Server{
 				Handler:      s.opts.Cors.Handler(s),
 				Addr:         s.opts.HttpAddress,
-				WriteTimeout: 15 * time.Second,
-				ReadTimeout:  15 * time.Second,
-				IdleTimeout:  time.Second * 60,
+				WriteTimeout: 60 * time.Second,
+				ReadTimeout:  60 * time.Second,
+				IdleTimeout:  time.Second * 200,
 			}
 
 			if err := s.httpServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
