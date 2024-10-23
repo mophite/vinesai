@@ -26,7 +26,7 @@ var Tools = []tools.Tool{
 	&queryOffline{CallbacksHandler: LogHandler{}},
 	&queryDevice{CallbacksHandler: LogHandler{}},
 	&scene{CallbacksHandler: LogHandler{}},
-	&guide{CallbacksHandler: LogHandler{}},
+	&guideScene{CallbacksHandler: LogHandler{}},
 	&sceneQuery{CallbacksHandler: LogHandler{}},
 	&autoQuery{CallbacksHandler: LogHandler{}},
 	&runScene{CallbacksHandler: LogHandler{}},

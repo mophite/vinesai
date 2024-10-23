@@ -46,7 +46,7 @@ func (s *autoQuery) Call(ctx context.Context, input string) (string, error) {
 
 }
 
-var queryAutoPrompts = `根据我的意图描述，告诉我智能家居自动化相关的信息，严格按照json格式返回。
+var queryAutoPrompts = `根据我的意图描述，告诉我智能家居自动化相关的信息。
 ### 自动化列表：%s
 说明：enabled：false表示自动化是禁用状态，true表示自动化是启用中。
 ### 用俏皮人性化的语气回复我，例如：你有3个自动化，启用中2个，禁用状态1个。
