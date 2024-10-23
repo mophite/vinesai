@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"vinesai/internel/ava"
+	"vinesai/internel/x"
 
 	"github.com/go-redsync/redsync/v4"
 	"github.com/go-redsync/redsync/v4/redis/goredis/v9"
@@ -29,4 +30,18 @@ func ChaosRedis(address, password string) error {
 	RedisLock = redsync.New(pool)
 
 	return nil
+}
+
+func RedisGet(key string, v interface{}) error {
+	result, err := GRedis.Get(context.Background(), key).Result()
+	if err != nil {
+		return err
+	}
+
+	err = x.MustNativeUnmarshal([]byte(result), v)
+	return err
+}
+
+func RedisSet(key string, value interface{}) error {
+	return GRedis.Set(context.Background(), key, x.MustMarshal2String(value), 0).Err()
 }

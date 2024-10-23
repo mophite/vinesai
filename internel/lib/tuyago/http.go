@@ -192,7 +192,7 @@ func Get(c *ava.Context, uri string, v interface{}) error {
 		return err
 	}
 
-	c.Debugf("latency=%v秒 |uri=%v |FROM=%v", time.Now().Sub(now).Seconds(), uri, string(b))
+	c.Debugf("latency=%v秒 |header=%s |uri=%v |FROM=%v", time.Now().Sub(now).Seconds(), x.MustMarshal2String(header), uri, string(b))
 
 	return x.MustNativeUnmarshal(b, v)
 }
@@ -232,7 +232,7 @@ func Post(c *ava.Context, uri string, data, v interface{}) error {
 		return err
 	}
 
-	c.Debugf("latency=%v秒 ｜uri=%s |TO=%v |FROM=%v", time.Now().Sub(now).Seconds(), uri, string(body), string(b))
+	c.Debugf("latency=%v秒 ｜header=%s |uri=%s |TO=%v |FROM=%v", time.Now().Sub(now).Seconds(), x.MustMarshal2String(header), uri, string(body), string(b))
 
 	return x.MustNativeUnmarshal(b, v)
 }

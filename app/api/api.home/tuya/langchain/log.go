@@ -55,7 +55,7 @@ func (l LogHandler) HandleLLMGenerateContentEnd(_ context.Context, res *llms.Con
 }
 
 func (l LogHandler) HandleStreamingFunc(_ context.Context, chunk []byte) {
-	ava.Debug(string(chunk))
+	//ava.Debug(string(chunk))
 }
 
 func (l LogHandler) HandleText(_ context.Context, text string) {

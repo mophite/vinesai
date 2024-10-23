@@ -2,7 +2,6 @@ package langchain
 
 import (
 	"context"
-	"fmt"
 	"regexp"
 	"sync"
 	"vinesai/internel/ava"
@@ -21,23 +20,30 @@ import (
 )
 
 var Tools = []tools.Tool{
-	//&devicesAgent{CallbacksHandler: LogHandler{}},
+	&syncDevices{},
 	&summary{CallbacksHandler: LogHandler{}},
 	&queryOnline{CallbacksHandler: LogHandler{}},
 	&queryOffline{CallbacksHandler: LogHandler{}},
 	&queryDevice{CallbacksHandler: LogHandler{}},
-	//&action{CallbacksHandler: LogHandler{}},
-	&syncDevices{},
 	&scene{CallbacksHandler: LogHandler{}},
 	&guide{CallbacksHandler: LogHandler{}},
+	&sceneQuery{CallbacksHandler: LogHandler{}},
+	&autoQuery{CallbacksHandler: LogHandler{}},
+	&runScene{CallbacksHandler: LogHandler{}},
 }
 
 var defaultKey = "sk-08cdfea5547040209ea0e2d874fff912"
 var defaultUrl = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+var modelAgent = "qwen-turbo"
+var modeGuide = "qwen-plus"
+var modeLongText = "qwen-long"
 
 //
 //var defaultKey = "sk-2RET3Pqa6Z3g6b0pE29351119e9b410fAfC3D44b4eC4C4A9"
 //var defaultUrl = "https://ai-yyds.com/v1"
+//var modelAgent = "claude-3-5-sonnet-20241022"
+//var modeGuide = "gpt-4o"
+//var modeLongText = "claude-3-5-sonnet-20241022"
 
 var langchaingoOpenAi *openai.LLM
 var langchaingoGuideOpenAi *openai.LLM
@@ -49,28 +55,21 @@ func init() {
 	langchaingoOpenAi, err = openai.New(
 		openai.WithBaseURL(defaultUrl),
 		openai.WithToken(defaultKey),
-		//openai.WithModel("gpt-4o-mini-2024-07-18"),
-		//openai.WithModel("qwen-turbo-latest"),
-		openai.WithModel("qwen-turbo"),
+		openai.WithModel(modelAgent),
 		openai.WithCallback(LogHandler{}),
 	)
 
 	langchaingoGuideOpenAi, err = openai.New(
 		openai.WithBaseURL(defaultUrl),
 		openai.WithToken(defaultKey),
-		//openai.WithModel("gpt-4o-mini-2024-07-18"),
-		//openai.WithModel("qwen-turbo-latest"),
-		//openai.WithModel("qwen-turbo"),
-		openai.WithModel("qwen-plus"),
+		openai.WithModel(modeGuide),
 		openai.WithCallback(LogHandler{}),
 	)
 
 	llmOpenAi, err = openai.New(
 		openai.WithBaseURL(defaultUrl),
 		openai.WithToken(defaultKey),
-		//openai.WithModel("gpt-4o-mini-2024-07-18"),
-		//openai.WithModel("qwen-turbo"),
-		openai.WithModel("qwen-long"),
+		openai.WithModel(modeLongText),
 		openai.WithResponseFormat(openai.ResponseFormatJSON),
 		openai.WithCallback(LogHandler{}),
 	)
@@ -81,8 +80,9 @@ func init() {
 
 	tuyago.Register("deviceOffline", &deviceOffline{})                 //设备离线
 	tuyago.Register("deviceOnline", &deviceOnline{})                   //设备上线
-	tuyago.Register("deviceBindSpace", &deviceBindSpace{})             //删除设备
+	tuyago.Register("deviceBindSpace", &deviceBindSpace{})             //设备绑定
 	tuyago.Register("devicePropertyMessage", &devicePropertyMessage{}) //设备状态上报
+	tuyago.Register("deviceUnbindSpace", &deviceUnbindSpace{})         //设备解绑
 }
 
 func findJSON(str string) string {
@@ -97,7 +97,10 @@ func findJSON(str string) string {
 
 func GenerateContentTurbo(c *ava.Context, prompt, input string) (string, error) {
 
-	conversation := chains.NewConversation(langchaingoGuideOpenAi, memory.NewConversationBuffer(memory.WithChatHistory(buffChatMemory)), prompt)
+	conversation := chains.NewConversation(
+		langchaingoGuideOpenAi,
+		memory.NewConversationBuffer(memory.WithChatHistory(buffChatMemory)), prompt,
+	)
 	result, err := chains.Run(
 		context.Background(),
 		conversation,
@@ -147,7 +150,7 @@ func GenerateContentWithout(c *ava.Context, mcList []llms.MessageContent, v inte
 		return err
 	}
 
-	c.Debugf("ai resp=%s |data=%s |content=%s", content, x.MustMarshal2String(v), resp.Choices[0].Content)
+	//c.Debugf("ai resp=%s |data=%s |content=%s", content, x.MustMarshal2String(v), resp.Choices[0].Content)
 
 	return nil
 }
@@ -211,15 +214,13 @@ func Run(c *ava.Context, uid, homeId, content string) (string, error) {
 		chains.WithTemperature(0.5),
 	)
 
-	if err != nil {
+	if err != nil && !errors.Is(err, agents.ErrNotFinished) {
 		c.Errorf("result=%v |err=%v", result, err)
 		if result != "" {
 			return result, err
 		}
 		return "出了点小故障，请重试", err
 	}
-
-	fmt.Println("-------1--", result)
 
 	return result, err
 }

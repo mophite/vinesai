@@ -35,6 +35,66 @@ func init() {
 	)
 }
 
+var s6 = `[
+  {
+    "device_id": "6c3f4cb6c5899478efrgea",
+    "functions": [
+      {
+        "values": {},
+        "code": "switch_1",
+        "type": "Boolean",
+        "value_range_json": [
+          [
+            true,
+            "开启"
+          ],
+          [
+            false,
+            "关闭"
+          ]
+        ]
+      },
+      {
+        "values": {},
+        "code": "switch_2",
+        "type": "Boolean",
+        "value_range_json": [
+          [
+            true,
+            "开启"
+          ],
+          [
+            false,
+            "关闭"
+          ]
+        ]
+      }
+    ]
+  }
+]
+`
+
+func TestString(t *testing.T) {
+	ava.Debug(removeWhitespace(s6))
+}
+func TestSS190(t *testing.T) {
+	var resp interface{}
+	err := tuyago.Post(ava.Background(), "/v1.0/aispeech/voice/push", &struct {
+		Tts      string `json:"tts"`
+		DeviceId string `json:"deviceId"`
+	}{Tts: "您好，\n很高兴为您服务，我们正在处理您的问题，请耐心等待。", DeviceId: "6c06757f132f8977ca3yho"}, &resp)
+	if err != nil {
+		t.Fatal(err)
+	}
+	//
+	//var resp1 interface{}
+	//err = tuyago.Get(ava.Background(), fmt.Sprintf("/v1.0/homes/%s/rooms/%d/devices", "178176713", 53096637), &resp1)
+	//
+	//if err != nil {
+	//	t.Fatal(err)
+	//}
+}
+
 func TestConsumer(t *testing.T) {
 	select {}
 }
@@ -78,9 +138,11 @@ func TestRun(t *testing.T) {
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "我有多少个设备")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "我只有16个设备，为什么是20个")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "灯都关闭了吗")
-	Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "创建一个离家模式")
+	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "创建一个离家模式")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "我想睡觉了")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "你会去控制哪些设备")
+	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "执行回家场景，晚安")
+	Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "我的自动化信息")
 
 	//select {}
 }

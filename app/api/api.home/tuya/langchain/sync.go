@@ -175,18 +175,23 @@ func syncDevicesForSummary(c *ava.Context, homeId string) ([]string, map[string]
 		return nil, nil, fmt.Errorf("no devices |homeid=%s", homeId)
 	}
 
+	var codesInsertDoc []homeFunctionAndStatus
 	for i := range codes.Result {
-		if v, ok := devicesMap[codes.Result[i].DeviceId]; ok {
-			if v.HomeId == "" {
+		tmp := codes.Result[i]
+		if v, ok := devicesMap[tmp.DeviceId]; ok {
+			if v.RoomName == "" {
 				continue
 			}
-			codes.Result[i].Name = v.Name
-			codes.Result[i].HomeId = v.HomeId
-			codes.Result[i].RoomName = v.RoomName
+			tmp.Name = v.Name
+			tmp.HomeId = v.HomeId
+			tmp.RoomName = v.RoomName
+			tmp.ProductID = v.ProductID
+			tmp.Category = v.Category
+			codesInsertDoc = append(codesInsertDoc, tmp)
 		}
 	}
 
-	_, err = collectionCodes.InsertMany(ctx, codes.Result)
+	_, err = collectionCodes.InsertMany(ctx, codesInsertDoc)
 	if err != nil {
 		c.Error(err)
 		return nil, nil, err

@@ -175,27 +175,51 @@ type homeFunctionAndStatus struct {
 	Functions []interface{} `json:"functions"`
 	Status    []interface{} `json:"status"`
 	//非接口返回字段
-	Name     string `json:"name"`
-	HomeId   string `json:"home_id"`
-	RoomName string `json:"room_name"`
+	Name      string `json:"name"`
+	HomeId    string `json:"home_id"`
+	RoomName  string `json:"room_name"`
+	ProductID string `json:"product_id"`
+	Category  string `json:"category"`
 }
 
 type homeFunction struct {
 	DeviceId  string        `json:"device_id" bson:"_id"`
 	Functions []interface{} `json:"functions"`
+	Name      string        `json:"name"`
 }
 
 type createScene struct {
 	Name       string    `json:"name"`
 	Background string    `json:"background"`
 	Actions    []actions `json:"actions"`
-	Content    string    `json:"content"`
+}
+
+// ai返回
+type createSceneFromAiResp struct {
+	Name    string    `json:"name"`
+	Actions []actions `json:"actions"`
+	Content string    `json:"content"`
 }
 
 type actions struct {
 	ExecutorProperty interface{} `json:"executor_property"`
 	ActionExecutor   string      `json:"action_executor"`
 	EntityID         string      `json:"entity_id"`
+}
+
+type actionsRedis struct {
+	ExecutorProperty interface{} `json:"executor_property"`
+	ActionExecutor   string      `json:"action_executor"`
+	ProductID        string      `json:"product_id"`
+	CategoryName     string      `json:"category_name"`
+}
+
+type sceneListResp struct {
+	Result []struct {
+		Name    string `json:"name"`
+		Enabled bool   `json:"enabled"`
+		SceneId string `json:"scene_id"`
+	} `json:"result"`
 }
 
 func getCategoryName(categoryId string) string {

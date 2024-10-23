@@ -299,9 +299,6 @@ type summaryControlData struct {
 	Commands string `json:"commands"`
 }
 
-var defaultSummaryCommandKey = "TUYA_SUMMARY_COMMAND_%s_%s"
-var defaultSummaryNativeCommandKey = "TUYA_SUMMARY_NATIVE_COMMAND_"
-
 func getSummaryCategoryListKey(category, productId string) string {
 	return fmt.Sprintf(defaultSummaryCommandKey, category, productId)
 }
