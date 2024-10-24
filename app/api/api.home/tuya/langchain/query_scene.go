@@ -3,8 +3,11 @@ package langchain
 import (
 	"context"
 	"fmt"
+	"vinesai/internel/db"
 	"vinesai/internel/lib/tuyago"
 	"vinesai/internel/x"
+
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 // 查询家庭场景
@@ -25,8 +28,9 @@ func (s *sceneQuery) Call(ctx context.Context, input string) (string, error) {
 
 	var resultResp struct {
 		Result []struct {
-			Name    string `json:"name"`
-			Enabled bool   `json:"enabled"`
+			Name    string         `json:"name"`
+			Enabled bool           `json:"enabled"`
+			Actions []actions4Name `json:"actions"`
 		} `json:"result"`
 	}
 
@@ -36,6 +40,19 @@ func (s *sceneQuery) Call(ctx context.Context, input string) (string, error) {
 		return "暂且找不到你的智能家居场景，请稍后再试。", err
 	}
 
+	for i := range resultResp.Result {
+		data := resultResp.Result[i].Actions
+		for ii := range data {
+			var d mgoDocDevice
+			err = db.Mgo.Collection(mgoCollectionNameDevice).FindOne(context.Background(), bson.M{"_id": data[ii].EntityID}).Decode(&d)
+			if err != nil {
+				c.Error(err)
+				continue
+			}
+			resultResp.Result[i].Actions[ii].Name = d.Name
+		}
+	}
+
 	resp, err := GenerateContentTurbo(c, fmt.Sprintf(queryScenePrompts, x.MustMarshal2String(resultResp)), input)
 	if err != nil {
 		c.Error(err)
@@ -43,7 +60,6 @@ func (s *sceneQuery) Call(ctx context.Context, input string) (string, error) {
 	}
 
 	return resp, nil
-
 }
 
 var queryScenePrompts = `根据我的意图描述，告诉我智能家居场景相关的信息。

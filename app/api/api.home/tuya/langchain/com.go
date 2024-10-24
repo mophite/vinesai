@@ -207,6 +207,14 @@ type actions struct {
 	EntityID         string      `json:"entity_id"`
 }
 
+type actions4Name struct {
+	ExecutorProperty interface{} `json:"executor_property"`
+	ActionExecutor   string      `json:"action_executor"`
+	EntityID         string      `json:"entity_id"`
+	//非接口返回字段需要赋值
+	Name string `json:"name"`
+}
+
 type actionsRedis struct {
 	ExecutorProperty interface{} `json:"executor_property"`
 	ActionExecutor   string      `json:"action_executor"`

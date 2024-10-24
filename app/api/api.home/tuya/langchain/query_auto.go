@@ -3,8 +3,11 @@ package langchain
 import (
 	"context"
 	"fmt"
+	"vinesai/internel/db"
 	"vinesai/internel/lib/tuyago"
 	"vinesai/internel/x"
+
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 // 查询家庭场景
@@ -25,8 +28,10 @@ func (s *autoQuery) Call(ctx context.Context, input string) (string, error) {
 
 	var resultResp struct {
 		Result []struct {
-			Name    string `json:"name"`
-			Enabled bool   `json:"enabled"`
+			Name       string         `json:"name"`
+			Enabled    bool           `json:"enabled"`
+			Actions    []actions4Name `json:"actions"`
+			Conditions interface{}    `json:"conditions"`
 		} `json:"result"`
 	}
 
@@ -34,6 +39,19 @@ func (s *autoQuery) Call(ctx context.Context, input string) (string, error) {
 	if err != nil {
 		c.Error(err)
 		return "暂且找不到你的智能家居自动化，请稍后再试。", err
+	}
+
+	for i := range resultResp.Result {
+		data := resultResp.Result[i].Actions
+		for ii := range data {
+			var d mgoDocDevice
+			err = db.Mgo.Collection(mgoCollectionNameDevice).FindOne(context.Background(), bson.M{"_id": data[ii].EntityID}).Decode(&d)
+			if err != nil {
+				c.Error(err)
+				continue
+			}
+			resultResp.Result[i].Actions[ii].Name = d.Name
+		}
 	}
 
 	resp, err := GenerateContentTurbo(c, fmt.Sprintf(queryAutoPrompts, x.MustMarshal2String(resultResp)), input)
