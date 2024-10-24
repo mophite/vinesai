@@ -44,7 +44,7 @@ func (s *sceneQuery) Call(ctx context.Context, input string) (string, error) {
 		data := resultResp.Result[i].Actions
 		for ii := range data {
 			var d mgoDocDevice
-			err = db.Mgo.Collection(mgoCollectionNameDevice).FindOne(context.Background(), bson.M{"_id": data[ii].EntityID}).Decode(&d)
+			err = db.Mgo.Collection(mgoCollectionDevice).FindOne(context.Background(), bson.M{"_id": data[ii].EntityID}).Decode(&d)
 			if err != nil {
 				c.Error(err)
 				continue
@@ -64,8 +64,8 @@ func (s *sceneQuery) Call(ctx context.Context, input string) (string, error) {
 
 var queryScenePrompts = `根据我的意图描述，告诉我智能家居场景相关的信息。
 ### 场景列表：%s
-说明：enabled：false表示场景是禁用状态，true表示场景是启用中。
-### 用俏皮人性化的语气回复我，不要返回无关的信息，例如：你有3个场景，启用中2个，禁用状态1个。
+说明："enabled"：false表示场景是禁用状态，true表示场景是启用中。
+### 用人性化的语气回复我，不要返回无关的信息，例如：你有3个场景，启用中2个，禁用状态1个。
 
 当前对话：
 {{.history}}

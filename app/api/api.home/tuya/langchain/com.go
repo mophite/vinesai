@@ -9,8 +9,9 @@ type deviceResp struct {
 	Tid      string        `json:"tid"`
 }
 
-var mgoCollectionNameDevice = "tuya_device"
-var mgoCollectionNameCodes = "tuya_codes"
+var mgoCollectionDevice = "tuya_device"
+var mgoCollectionCodes = "tuya_codes"
+var mgoCollectionUser = "tuya_user"
 
 // 用户设备信息
 type mgoDocDevice struct {
@@ -188,10 +189,52 @@ type homeFunction struct {
 	Name      string        `json:"name"`
 }
 
+type homeStatus struct {
+	DeviceId string        `json:"device_id" bson:"_id"`
+	Status   []interface{} `json:"status"`
+	Name     string        `json:"name"`
+}
+
 type createScene struct {
 	Name       string    `json:"name"`
 	Background string    `json:"background"`
 	Actions    []actions `json:"actions"`
+}
+
+type createAutoData struct {
+	Actions []struct {
+		ActionExecutor   string      `json:"action_executor"`
+		EntityID         string      `json:"entity_id"`
+		ExecutorProperty interface{} `json:"executor_property"`
+	} `json:"actions"`
+	Background string `json:"background"`
+	Conditions []struct {
+		Display    interface{} `json:"display"`
+		EntityID   string      `json:"entity_id"`
+		EntityType int         `json:"entity_type"`
+		OrderNum   int         `json:"order_num"`
+	} `json:"conditions"`
+	MatchType     int    `json:"match_type"`
+	Name          string `json:"name"`
+	Preconditions []struct {
+		CondType string `json:"cond_type"`
+		Display  struct {
+			End        string `json:"end"`
+			Loops      string `json:"loops"`
+			Start      string `json:"start"`
+			TimezoneID string `json:"timezone_id"`
+		} `json:"display"`
+	} `json:"preconditions"`
+}
+
+type createAuto struct {
+	Actions []actions `json:"actions"`
+}
+
+type homeInfo struct {
+	HomeId string `json:"home_id"  bson:"_id"`
+	Lon    string `json:"lon"`
+	Lat    string `json:"lat"`
 }
 
 // ai返回

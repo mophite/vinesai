@@ -45,7 +45,7 @@ func (s *autoQuery) Call(ctx context.Context, input string) (string, error) {
 		data := resultResp.Result[i].Actions
 		for ii := range data {
 			var d mgoDocDevice
-			err = db.Mgo.Collection(mgoCollectionNameDevice).FindOne(context.Background(), bson.M{"_id": data[ii].EntityID}).Decode(&d)
+			err = db.Mgo.Collection(mgoCollectionDevice).FindOne(context.Background(), bson.M{"_id": data[ii].EntityID}).Decode(&d)
 			if err != nil {
 				c.Error(err)
 				continue
@@ -66,8 +66,8 @@ func (s *autoQuery) Call(ctx context.Context, input string) (string, error) {
 
 var queryAutoPrompts = `根据我的意图描述，告诉我智能家居自动化相关的信息。
 ### 自动化列表：%s
-说明：enabled：false表示自动化是禁用状态，true表示自动化是启用中。
-### 用俏皮人性化的语气回复我，例如：你有3个自动化，启用中2个，禁用状态1个。
+说明："enabled"：false表示自动化是禁用状态，true表示自动化是启用中。
+### 用人性化的语气回复我，例如：你有3个自动化，启用中2个，禁用状态1个。
 
 当前对话：
 {{.history}}

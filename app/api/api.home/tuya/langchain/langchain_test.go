@@ -142,7 +142,7 @@ func TestRun(t *testing.T) {
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "我想睡觉了")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "你会去控制哪些设备")
 	//Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "执行回家场景，晚安")
-	Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "我的自动化信息")
+	Run(ava.Background(), "ay1716438065043jAiE1", "178176713", "创建一个有人灯亮的自动化")
 
 	//select {}
 }

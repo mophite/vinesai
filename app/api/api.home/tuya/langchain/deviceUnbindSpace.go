@@ -29,7 +29,7 @@ func (o *deviceUnbindSpace) Call(c *ava.Context) error {
 	//同步redis数据
 	//更新离线设备数据库
 	filter := bson.M{"_id": o.BizData.DevID}
-	_, err := db.Mgo.Collection(mgoCollectionNameDevice).DeleteOne(context.Background(), filter)
+	_, err := db.Mgo.Collection(mgoCollectionDevice).DeleteOne(context.Background(), filter)
 	if err != nil {
 		c.Error(err)
 		return err

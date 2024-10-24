@@ -32,7 +32,7 @@ func (q *queryOnline) Call(ctx context.Context, input string) (string, error) {
 
 	var devices []*queryOnlineOrOfflineData
 	var filter = bson.M{"homeid": homeId, "online": true}
-	cur, err := db.Mgo.Collection(mgoCollectionNameDevice).Find(context.Background(), filter)
+	cur, err := db.Mgo.Collection(mgoCollectionDevice).Find(context.Background(), filter)
 	if err != nil {
 		ava.Error(err)
 		return "服务器出小毛病了", err

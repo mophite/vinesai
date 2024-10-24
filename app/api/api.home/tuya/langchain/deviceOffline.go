@@ -25,7 +25,7 @@ func (o *deviceOffline) Call(c *ava.Context) error {
 	//更新离线设备数据库
 	filter := bson.M{"_id": o.BizData.DevID}
 	update := bson.M{"$set": bson.M{"online": false}}
-	_, err := db.Mgo.Collection(mgoCollectionNameDevice).UpdateOne(context.Background(), filter, update)
+	_, err := db.Mgo.Collection(mgoCollectionDevice).UpdateOne(context.Background(), filter, update)
 	if err != nil {
 		c.Error(err)
 		return err

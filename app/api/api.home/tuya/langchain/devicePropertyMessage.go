@@ -46,7 +46,7 @@ func (o *devicePropertyMessage) Call(c *ava.Context) error {
 			}},
 		}
 
-		err := db.Mgo.Collection(mgoCollectionNameDevice).
+		err := db.Mgo.Collection(mgoCollectionDevice).
 			FindOneAndUpdate(context.Background(), filter, update).Err()
 		// 如果没有匹配的元素（即 err 为 mongo.ErrNoDocuments），则插入新的数组元素
 		if errors.Is(err, mongo.ErrNoDocuments) {
@@ -60,7 +60,7 @@ func (o *devicePropertyMessage) Call(c *ava.Context) error {
 				}},
 			}
 
-			err = db.Mgo.Collection(mgoCollectionNameDevice).
+			err = db.Mgo.Collection(mgoCollectionDevice).
 				FindOneAndUpdate(context.Background(),
 					bson.M{"_id": o.BizData.DevID}, update).Err()
 			if err != nil {

@@ -30,19 +30,20 @@ var Tools = []tools.Tool{
 	&sceneQuery{CallbacksHandler: LogHandler{}},
 	&autoQuery{CallbacksHandler: LogHandler{}},
 	&runScene{CallbacksHandler: LogHandler{}},
+	&automations{CallbacksHandler: LogHandler{}},
 }
 
-//var defaultKey = "sk-08cdfea5547040209ea0e2d874fff912"
-//var defaultUrl = "https://dashscope.aliyuncs.com/compatible-mode/v1"
-//var modelAgent = "qwen-turbo"
-//var modeGuide = "qwen-plus"
-//var modeLongText = "qwen-long"
+var defaultKey = "sk-08cdfea5547040209ea0e2d874fff912"
+var defaultUrl = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+var modelAgent = "qwen-turbo"
+var modeGuide = "qwen-plus"
+var modeLongText = "qwen-long"
 
-var defaultKey = "sk-2RET3Pqa6Z3g6b0pE29351119e9b410fAfC3D44b4eC4C4A9"
-var defaultUrl = "https://ai-yyds.com/v1"
-var modelAgent = "claude-3-5-sonnet-20241022"
-var modeGuide = "gpt-4o"
-var modeLongText = "claude-3-5-sonnet-20241022"
+//var defaultKey = "sk-2RET3Pqa6Z3g6b0pE29351119e9b410fAfC3D44b4eC4C4A9"
+//var defaultUrl = "https://ai-yyds.com/v1"
+//var modelAgent = "claude-3-5-sonnet-20241022"
+//var modeGuide = "gpt-4o"
+//var modeLongText = "claude-3-5-sonnet-20241022"
 
 var langchaingoOpenAi *openai.LLM
 var langchaingoGuideOpenAi *openai.LLM

@@ -12,6 +12,7 @@ import (
 	"vinesai/internel/x"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 // 同步设备
@@ -107,6 +108,7 @@ func syncDevicesForSummary(c *ava.Context, homeId string) ([]string, map[string]
 			continue
 		}
 
+		var userOk bool
 		for ii := range tmpDevicesResp.Result {
 			tmpDeviceData := tmpDevicesResp.Result[ii]
 
@@ -121,6 +123,21 @@ func syncDevicesForSummary(c *ava.Context, homeId string) ([]string, map[string]
 			tmpDeviceData.CategoryName = getCategoryName(tmpDeviceData.Category)
 			deviceDoc = append(deviceDoc, tmpDeviceData)
 			devicesMap[tmpDeviceData.ID] = tmpDeviceData
+			if tmpDeviceData.Lon != "" && tmpDeviceData.Lat != "" && !userOk {
+
+				replaceOptions := options.FindOneAndReplace().SetUpsert(true)
+				err = db.Mgo.Collection(mgoCollectionUser).FindOneAndReplace(context.Background(), bson.M{"_id": homeId}, &homeInfo{
+					HomeId: homeId,
+					Lon:    tmpDeviceData.Lon,
+					Lat:    tmpDeviceData.Lat,
+				}, replaceOptions).Err()
+
+				if err != nil {
+					c.Error(err)
+					continue
+				}
+				userOk = true
+			}
 
 			//如果设备品类不在控制范围内，则不添
 			if getCategoryName(tmpDeviceData.Category) == "" {
@@ -137,7 +154,7 @@ func syncDevicesForSummary(c *ava.Context, homeId string) ([]string, map[string]
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	collectionDevices := db.Mgo.Collection(mgoCollectionNameDevice)
+	collectionDevices := db.Mgo.Collection(mgoCollectionDevice)
 	result, err := collectionDevices.DeleteMany(ctx, bson.M{"homeid": homeId})
 	if err != nil {
 		c.Error(err)
@@ -154,7 +171,7 @@ func syncDevicesForSummary(c *ava.Context, homeId string) ([]string, map[string]
 
 	//家庭设备支持的场景
 	//删除所有数据，重新插入
-	collectionCodes := db.Mgo.Collection(mgoCollectionNameCodes)
+	collectionCodes := db.Mgo.Collection(mgoCollectionCodes)
 	resultCodes, err := collectionCodes.DeleteMany(ctx, bson.M{"homeid": homeId})
 	if err != nil {
 		c.Error(err)

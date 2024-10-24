@@ -86,7 +86,7 @@ func (s *scene) Call(ctx context.Context, input string) (string, error) {
 	filter := bson.M{"homeid": homeId}
 
 	//获取筛选后的设备支持的联动规则，指令
-	cur, err := db.Mgo.Collection(mgoCollectionNameCodes).Find(context.Background(), filter)
+	cur, err := db.Mgo.Collection(mgoCollectionCodes).Find(context.Background(), filter)
 	if err != nil {
 		c.Error(err)
 		return "开了点小差，重试一下", err
@@ -103,6 +103,9 @@ func (s *scene) Call(ctx context.Context, input string) (string, error) {
 
 	for i := range codesResp {
 		var code = codesResp[i]
+		if len(code.Functions) == 0 {
+			continue
+		}
 		codesReq = append(codesReq, homeFunction{
 			DeviceId:  code.DeviceId,
 			Functions: code.Functions,
@@ -151,7 +154,7 @@ func (s *scene) Call(ctx context.Context, input string) (string, error) {
 	}
 
 	if len(resultAction.Actions) == 0 {
-		return "创建场景失败了", fmt.Errorf("创建场景失败了 ｜homeid=%s |input=%s", homeId, input)
+		return resultAction.Content, fmt.Errorf("创建场景失败了 ｜homeid=%s |input=%s", homeId, input)
 	}
 
 	var createSceneResp struct {
@@ -177,7 +180,7 @@ func (s *scene) Call(ctx context.Context, input string) (string, error) {
 	//	action := resultAction.Actions[i]
 	//	var tmp actionsRedis
 	//	var mgoData mgoDocDevice
-	//	err = db.Mgo.Collection(mgoCollectionNameDevice).FindOne(context.Background(), bson.M{"_id": action.EntityID}).Decode(&mgoData)
+	//	err = db.Mgo.Collection(mgoCollectionDevice).FindOne(context.Background(), bson.M{"_id": action.EntityID}).Decode(&mgoData)
 	//	if err != nil && !errors.Is(err, mongo.ErrNilDocument) {
 	//		c.Error(err)
 	//		return msg, err
@@ -196,10 +199,10 @@ func (s *scene) Call(ctx context.Context, input string) (string, error) {
 	return resultAction.Content, nil
 }
 
-var onClickSceneCreatePrompts = `分析我的意图，从指令数据信息中选择指令，并严格按照返回的JSON格式返回我即将调用创建场景接口的数据
+var onClickSceneCreatePrompts = `你是一个精通智能家居场景模式的助理，请分析我的意图，并从设备指令数据中选择合适的指令。请严格按照以下JSON格式返回创建场景接口所需的数据：
 ### 设备以及指令数据信息: %s
 
-### 返回json格式：
+### 返回JSON格式：
 {
  "content":"根据我的意图和创建成功或失败后用人性化的语言告诉我详细设备控制过程",
  "name": "场景名称，6个字左右，例如：关闭客厅插座",
@@ -213,8 +216,9 @@ var onClickSceneCreatePrompts = `分析我的意图，从指令数据信息中�
 }
 
 说明：
-1.entity_id就是device_id
-2.actions：数据对象，一个对象元素只能有一个指令，不能在一个对象中出现多个指令
+1. "entity_id" 即为 "device_id"
+2. "actions"：每个对象只能包含一个指令
+
 
 ### 示例：
 设备以及指令数据：[{"device_id":"6c3f4cb6c5899478efrgea","functions":[{"values":{},"code":"switch_1","type":"Boolean","value_range_json":[[true,"开启"],[false,"关闭"]]},{"values":{},"code":"switch_2","type":"Boolean","value_range_json":[[true,"开启"],[false,"关闭"]]}]}]

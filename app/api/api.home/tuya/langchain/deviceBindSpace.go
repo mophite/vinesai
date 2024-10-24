@@ -35,7 +35,7 @@ func (o *deviceBindSpace) Call(c *ava.Context) error {
 	//}
 	//tuyago.Get(c, "")
 	//filter := bson.M{"_id": o.BizData.DevID}
-	//_, err := db.Mgo.Collection(mgoCollectionNameDevice).insert(context.Background(), filter)
+	//_, err := db.Mgo.Collection(mgoCollectionDevice).insert(context.Background(), filter)
 	//if err != nil {
 	//	c.Error(err)
 	//	return err
